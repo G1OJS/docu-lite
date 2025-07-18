@@ -1,2 +1,2 @@
 # light-auto-docs
-Ultra light script to extract Python class &amp; function objects and docstrings to HTML
+Created for my own use, very new, but might go somewhere (and it's already useful)
