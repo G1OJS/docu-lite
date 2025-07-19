@@ -12,7 +12,8 @@
 import html
 
 class docobj:
-    """ Bottom level document object containing only text and text-related properties"""
+    """ Bottom level document object containing only text and text-related properties """
+    """ Note that this version does not process single line docstrings """
     def __init__(self, firstline):
         self.firstline = firstline.strip()
         self.html_class = self.firstline.split(" ")[0]
@@ -102,11 +103,10 @@ def main():
     doc_html = html_head()
 
     filepath = ""
-    verbose = True
     for fname  in ["make_outline.py"]:
         doc_html += f"<div class = 'filename'>{fname}</div>"
         doc = get_doc(filepath + fname, ['class','def','docstring','text'])
-        doc_html += doc_body(doc, verbose = True)
+        doc_html += doc_body(doc, verbose = False)
 
     outname = "outline.html"
     with open(outname, "w", encoding="utf-8") as f:
