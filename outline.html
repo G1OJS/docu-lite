@@ -8,15 +8,15 @@
 </div>
 <div class ='docstring text'>    Next steps
 </div>
-<div class ='docstring text'>      - tidy up the html formatting
-</div>
-<div class ='docstring text'>        - remove the word 'def' from the beginning of def firstlines?
-</div>
 <div class ='docstring text'>        - ensure that 'firstline' handles multiline argument lists '(' to ')'
 </div>
-<div class ='docstring text'>
+<div class ='docstring text'>        - tidy up the html formatting
 </div>
-<div class ='docstring text'>    Note that some characters in main need escaping 
+<div class ='docstring text'>            - several functions for different layouts?
+</div>
+<div class ='docstring text'>            - sort out indentation in body text
+</div>
+<div class ='docstring text'>            - check if characters in main need escaping 
 </div>
 </details><details><summary><span class='text'>text</span></summary><div class ='text text'>
 </div>
@@ -110,11 +110,9 @@
 </div>
 <div class ='text text'>            obj.indent_level = indents.index(obj.indent_spaces)
 </div>
-<div class ='text text'>        
+<div class ='text text'>
 </div>
-<div class ='text text'>            
-</div>
-</details></details><details><summary><span class='def'>def main():</span></summary><div class ='def text'>    html =  "<!DOCTYPE html><html lang='en'><head><title>Code Outline</title>"
+</details></details><details><summary><span class='def'>def html_head():</span></summary><div class ='def text'>    html =  "<!DOCTYPE html><html lang='en'><head><title>Code Outline</title>"
 </div>
 <div class ='def text'>    html += "<style> * {font-weight:bold;padding-left:2rem;}"
 </div>
@@ -132,6 +130,48 @@
 </div>
 <div class ='def text'>    html += "</style></head><body>"
 </div>
+<div class ='def text'>    return html
+</div>
+<div class ='def text'>
+</div>
+</details><details><summary><span class='def'>def doc_html(doc, verbose = False):</span></summary><div class ='def text'>    html = ""
+</div>
+<div class ='def text'>    for i,obj in enumerate(doc.objects):
+</div>
+<div class ='def text'>        if(verbose):
+</div>
+<div class ='def text'>            print(f"Level {obj.indent_level} object, firstline =  {obj.firstline}")
+</div>
+<div class ='def text'>            for l in obj.lines:
+</div>
+<div class ='def text'>                print(f"{'    ' * obj.indent_level} {l.replace('\n','')}")
+</div>
+<div class ='def text'>        nextobj = doc.objects[(i+1) % len(doc.objects)]
+</div>
+<div class ='def text'>        if(nextobj.indent_level > obj.indent_level):
+</div>
+<div class ='def text'>            html += f"<details><summary><span class ='{obj.html_class}'>{obj.firstline}</span></summary>"
+</div>
+<div class ='def text'>        else:
+</div>
+<div class ='def text'>            html += f"<details><summary><span class='{obj.html_class}'>{obj.firstline}</span></summary>"
+</div>
+<div class ='def text'>            for line in obj.lines[1:]:
+</div>
+<div class ='def text'>                html += f"<div class ='{obj.html_class} text'>{line}</div>\n"
+</div>
+<div class ='def text'>            html += "</details>"
+</div>
+<div class ='def text'>        if(nextobj.indent_level < obj.indent_level):
+</div>
+<div class ='def text'>            html += "</details>"
+</div>
+<div class ='def text'>    return html
+</div>
+<div class ='def text'>            
+</div>
+</details><details><summary><span class='def'>def main():</span></summary><div class ='def text'>    html = html_head()
+</div>
 <div class ='def text'>
 </div>
 <div class ='def text'>    filepath = ""
@@ -144,35 +184,7 @@
 </div>
 <div class ='def text'>        doc = get_doc(filepath + fname, ['class','def','docstring','text'])
 </div>
-<div class ='def text'>        for i,obj in enumerate(doc.objects):
-</div>
-<div class ='def text'>            if(verbose):
-</div>
-<div class ='def text'>                print(f"Level {obj.indent_level} object, firstline =  {obj.firstline}")
-</div>
-<div class ='def text'>                for l in obj.lines:
-</div>
-<div class ='def text'>                    print(f"{'    ' * obj.indent_level} {l.replace('\n','')}")
-</div>
-<div class ='def text'>            nextobj = doc.objects[(i+1) % len(doc.objects)]
-</div>
-<div class ='def text'>            if(nextobj.indent_level > obj.indent_level):
-</div>
-<div class ='def text'>                html += f"<details><summary><span class ='{obj.html_class}'>{obj.firstline}</span></summary>"
-</div>
-<div class ='def text'>            else:
-</div>
-<div class ='def text'>                html += f"<details><summary><span class='{obj.html_class}'>{obj.firstline}</span></summary>"
-</div>
-<div class ='def text'>                for line in obj.lines[1:]:
-</div>
-<div class ='def text'>                    html += f"<div class ='{obj.html_class} text'>{line}</div>\n"
-</div>
-<div class ='def text'>                html += "</details>"
-</div>
-<div class ='def text'>            if(nextobj.indent_level < obj.indent_level):
-</div>
-<div class ='def text'>                html += "</details>"
+<div class ='def text'>        html += doc_html(doc)
 </div>
 <div class ='def text'>               
 </div>

@@ -63,9 +63,8 @@ class get_doc:
             if(obj.indent_spaces > indents[-1]):
                 indents.append(obj.indent_spaces)
             obj.indent_level = indents.index(obj.indent_spaces)
-        
-            
-def main():
+
+def html_head():
     html =  "<!DOCTYPE html><html lang='en'><head><title>Code Outline</title>"
     html += "<style> * {font-weight:bold;padding-left:2rem;}"
     html += ".filename {padding-left:0em;}"
@@ -75,27 +74,36 @@ def main():
     html += ".def {color:orange; }"
     html += ".text {color:black; font-size:1rem; font-weight:normal; }"
     html += "</style></head><body>"
+    return html
+
+def doc_html(doc, verbose = False):
+    html = ""
+    for i,obj in enumerate(doc.objects):
+        if(verbose):
+            print(f"Level {obj.indent_level} object, firstline =  {obj.firstline}")
+            for l in obj.lines:
+                print(f"{'    ' * obj.indent_level} {l.replace('\n','')}")
+        nextobj = doc.objects[(i+1) % len(doc.objects)]
+        if(nextobj.indent_level > obj.indent_level):
+            html += f"<details><summary><span class ='{obj.html_class}'>{obj.firstline}</span></summary>"
+        else:
+            html += f"<details><summary><span class='{obj.html_class}'>{obj.firstline}</span></summary>"
+            for line in obj.lines[1:]:
+                html += f"<div class ='{obj.html_class} text'>{line}</div>\n"
+            html += "</details>"
+        if(nextobj.indent_level < obj.indent_level):
+            html += "</details>"
+    return html
+            
+def main():
+    html = html_head()
 
     filepath = ""
     verbose = True
     for fname  in ["make_outline.py"]:
         html += f"<div class = 'filename'>{fname}</div>"
         doc = get_doc(filepath + fname, ['class','def','docstring','text'])
-        for i,obj in enumerate(doc.objects):
-            if(verbose):
-                print(f"Level {obj.indent_level} object, firstline =  {obj.firstline}")
-                for l in obj.lines:
-                    print(f"{'    ' * obj.indent_level} {l.replace('\n','')}")
-            nextobj = doc.objects[(i+1) % len(doc.objects)]
-            if(nextobj.indent_level > obj.indent_level):
-                html += f"<details><summary><span class ='{obj.html_class}'>{obj.firstline}</span></summary>"
-            else:
-                html += f"<details><summary><span class='{obj.html_class}'>{obj.firstline}</span></summary>"
-                for line in obj.lines[1:]:
-                    html += f"<div class ='{obj.html_class} text'>{line}</div>\n"
-                html += "</details>"
-            if(nextobj.indent_level < obj.indent_level):
-                html += "</details>"
+        html += doc_html(doc)
                
     outname = "outline.html"
     with open(outname, "w", encoding="utf-8") as f:
