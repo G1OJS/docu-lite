@@ -1,2 +1,2 @@
-# light-auto-docs
-Created for my own use, very new, but might go somewhere (and it's already useful)
+# 🧾 docu-lite
+### Zero-dependency HTML doc viewer for Python. Browse classes and functions with collapsible docstrings in a tidy, readable format.
