@@ -1,208 +1,212 @@
-<!DOCTYPE html><html lang='en'><head><title>Code Outline</title><style> * {font-weight:bold;padding-left:2rem;}.filename {padding-left:0em;}.docstring { font-weight:normal; color:green;}.docstring.text { font-weight:normal; color:green;}.class {color:blue;}.def {color:orange; }.text {color:black; font-size:1rem; font-weight:normal; }</style></head><body><div class = 'filename'>make_outline.py</div><details><summary><span class='docstring'>docstring</span></summary><div class ='docstring text'>    This may be the most promising for very lightweight semi-automatic documentation
+<!DOCTYPE doc_html><doc_html lang='en'><head><title>Code Outline</title><style> * {font-weight:bold;padding-left:2rem;}.filename {padding-left:0em;}.docstring { font-weight:normal; color:green;}.docstring.text { font-weight:normal; color:green;}.class {color:blue;}.def {color:orange; }.text {color:black; font-size:1rem; font-weight:normal; }</style></head><body><div class = 'filename'>make_outline.py</div><details><summary><span class='docstring'>docstring</span></summary><div class ='docstring text'>&nbsp&nbsp&nbsp&nbspThis&nbspmay&nbspbe&nbspthe&nbspmost&nbsppromising&nbspfor&nbspvery&nbsplightweight&nbspsemi-automatic&nbspdocumentation
 </div>
-<div class ='docstring text'>    + classes make it neat and readable
+<div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp+&nbspclasses&nbspmake&nbspit&nbspneat&nbspand&nbspreadable
 </div>
-<div class ='docstring text'>    + it works
+<div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp+&nbspit&nbspworks
 </div>
 <div class ='docstring text'>
 </div>
-<div class ='docstring text'>    Next steps
+<div class ='docstring text'>&nbsp&nbsp&nbsp&nbspNext&nbspsteps
 </div>
-<div class ='docstring text'>        - ensure that 'firstline' handles multiline argument lists '(' to ')'
+<div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-&nbspensure&nbspthat&nbsp&#x27;firstline&#x27;&nbsphandles&nbspmultiline&nbspargument&nbsplists&nbsp&#x27;(&#x27;&nbspto&nbsp&#x27;)&#x27;
 </div>
-<div class ='docstring text'>        - tidy up the html formatting
+<div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-&nbsptidy&nbspup&nbspthe&nbspdoc_html&nbspformatting
 </div>
-<div class ='docstring text'>            - several functions for different layouts?
+<div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-&nbspseveral&nbspfunctions&nbspfor&nbspdifferent&nbsplayouts?
 </div>
-<div class ='docstring text'>            - sort out indentation in body text
+<div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-&nbspsort&nbspout&nbspindentation&nbspin&nbspbody&nbsptext
 </div>
-<div class ='docstring text'>            - check if characters in main need escaping 
+<div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-&nbspcheck&nbspif&nbspcharacters&nbspin&nbspmain&nbspneed&nbspescaping&nbsp
 </div>
-</details><details><summary><span class='text'>text</span></summary><div class ='text text'>
-</div>
-</details><details><summary><span class ='class'>class docobj:</span></summary><details><summary><span class='def'>def __init__(self, firstline):</span></summary><div class ='def text'>        self.firstline = firstline.strip()
-</div>
-<div class ='def text'>        self.html_class = self.firstline.split(" ")[0]
-</div>
-<div class ='def text'>        self.docstring =[]
-</div>
-<div class ='def text'>        self.lines = []
-</div>
-<div class ='def text'>        self.indent_spaces = len(firstline) - len(firstline.lstrip())
-</div>
-<div class ='def text'>        self.indent_level = 0
-</div>
-<div class ='def text'>
-</div>
-</details></details><details><summary><span class ='class'>class get_doc:</span></summary><details><summary><span class ='def'>def __init__(self,filepath, objtypes):</span></summary><details><summary><span class='docstring'>docstring</span></summary><div class ='docstring text'>            document-level properties and file reader / preprocessor
-</div>
-<div class ='docstring text'>            completes with self.objects containing parsed docobjects
-</div>
-</details><details><summary><span class='text'>text</span></summary><div class ='text text'>        self.objects = []
-</div>
-<div class ='text text'>        indent_level = 0
-</div>
-<div class ='text text'>        indent_spaces = 0
-</div>
-<div class ='text text'>        # get input file into lines
-</div>
-<div class ='text text'>        with open(filepath,"r") as f:
-</div>
-<div class ='text text'>            lines = f.readlines()
-</div>
-<div class ='text text'>        # replace all opening docstring markers with 'docstring'
-</div>
-<div class ='text text'>        # replace all closing docstring makers with 'text'
-</div>
-<div class ='text text'>        opening = True
-</div>
-<div class ='text text'>        for idx, line in enumerate(lines):
-</div>
-<div class ='text text'>            if(('"""' in line) and not ('"""' in line.replace('"""','',1))):
-</div>
-<div class ='text text'>                rep = 'docstring' if opening else 'text'
-</div>
-<div class ='text text'>                opening = not opening
-</div>
-<div class ='text text'>                lines[idx] = line.replace('docstring',rep)
+</details><details><summary><span class='text'>text</span></summary><div class ='text text'>import&nbsphtml
 </div>
 <div class ='text text'>
 </div>
-<div class ='text text'>        # find document objects and remember the line number they start at
+</details><details><summary><span class ='class'>class docobj:</span></summary><details><summary><span class='def'>def __init__(self, firstline):</span></summary><div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.firstline&nbsp=&nbspfirstline.strip()
 </div>
-<div class ='text text'>        line_index = []
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.html_class&nbsp=&nbspself.firstline.split(&quot;&nbsp&quot;)[0]
 </div>
-<div class ='text text'>        for line_no, line in enumerate(lines):
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.docstring&nbsp=[]
 </div>
-<div class ='text text'>            for p in objtypes:
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.lines&nbsp=&nbsp[]
 </div>
-<div class ='text text'>                if line.strip().startswith(p):
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.indent_spaces&nbsp=&nbsplen(firstline)&nbsp-&nbsplen(firstline.lstrip())
 </div>
-<div class ='text text'>                    self.objects.append(docobj(line))
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.indent_level&nbsp=&nbsp0
 </div>
-<div class ='text text'>                    line_index.append(line_no)
+<div class ='def text'>
+</div>
+</details></details><details><summary><span class ='class'>class get_doc:</span></summary><details><summary><span class ='def'>def __init__(self,filepath, objtypes):</span></summary><details><summary><span class='docstring'>docstring</span></summary><div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdocument-level&nbspproperties&nbspand&nbspfile&nbspreader&nbsp/&nbsppreprocessor
+</div>
+<div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspcompletes&nbspwith&nbspself.objects&nbspcontaining&nbspparsed&nbspdocobjects
+</div>
+</details><details><summary><span class='text'>text</span></summary><div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.objects&nbsp=&nbsp[]
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspindent_level&nbsp=&nbsp0
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspindent_spaces&nbsp=&nbsp0
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#&nbspget&nbspinput&nbspfile&nbspinto&nbsplines
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspwith&nbspopen(filepath,&quot;r&quot;)&nbspas&nbspf:
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsplines&nbsp=&nbspf.readlines()
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#&nbspreplace&nbspall&nbspopening&nbspdocstring&nbspmarkers&nbspwith&nbsp&#x27;docstring&#x27;
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#&nbspreplace&nbspall&nbspclosing&nbspdocstring&nbspmakers&nbspwith&nbsp&#x27;text&#x27;
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspopening&nbsp=&nbspTrue
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspfor&nbspidx,&nbspline&nbspin&nbspenumerate(lines):
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspif((&#x27;&quot;&quot;&quot;&#x27;&nbspin&nbspline)&nbspand&nbspnot&nbsp(&#x27;&quot;&quot;&quot;&#x27;&nbspin&nbspline.replace(&#x27;&quot;&quot;&quot;&#x27;,&#x27;&#x27;,1))):
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsprep&nbsp=&nbsp&#x27;docstring&#x27;&nbspif&nbspopening&nbspelse&nbsp&#x27;text&#x27;
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspopening&nbsp=&nbspnot&nbspopening
+</div>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsplines[idx]&nbsp=&nbspline.replace(&#x27;docstring&#x27;,rep)
 </div>
 <div class ='text text'>
 </div>
-<div class ='text text'>        # fill the object.lines[] with the text within the object
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#&nbspfind&nbspdocument&nbspobjects&nbspand&nbspremember&nbspthe&nbspline&nbspnumber&nbspthey&nbspstart&nbspat
 </div>
-<div class ='text text'>        for obj_ind, obj_start_line_no in enumerate(line_index):
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspline_index&nbsp=&nbsp[]
 </div>
-<div class ='text text'>            obj = self.objects[obj_ind]
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspfor&nbspline_no,&nbspline&nbspin&nbspenumerate(lines):
 </div>
-<div class ='text text'>            last_line = line_index[obj_ind+1] if obj_ind < len(self.objects)-1 else len(lines)
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspfor&nbspp&nbspin&nbspobjtypes:
 </div>
-<div class ='text text'>            for obj_line_ind in range(obj_start_line_no, last_line):
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspif&nbspline.strip().startswith(p):
 </div>
-<div class ='text text'>                obj.lines.append(f"{lines[obj_line_ind]}")
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.objects.append(docobj(line))
 </div>
-<div class ='text text'>
-</div>
-<div class ='text text'>        # tell the object what its indent level is within the document
-</div>
-<div class ='text text'>        indents =[0]
-</div>
-<div class ='text text'>        for obj in self.objects:
-</div>
-<div class ='text text'>            if(obj.indent_spaces > indents[-1]):
-</div>
-<div class ='text text'>                indents.append(obj.indent_spaces)
-</div>
-<div class ='text text'>            obj.indent_level = indents.index(obj.indent_spaces)
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspline_index.append(line_no)
 </div>
 <div class ='text text'>
 </div>
-</details></details><details><summary><span class='def'>def html_head():</span></summary><div class ='def text'>    html =  "<!DOCTYPE html><html lang='en'><head><title>Code Outline</title>"
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#&nbspfill&nbspthe&nbspobject.lines[]&nbspwith&nbspthe&nbsptext&nbspwithin&nbspthe&nbspobject
 </div>
-<div class ='def text'>    html += "<style> * {font-weight:bold;padding-left:2rem;}"
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspfor&nbspobj_ind,&nbspobj_start_line_no&nbspin&nbspenumerate(line_index):
 </div>
-<div class ='def text'>    html += ".filename {padding-left:0em;}"
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspobj&nbsp=&nbspself.objects[obj_ind]
 </div>
-<div class ='def text'>    html += ".docstring { font-weight:normal; color:green;}"
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsplast_line&nbsp=&nbspline_index[obj_ind+1]&nbspif&nbspobj_ind&nbsp&lt;&nbsplen(self.objects)-1&nbspelse&nbsplen(lines)
 </div>
-<div class ='def text'>    html += ".docstring.text { font-weight:normal; color:green;}"
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspfor&nbspobj_line_ind&nbspin&nbsprange(obj_start_line_no,&nbsplast_line):
 </div>
-<div class ='def text'>    html += ".class {color:blue;}"
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspobj.lines.append(f&quot;{lines[obj_line_ind]}&quot;)
 </div>
-<div class ='def text'>    html += ".def {color:orange; }"
+<div class ='text text'>
 </div>
-<div class ='def text'>    html += ".text {color:black; font-size:1rem; font-weight:normal; }"
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#&nbsptell&nbspthe&nbspobject&nbspwhat&nbspits&nbspindent&nbsplevel&nbspis&nbspwithin&nbspthe&nbspdocument
 </div>
-<div class ='def text'>    html += "</style></head><body>"
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspindents&nbsp=[0]
 </div>
-<div class ='def text'>    return html
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspfor&nbspobj&nbspin&nbspself.objects:
 </div>
-<div class ='def text'>
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspif(obj.indent_spaces&nbsp&gt;&nbspindents[-1]):
 </div>
-</details><details><summary><span class='def'>def doc_html(doc, verbose = False):</span></summary><div class ='def text'>    html = ""
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspindents.append(obj.indent_spaces)
 </div>
-<div class ='def text'>    for i,obj in enumerate(doc.objects):
+<div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspobj.indent_level&nbsp=&nbspindents.index(obj.indent_spaces)
 </div>
-<div class ='def text'>        if(verbose):
+<div class ='text text'>
 </div>
-<div class ='def text'>            print(f"Level {obj.indent_level} object, firstline =  {obj.firstline}")
+</details></details></details><details><summary><span class='def'>def html_head():</span></summary><div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp=&nbsp&nbsp&quot;&lt;!DOCTYPE&nbspdoc_html&gt;&lt;doc_html&nbsplang=&#x27;en&#x27;&gt;&lt;head&gt;&lt;title&gt;Code&nbspOutline&lt;/title&gt;&quot;
 </div>
-<div class ='def text'>            for l in obj.lines:
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;&lt;style&gt;&nbsp*&nbsp{font-weight:bold;padding-left:2rem;}&quot;
 </div>
-<div class ='def text'>                print(f"{'    ' * obj.indent_level} {l.replace('\n','')}")
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;.filename&nbsp{padding-left:0em;}&quot;
 </div>
-<div class ='def text'>        nextobj = doc.objects[(i+1) % len(doc.objects)]
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;.docstring&nbsp{&nbspfont-weight:normal;&nbspcolor:green;}&quot;
 </div>
-<div class ='def text'>        if(nextobj.indent_level > obj.indent_level):
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;.docstring.text&nbsp{&nbspfont-weight:normal;&nbspcolor:green;}&quot;
 </div>
-<div class ='def text'>            html += f"<details><summary><span class ='{obj.html_class}'>{obj.firstline}</span></summary>"
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;.class&nbsp{color:blue;}&quot;
 </div>
-<div class ='def text'>        else:
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;.def&nbsp{color:orange;&nbsp}&quot;
 </div>
-<div class ='def text'>            html += f"<details><summary><span class='{obj.html_class}'>{obj.firstline}</span></summary>"
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;.text&nbsp{color:black;&nbspfont-size:1rem;&nbspfont-weight:normal;&nbsp}&quot;
 </div>
-<div class ='def text'>            for line in obj.lines[1:]:
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&quot;
 </div>
-<div class ='def text'>                html += f"<div class ='{obj.html_class} text'>{line}</div>\n"
-</div>
-<div class ='def text'>            html += "</details>"
-</div>
-<div class ='def text'>        if(nextobj.indent_level < obj.indent_level):
-</div>
-<div class ='def text'>            html += "</details>"
-</div>
-<div class ='def text'>    return html
-</div>
-<div class ='def text'>            
-</div>
-</details><details><summary><span class='def'>def main():</span></summary><div class ='def text'>    html = html_head()
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspreturn&nbspdoc_html
 </div>
 <div class ='def text'>
 </div>
-<div class ='def text'>    filepath = ""
+</details><details><summary><span class='def'>def doc_body(doc, verbose = False):</span></summary><div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp=&nbsp&quot;&quot;
 </div>
-<div class ='def text'>    verbose = True
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspfor&nbspi,obj&nbspin&nbspenumerate(doc.objects):
 </div>
-<div class ='def text'>    for fname  in ["make_outline.py"]:
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspif(verbose):
 </div>
-<div class ='def text'>        html += f"<div class = 'filename'>{fname}</div>"
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspprint(f&quot;Level&nbsp{obj.indent_level}&nbspobject,&nbspfirstline&nbsp=&nbsp&nbsp{obj.firstline}&quot;)
 </div>
-<div class ='def text'>        doc = get_doc(filepath + fname, ['class','def','docstring','text'])
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspfor&nbspl&nbspin&nbspobj.lines:
 </div>
-<div class ='def text'>        html += doc_html(doc)
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspprint(f&quot;{&#x27;&nbsp&nbsp&nbsp&nbsp&#x27;&nbsp*&nbspobj.indent_level}&nbsp{l.replace(&#x27;\n&#x27;,&#x27;&#x27;)}&quot;)
 </div>
-<div class ='def text'>               
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspnextobj&nbsp=&nbspdoc.objects[(i+1)&nbsp%&nbsplen(doc.objects)]
 </div>
-<div class ='def text'>    outname = "outline.html"
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspif(nextobj.indent_level&nbsp&gt;&nbspobj.indent_level):
 </div>
-<div class ='def text'>    with open(outname, "w", encoding="utf-8") as f:
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbspf&quot;&lt;details&gt;&lt;summary&gt;&lt;span&nbspclass&nbsp=&#x27;{obj.html_class}&#x27;&gt;{obj.firstline}&lt;/span&gt;&lt;/summary&gt;&quot;
 </div>
-<div class ='def text'>        f.write(html)
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspelse:
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbspf&quot;&lt;details&gt;&lt;summary&gt;&lt;span&nbspclass=&#x27;{obj.html_class}&#x27;&gt;{obj.firstline}&lt;/span&gt;&lt;/summary&gt;&quot;
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspfor&nbspline&nbspin&nbspobj.lines[1:]:
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbspf&quot;&lt;div&nbspclass&nbsp=&#x27;{obj.html_class}&nbsptext&#x27;&gt;{html.escape(line).replace(&#x27;&nbsp&#x27;,&#x27;&amp;nbsp&#x27;)}&lt;/div&gt;\n&quot;
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;&lt;/details&gt;&quot;
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspif(nextobj.indent_level&nbsp&lt;&nbspobj.indent_level):
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspfor&nbspi&nbspin&nbsprange(obj.indent_level&nbsp-&nbspnextobj.indent_level):
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;&lt;/details&gt;&quot;
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspreturn&nbspdoc_html
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</div>
+</details><details><summary><span class='def'>def main():</span></summary><div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp=&nbsphtml_head()
 </div>
 <div class ='def text'>
 </div>
-<div class ='def text'>    print(f"\n\nOutline written to {outname}")
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspfilepath&nbsp=&nbsp&quot;&quot;
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspverbose&nbsp=&nbspTrue
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspfor&nbspfname&nbsp&nbspin&nbsp[&quot;make_outline.py&quot;]:
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbspf&quot;&lt;div&nbspclass&nbsp=&nbsp&#x27;filename&#x27;&gt;{fname}&lt;/div&gt;&quot;
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc&nbsp=&nbspget_doc(filepath&nbsp+&nbspfname,&nbsp[&#x27;class&#x27;,&#x27;def&#x27;,&#x27;docstring&#x27;,&#x27;text&#x27;])
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbspdoc_body(doc,&nbspverbose&nbsp=&nbspTrue)
 </div>
 <div class ='def text'>
 </div>
-<div class ='def text'>if __name__ == "__main__":
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspoutname&nbsp=&nbsp&quot;outline.html&quot;
 </div>
-<div class ='def text'>    main()
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspwith&nbspopen(outname,&nbsp&quot;w&quot;,&nbspencoding=&quot;utf-8&quot;)&nbspas&nbspf:
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspf.write(doc_html)
+</div>
+<div class ='def text'>
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspprint(f&quot;\n\nOutline&nbspwritten&nbspto&nbsp{outname}&quot;)
+</div>
+<div class ='def text'>
+</div>
+<div class ='def text'>if&nbsp__name__&nbsp==&nbsp&quot;__main__&quot;:
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbspmain()
 </div>
 <div class ='def text'>
 </div>
