@@ -14,8 +14,6 @@ import html
 class docobj:
     """ Bottom level document object containing only text and text-related properties """
     """ Note that this version does not process single line docstrings """
-    """ Nor does it handle two
-        line docstrings like this one """
     def __init__(self, firstline):
         self.firstline = firstline.strip()
         self.html_class = self.firstline.split(" ")[0]
@@ -36,14 +34,11 @@ class get_doc:
         # get input file into lines
         with open(filepath,"r") as f:
             lines = f.readlines()
-
-        # process docstrings to a common format:
-        #   ignore """text""" and """text\ntext""", otherwise:
-        #    - replace all opening docstring markers with 'docstring'
-        #    - replace all closing docstring makers with 'text'
+        # replace all opening docstring markers with 'docstring'
+        # replace all closing docstring makers with 'text'
         opening = True
         for idx, line in enumerate(lines):
-            if(line.strip() == '"""'):
+            if(('"""' in line) and not ('"""' in line.replace('"""','',1))):
                 rep = 'docstring' if opening else 'text'
                 opening = not opening
                 lines[idx] = line.replace('"""',rep)
@@ -70,19 +65,16 @@ class get_doc:
                 indents.append(obj.indent_spaces)
             obj.indent_level = indents.index(obj.indent_spaces)
 
-
 def html_head():
-    doc_html =  "<!DOCTYPE doc_html><doc_html lang='en'>\n<head>\n<title>Code Outline</title>"
-    doc_html += "<style>\n * {font-weight:bold;padding-left:2rem;}\n"
-    doc_html += ".filename {padding-left:0em;}\n"
-    doc_html += ".class {color:blue;}\n"
-    doc_html += ".def {color:orange; }\n"
-    doc_html += ".docstring {color:green;}\n"
-    doc_html += ".text {color:black;}\n"
-    doc_html += ".inner {font-size:1rem; font-weight:normal; white-space: pre;}\n"
-    doc_html += ".def.inner {color:black;}\n"
-    doc_html += ".class.inner {color:black;}\n"
-    doc_html += "</style>\n</head>\n"
+    doc_html =  "<!DOCTYPE doc_html><doc_html lang='en'><head><title>Code Outline</title>"
+    doc_html += "<style> * {font-weight:bold;padding-left:2rem;}"
+    doc_html += ".filename {padding-left:0em;}"
+    doc_html += ".docstring { font-weight:normal; color:green;}"
+    doc_html += ".docstring.text { font-weight:normal; color:green;}"
+    doc_html += ".class {color:blue;}"
+    doc_html += ".def {color:orange; }"
+    doc_html += ".text {color:black; font-size:1rem; font-weight:normal; }"
+    doc_html += "</style></head><body>"
     return doc_html
 
 def doc_body(doc, verbose = False):
@@ -93,28 +85,29 @@ def doc_body(doc, verbose = False):
             for l in obj.lines:
                 print(f"{'    ' * obj.indent_level} {l.replace('\n','')}")
         nextobj = doc.objects[(i+1) % len(doc.objects)]
-        doc_html += f"<details><summary><span class ='{obj.html_class}'>{obj.firstline}</span></summary>\n"
-        if(nextobj.indent_level <= obj.indent_level):
+        if(nextobj.indent_level > obj.indent_level):
+            doc_html += f"<details><summary><span class ='{obj.html_class}'>{obj.firstline}</span></summary>"
+        else:
+            doc_html += f"<details><summary><span class='{obj.html_class}'>{obj.firstline}</span></summary>"
+            doc_html += "<code>"
             for line in obj.lines[1:]:
-                doc_html += f"<span class ='{obj.html_class} inner'>{html.escape(line)}</span>\n"
-            for i in range(obj.indent_level - nextobj.indent_level + 1):
-                doc_html += "</details>\n"
+                doc_html += f"<div class ='{obj.html_class} text'>{html.escape(line).replace(' ','&nbsp')}</div>\n"
+            doc_html += "</code>"
+            doc_html += "</details>"
+        if(nextobj.indent_level < obj.indent_level):
+            for i in range(obj.indent_level - nextobj.indent_level):
+                doc_html += "</details>"
     return doc_html
             
 def main():
-    """
-        Another docstring for testing
-    """
     doc_html = html_head()
-    doc_html += "<body>\n"
 
     filepath = ""
     for fname  in ["make_outline.py"]:
         doc_html += f"<div class = 'filename'>{fname}</div>"
         doc = get_doc(filepath + fname, ['class','def','docstring','text'])
-        doc_html += doc_body(doc, verbose = True)
+        doc_html += doc_body(doc, verbose = False)
 
-    doc_html += "</body>\n"
     outname = "outline.html"
     with open(outname, "w", encoding="utf-8") as f:
         f.write(doc_html)
