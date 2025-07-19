@@ -13,24 +13,30 @@
 </style>
 </head>
 <body>
-<div class = 'filename'>make_outline.py</div><details><summary><span class ='docstring'>docstring</span></summary>
-<span class ='docstring inner'>    This may be the most promising for very lightweight semi-automatic documentation
+<div class = 'filename'>docu-lite.py</div><details><summary><span class ='docstring'>docstring</span></summary>
+<span class ='docstring inner'>    This is a demo of docu-lite semi-automatic documentation, using this same
 </span>
-<span class ='docstring inner'>    + classes make it neat and readable
+<span class ='docstring inner'>    file as the input test case. To try it on your own files,
 </span>
-<span class ='docstring inner'>    + it works
+<span class ='docstring inner'>    change these lines below:
+</span>
+<span class ='docstring inner'>        filepath = &quot;&quot;
+</span>
+<span class ='docstring inner'>        for fname  in [&quot;docu-lite.py&quot;]:
+</span>
+<span class ='docstring inner'>    Remember that if you use a path containing &quot;\&quot;, you&#x27;ll need to escape them by
+</span>
+<span class ='docstring inner'>    adding another &quot;\&quot; e.g. filepath = &quot;C:\\users\\me\\mydocs\\test.py&quot;
 </span>
 <span class ='docstring inner'>
 </span>
-<span class ='docstring inner'>    Next steps
+<span class ='docstring inner'>    This is the initial version with everything contained in one file.
 </span>
-<span class ='docstring inner'>        - ensure that &#x27;firstline&#x27; handles multiline argument lists &#x27;(&#x27; to &#x27;)&#x27;
+<span class ='docstring inner'>
 </span>
-<span class ='docstring inner'>        - tidy up the doc_html formatting
+<span class ='docstring inner'>    Future versions may grow to a library-based project with different HTML generators etc
 </span>
-<span class ='docstring inner'>            - several functions for different layouts?
-</span>
-<span class ='docstring inner'>            - sort out indentation in body text
+<span class ='docstring inner'>
 </span>
 </details>
 <details><summary><span class ='text'>text</span></summary>
@@ -225,13 +231,13 @@
 </span>
 <span class ='text inner'>    filepath = &quot;&quot;
 </span>
-<span class ='text inner'>    for fname  in [&quot;make_outline.py&quot;]:
+<span class ='text inner'>    for fname  in [&quot;docu-lite.py&quot;]:
 </span>
 <span class ='text inner'>        doc_html += f&quot;&lt;div class = &#x27;filename&#x27;&gt;{fname}&lt;/div&gt;&quot;
 </span>
 <span class ='text inner'>        doc = get_doc(filepath + fname, [&#x27;class&#x27;,&#x27;def&#x27;,&#x27;docstring&#x27;,&#x27;text&#x27;])
 </span>
-<span class ='text inner'>        doc_html += doc_body(doc, verbose = True)
+<span class ='text inner'>        doc_html += doc_body(doc, verbose = False)
 </span>
 <span class ='text inner'>
 </span>

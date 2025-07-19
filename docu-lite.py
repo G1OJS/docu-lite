@@ -1,13 +1,16 @@
 """
-    This may be the most promising for very lightweight semi-automatic documentation
-    + classes make it neat and readable
-    + it works
+    This is a demo of docu-lite semi-automatic documentation, using this same
+    file as the input test case. To try it on your own files,
+    change these lines below:
+        filepath = ""
+        for fname  in ["docu-lite.py"]:
+    Remember that if you use a path containing "\", you'll need to escape them by
+    adding another "\" e.g. filepath = "C:\\users\\me\\mydocs\\test.py"
 
-    Next steps
-        - ensure that 'firstline' handles multiline argument lists '(' to ')'
-        - tidy up the doc_html formatting
-            - several functions for different layouts?
-            - sort out indentation in body text
+    This is the initial version with everything contained in one file.
+
+    Future versions may grow to a library-based project with different HTML generators etc
+
 """
 import html
 
@@ -109,10 +112,10 @@ def main():
     doc_html += "<body>\n"
 
     filepath = ""
-    for fname  in ["make_outline.py"]:
+    for fname  in ["docu-lite.py"]:
         doc_html += f"<div class = 'filename'>{fname}</div>"
         doc = get_doc(filepath + fname, ['class','def','docstring','text'])
-        doc_html += doc_body(doc, verbose = True)
+        doc_html += doc_body(doc, verbose = False)
 
     doc_html += "</body>\n"
     outname = "outline.html"
