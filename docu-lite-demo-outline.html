@@ -1,18 +1,6 @@
-<!DOCTYPE doc_html><doc_html lang='en'>
+<!DOCTYPE html><html lang='en'>
 <head>
-<title>Code Outline</title><style>
- * {font-weight:bold;padding-left:2rem;}
-.filename {padding-left:0em;}
-.class {color:blue;}
-.def {color:orange; }
-.docstring {color:green;}
-.text {color:black;}
-.inner {font-size:1rem; font-weight:normal; white-space: pre;}
-.def.inner {color:black;}
-.class.inner {color:black;}
-</style>
-</head>
-<body>
+<title>docu-lite-demo-outline.html</title><link rel='stylesheet' href='./docu-lite-style.css' /><body>
 <div class = 'filename'>docu-lite.py</div><details><summary><span class ='docstring'>docstring</span></summary>
 <span class ='docstring inner'>    This is a demo of docu-lite semi-automatic documentation, using this same
 </span>
@@ -20,13 +8,17 @@
 </span>
 <span class ='docstring inner'>    change these lines below:
 </span>
-<span class ='docstring inner'>        filepath = &quot;&quot;
+<span class ='docstring inner'>        input_folder = &quot;&quot;
 </span>
-<span class ='docstring inner'>        for fname  in [&quot;docu-lite.py&quot;]:
+<span class ='docstring inner'>        input_filenames = [&quot;docu-lite.py&quot;]
+</span>
+<span class ='docstring inner'>        output_name = &quot;docu-lite-demo-outline.html&quot;
+</span>
+<span class ='docstring inner'>        output_style = &quot;docu-lite-style.css&quot;
 </span>
 <span class ='docstring inner'>    Remember that if you use a path containing &quot;\&quot;, you&#x27;ll need to escape them by
 </span>
-<span class ='docstring inner'>    adding another &quot;\&quot; e.g. filepath = &quot;C:\\users\\me\\mydocs\\test.py&quot;
+<span class ='docstring inner'>    adding another &quot;\&quot; e.g. input_folder = &quot;C:\\users\\me\\mydocs\\test.py&quot;
 </span>
 <span class ='docstring inner'>
 </span>
@@ -63,12 +55,14 @@
 </span>
 </details>
 </details>
-<details><summary><span class ='class'>class get_doc:</span></summary>
-<details><summary><span class ='def'>def __init__(self,filepath, objtypes):</span></summary>
+<details><summary><span class ='class'>class get_doc_objects:</span></summary>
+<details><summary><span class ='def'>def __init__(self, filepath, object_types = ['class','def','docstring','text']):</span></summary>
 <details><summary><span class ='docstring'>docstring</span></summary>
 <span class ='docstring inner'>            document-level properties and file reader / preprocessor
 </span>
-<span class ='docstring inner'>            completes with self.objects containing parsed docobjects
+<span class ='docstring inner'>            converts document into set of docobj in self.objects
+</span>
+<span class ='docstring inner'>            &#x27;docstring&#x27;,&#x27;text&#x27; represent the opening and closing docstring quotes 
 </span>
 </details>
 <details><summary><span class ='text'>text</span></summary>
@@ -94,15 +88,15 @@
 </span>
 <span class ='text inner'>        #    - replace all closing docstring makers with &#x27;text&#x27;
 </span>
-<span class ='text inner'>        opening = True
+<span class ='text inner'>        opening_tag = True
 </span>
 <span class ='text inner'>        for idx, line in enumerate(lines):
 </span>
 <span class ='text inner'>            if(line.strip() == &#x27;&quot;&quot;&quot;&#x27;):
 </span>
-<span class ='text inner'>                rep = &#x27;docstring&#x27; if opening else &#x27;text&#x27;
+<span class ='text inner'>                rep = &#x27;docstring&#x27; if opening_tag else &#x27;text&#x27;
 </span>
-<span class ='text inner'>                opening = not opening
+<span class ='text inner'>                opening_tag = not opening_tag
 </span>
 <span class ='text inner'>                lines[idx] = line.replace(&#x27;&quot;&quot;&quot;&#x27;,rep)
 </span>
@@ -114,7 +108,7 @@
 </span>
 <span class ='text inner'>        for line_no, line in enumerate(lines):
 </span>
-<span class ='text inner'>            for p in objtypes:
+<span class ='text inner'>            for p in object_types:
 </span>
 <span class ='text inner'>                if line.strip().startswith(p):
 </span>
@@ -157,65 +151,43 @@
 </details>
 </details>
 </details>
-<details><summary><span class ='def'>def html_head():</span></summary>
-<span class ='def inner'>    doc_html =  &quot;&lt;!DOCTYPE doc_html&gt;&lt;doc_html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;Code Outline&lt;/title&gt;&quot;
-</span>
-<span class ='def inner'>    doc_html += &quot;&lt;style&gt;\n * {font-weight:bold;padding-left:2rem;}\n&quot;
-</span>
-<span class ='def inner'>    doc_html += &quot;.filename {padding-left:0em;}\n&quot;
-</span>
-<span class ='def inner'>    doc_html += &quot;.class {color:blue;}\n&quot;
-</span>
-<span class ='def inner'>    doc_html += &quot;.def {color:orange; }\n&quot;
-</span>
-<span class ='def inner'>    doc_html += &quot;.docstring {color:green;}\n&quot;
-</span>
-<span class ='def inner'>    doc_html += &quot;.text {color:black;}\n&quot;
-</span>
-<span class ='def inner'>    doc_html += &quot;.inner {font-size:1rem; font-weight:normal; white-space: pre;}\n&quot;
-</span>
-<span class ='def inner'>    doc_html += &quot;.def.inner {color:black;}\n&quot;
-</span>
-<span class ='def inner'>    doc_html += &quot;.class.inner {color:black;}\n&quot;
-</span>
-<span class ='def inner'>    doc_html += &quot;&lt;/style&gt;\n&lt;/head&gt;\n&quot;
-</span>
-<span class ='def inner'>    return doc_html
-</span>
-<span class ='def inner'>
+<details><summary><span class ='def'>def object_list_to_HTML(doc, verbose = False):</span></summary>
+<details><summary><span class ='docstring'>docstring</span></summary>
+<span class ='docstring inner'>        converts list of doc_objects into HTML
 </span>
 </details>
-<details><summary><span class ='def'>def doc_body(doc, verbose = False):</span></summary>
-<span class ='def inner'>    doc_html = &quot;&quot;
+<details><summary><span class ='text'>text</span></summary>
+<span class ='text inner'>    doc_html = &quot;&quot;
 </span>
-<span class ='def inner'>    for i,obj in enumerate(doc.objects):
+<span class ='text inner'>    for i,obj in enumerate(doc.objects):
 </span>
-<span class ='def inner'>        if(verbose):
+<span class ='text inner'>        if(verbose):
 </span>
-<span class ='def inner'>            print(f&quot;Level {obj.indent_level} object, firstline =  {obj.firstline}&quot;)
+<span class ='text inner'>            print(f&quot;Level {obj.indent_level} object, firstline =  {obj.firstline}&quot;)
 </span>
-<span class ='def inner'>            for l in obj.lines:
+<span class ='text inner'>            for l in obj.lines:
 </span>
-<span class ='def inner'>                print(f&quot;{&#x27;    &#x27; * obj.indent_level} {l.replace(&#x27;\n&#x27;,&#x27;&#x27;)}&quot;)
+<span class ='text inner'>                print(f&quot;{&#x27;    &#x27; * obj.indent_level} {l.replace(&#x27;\n&#x27;,&#x27;&#x27;)}&quot;)
 </span>
-<span class ='def inner'>        nextobj = doc.objects[(i+1) % len(doc.objects)]
+<span class ='text inner'>        nextobj = doc.objects[(i+1) % len(doc.objects)]
 </span>
-<span class ='def inner'>        doc_html += f&quot;&lt;details&gt;&lt;summary&gt;&lt;span class =&#x27;{obj.html_class}&#x27;&gt;{obj.firstline}&lt;/span&gt;&lt;/summary&gt;\n&quot;
+<span class ='text inner'>        doc_html += f&quot;&lt;details&gt;&lt;summary&gt;&lt;span class =&#x27;{obj.html_class}&#x27;&gt;{obj.firstline}&lt;/span&gt;&lt;/summary&gt;\n&quot;
 </span>
-<span class ='def inner'>        if(nextobj.indent_level &lt;= obj.indent_level):
+<span class ='text inner'>        if(nextobj.indent_level &lt;= obj.indent_level):
 </span>
-<span class ='def inner'>            for line in obj.lines[1:]:
+<span class ='text inner'>            for line in obj.lines[1:]:
 </span>
-<span class ='def inner'>                doc_html += f&quot;&lt;span class =&#x27;{obj.html_class} inner&#x27;&gt;{html.escape(line)}&lt;/span&gt;\n&quot;
+<span class ='text inner'>                doc_html += f&quot;&lt;span class =&#x27;{obj.html_class} inner&#x27;&gt;{html.escape(line)}&lt;/span&gt;\n&quot;
 </span>
-<span class ='def inner'>            for i in range(obj.indent_level - nextobj.indent_level + 1):
+<span class ='text inner'>            for i in range(obj.indent_level - nextobj.indent_level + 1):
 </span>
-<span class ='def inner'>                doc_html += &quot;&lt;/details&gt;\n&quot;
+<span class ='text inner'>                doc_html += &quot;&lt;/details&gt;\n&quot;
 </span>
-<span class ='def inner'>    return doc_html
+<span class ='text inner'>    return doc_html
 </span>
-<span class ='def inner'>            
+<span class ='text inner'>            
 </span>
+</details>
 </details>
 <details><summary><span class ='def'>def main():</span></summary>
 <details><summary><span class ='docstring'>docstring</span></summary>
@@ -223,35 +195,45 @@
 </span>
 </details>
 <details><summary><span class ='text'>text</span></summary>
-<span class ='text inner'>    doc_html = html_head()
+<span class ='text inner'>    input_folder = &quot;&quot;
 </span>
-<span class ='text inner'>    doc_html += &quot;&lt;body&gt;\n&quot;
+<span class ='text inner'>    input_filenames = [&quot;docu-lite.py&quot;]
 </span>
-<span class ='text inner'>
+<span class ='text inner'>    output_name = &quot;docu-lite-demo-outline.html&quot;
 </span>
-<span class ='text inner'>    filepath = &quot;&quot;
+<span class ='text inner'>    output_style = &quot;docu-lite-style.css&quot;
 </span>
-<span class ='text inner'>    for fname  in [&quot;docu-lite.py&quot;]:
+<span class ='text inner'>    
 </span>
-<span class ='text inner'>        doc_html += f&quot;&lt;div class = &#x27;filename&#x27;&gt;{fname}&lt;/div&gt;&quot;
+<span class ='text inner'>    output_html =  f&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;{output_name}&lt;/title&gt;&quot;
 </span>
-<span class ='text inner'>        doc = get_doc(filepath + fname, [&#x27;class&#x27;,&#x27;def&#x27;,&#x27;docstring&#x27;,&#x27;text&#x27;])
+<span class ='text inner'>    output_html += f&quot;&lt;link rel=&#x27;stylesheet&#x27; href=&#x27;./{output_style}&#x27; /&gt;&quot;
 </span>
-<span class ='text inner'>        doc_html += doc_body(doc, verbose = False)
-</span>
-<span class ='text inner'>
-</span>
-<span class ='text inner'>    doc_html += &quot;&lt;/body&gt;\n&quot;
-</span>
-<span class ='text inner'>    outname = &quot;outline.html&quot;
-</span>
-<span class ='text inner'>    with open(outname, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
-</span>
-<span class ='text inner'>        f.write(doc_html)
+<span class ='text inner'>    output_html += &quot;&lt;body&gt;\n&quot;
 </span>
 <span class ='text inner'>
 </span>
-<span class ='text inner'>    print(f&quot;\n\nOutline written to {outname}&quot;)
+<span class ='text inner'>    for fname in input_filenames:
+</span>
+<span class ='text inner'>        output_html += f&quot;&lt;div class = &#x27;filename&#x27;&gt;{fname}&lt;/div&gt;&quot;
+</span>
+<span class ='text inner'>        doc_objects = get_doc_objects(input_folder + fname)
+</span>
+<span class ='text inner'>        output_html += object_list_to_HTML(doc_objects)
+</span>
+<span class ='text inner'>
+</span>
+<span class ='text inner'>    output_html += &quot;&lt;/body&gt;\n&quot;
+</span>
+<span class ='text inner'> 
+</span>
+<span class ='text inner'>    with open(output_name, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+</span>
+<span class ='text inner'>        f.write(output_html)
+</span>
+<span class ='text inner'>
+</span>
+<span class ='text inner'>    print(f&quot;\n\nOutline written to {output_name}.html&quot;)
 </span>
 <span class ='text inner'>
 </span>

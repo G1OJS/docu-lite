@@ -1,0 +1,9 @@
+ * {font-weight:bold;padding-left:2rem;}
+.filename {padding-left:0em;}
+.class {color:blue;}
+.def {color:orange; }
+.docstring {color:green;}
+.text {color:black;}
+.inner {font-size:1rem; font-weight:normal; white-space: pre; margin-left:2rem;}
+.def.inner {color:black;}
+.class.inner {color:black;}

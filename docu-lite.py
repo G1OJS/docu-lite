@@ -2,10 +2,12 @@
     This is a demo of docu-lite semi-automatic documentation, using this same
     file as the input test case. To try it on your own files,
     change these lines below:
-        filepath = ""
-        for fname  in ["docu-lite.py"]:
+        input_folder = ""
+        input_filenames = ["docu-lite.py"]
+        output_name = "docu-lite-demo-outline.html"
+        output_style = "docu-lite-style.css"
     Remember that if you use a path containing "\", you'll need to escape them by
-    adding another "\" e.g. filepath = "C:\\users\\me\\mydocs\\test.py"
+    adding another "\" e.g. input_folder = "C:\\users\\me\\mydocs\\test.py"
 
     This is the initial version with everything contained in one file.
 
@@ -27,11 +29,12 @@ class docobj:
         self.indent_spaces = len(firstline) - len(firstline.lstrip())
         self.indent_level = 0
 
-class get_doc:
-    def __init__(self,filepath, objtypes):
+class get_doc_objects:
+    def __init__(self, filepath, object_types = ['class','def','docstring','text']):
         """
             document-level properties and file reader / preprocessor
-            completes with self.objects containing parsed docobjects
+            converts document into set of docobj in self.objects
+            'docstring','text' represent the opening and closing docstring quotes 
         """
         self.objects = []
         indent_level = 0
@@ -44,17 +47,17 @@ class get_doc:
         #   ignore """text""" and """text\ntext""", otherwise:
         #    - replace all opening docstring markers with 'docstring'
         #    - replace all closing docstring makers with 'text'
-        opening = True
+        opening_tag = True
         for idx, line in enumerate(lines):
             if(line.strip() == '"""'):
-                rep = 'docstring' if opening else 'text'
-                opening = not opening
+                rep = 'docstring' if opening_tag else 'text'
+                opening_tag = not opening_tag
                 lines[idx] = line.replace('"""',rep)
 
         # find document objects and remember the line number they start at
         line_index = []
         for line_no, line in enumerate(lines):
-            for p in objtypes:
+            for p in object_types:
                 if line.strip().startswith(p):
                     self.objects.append(docobj(line))
                     line_index.append(line_no)
@@ -74,21 +77,10 @@ class get_doc:
             obj.indent_level = indents.index(obj.indent_spaces)
 
 
-def html_head():
-    doc_html =  "<!DOCTYPE doc_html><doc_html lang='en'>\n<head>\n<title>Code Outline</title>"
-    doc_html += "<style>\n * {font-weight:bold;padding-left:2rem;}\n"
-    doc_html += ".filename {padding-left:0em;}\n"
-    doc_html += ".class {color:blue;}\n"
-    doc_html += ".def {color:orange; }\n"
-    doc_html += ".docstring {color:green;}\n"
-    doc_html += ".text {color:black;}\n"
-    doc_html += ".inner {font-size:1rem; font-weight:normal; white-space: pre;}\n"
-    doc_html += ".def.inner {color:black;}\n"
-    doc_html += ".class.inner {color:black;}\n"
-    doc_html += "</style>\n</head>\n"
-    return doc_html
-
-def doc_body(doc, verbose = False):
+def object_list_to_HTML(doc, verbose = False):
+    """
+        converts list of doc_objects into HTML
+    """
     doc_html = ""
     for i,obj in enumerate(doc.objects):
         if(verbose):
@@ -108,21 +100,26 @@ def main():
     """
         Another docstring for testing
     """
-    doc_html = html_head()
-    doc_html += "<body>\n"
+    input_folder = ""
+    input_filenames = ["docu-lite.py"]
+    output_name = "docu-lite-demo-outline.html"
+    output_style = "docu-lite-style.css"
+    
+    output_html =  f"<!DOCTYPE html><html lang='en'>\n<head>\n<title>{output_name}</title>"
+    output_html += f"<link rel='stylesheet' href='./{output_style}' />"
+    output_html += "<body>\n"
 
-    filepath = ""
-    for fname  in ["docu-lite.py"]:
-        doc_html += f"<div class = 'filename'>{fname}</div>"
-        doc = get_doc(filepath + fname, ['class','def','docstring','text'])
-        doc_html += doc_body(doc, verbose = False)
+    for fname in input_filenames:
+        output_html += f"<div class = 'filename'>{fname}</div>"
+        doc_objects = get_doc_objects(input_folder + fname)
+        output_html += object_list_to_HTML(doc_objects)
 
-    doc_html += "</body>\n"
-    outname = "outline.html"
-    with open(outname, "w", encoding="utf-8") as f:
-        f.write(doc_html)
+    output_html += "</body>\n"
+ 
+    with open(output_name, "w", encoding="utf-8") as f:
+        f.write(output_html)
 
-    print(f"\n\nOutline written to {outname}")
+    print(f"\n\nOutline written to {output_name}.html")
 
 if __name__ == "__main__":
     main()
