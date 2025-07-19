@@ -3,8 +3,9 @@
 #### Browse classes and functions with collapsible docstrings in a tidy, readable format.
 
 This is the MVP upload. Coming soon 
-  - use your own css file instead of the auto-generated css
+  - command line arguments
 
 Just 100 lines to make HTML for this:
 
-![Capture](https://github.com/user-attachments/assets/bbc3723a-ad19-410e-8e7d-8d09e744b198)
+![Capture](https://github.com/user-attachments/assets/c2eb5243-5666-428a-a1f7-4a09ec127285)
+
