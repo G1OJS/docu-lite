@@ -88,8 +88,10 @@ def doc_body(doc, verbose = False):
             doc_html += f"<details><summary><span class ='{obj.html_class}'>{obj.firstline}</span></summary>"
         else:
             doc_html += f"<details><summary><span class='{obj.html_class}'>{obj.firstline}</span></summary>"
+            doc_html += "<code>"
             for line in obj.lines[1:]:
                 doc_html += f"<div class ='{obj.html_class} text'>{html.escape(line).replace(' ','&nbsp')}</div>\n"
+            doc_html += "</code>"
             doc_html += "</details>"
         if(nextobj.indent_level < obj.indent_level):
             for i in range(obj.indent_level - nextobj.indent_level):

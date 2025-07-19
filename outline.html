@@ -1,4 +1,4 @@
-<!DOCTYPE doc_html><doc_html lang='en'><head><title>Code Outline</title><style> * {font-weight:bold;padding-left:2rem;}.filename {padding-left:0em;}.docstring { font-weight:normal; color:green;}.docstring.text { font-weight:normal; color:green;}.class {color:blue;}.def {color:orange; }.text {color:black; font-size:1rem; font-weight:normal; }</style></head><body><div class = 'filename'>make_outline.py</div><details><summary><span class='docstring'>docstring</span></summary><div class ='docstring text'>&nbsp&nbsp&nbsp&nbspThis&nbspmay&nbspbe&nbspthe&nbspmost&nbsppromising&nbspfor&nbspvery&nbsplightweight&nbspsemi-automatic&nbspdocumentation
+<!DOCTYPE doc_html><doc_html lang='en'><head><title>Code Outline</title><style> * {font-weight:bold;padding-left:2rem;}.filename {padding-left:0em;}.docstring { font-weight:normal; color:green;}.docstring.text { font-weight:normal; color:green;}.class {color:blue;}.def {color:orange; }.text {color:black; font-size:1rem; font-weight:normal; }</style></head><body><div class = 'filename'>make_outline.py</div><details><summary><span class='docstring'>docstring</span></summary><code><div class ='docstring text'>&nbsp&nbsp&nbsp&nbspThis&nbspmay&nbspbe&nbspthe&nbspmost&nbsppromising&nbspfor&nbspvery&nbsplightweight&nbspsemi-automatic&nbspdocumentation
 </div>
 <div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp+&nbspclasses&nbspmake&nbspit&nbspneat&nbspand&nbspreadable
 </div>
@@ -16,13 +16,11 @@
 </div>
 <div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-&nbspsort&nbspout&nbspindentation&nbspin&nbspbody&nbsptext
 </div>
-<div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-&nbspcheck&nbspif&nbspcharacters&nbspin&nbspmain&nbspneed&nbspescaping&nbsp
-</div>
-</details><details><summary><span class='text'>text</span></summary><div class ='text text'>import&nbsphtml
+</code></details><details><summary><span class='text'>text</span></summary><code><div class ='text text'>import&nbsphtml
 </div>
 <div class ='text text'>
 </div>
-</details><details><summary><span class ='class'>class docobj:</span></summary><details><summary><span class='def'>def __init__(self, firstline):</span></summary><div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.firstline&nbsp=&nbspfirstline.strip()
+</code></details><details><summary><span class ='class'>class docobj:</span></summary><details><summary><span class='def'>def __init__(self, firstline):</span></summary><code><div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.firstline&nbsp=&nbspfirstline.strip()
 </div>
 <div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.html_class&nbsp=&nbspself.firstline.split(&quot;&nbsp&quot;)[0]
 </div>
@@ -36,11 +34,11 @@
 </div>
 <div class ='def text'>
 </div>
-</details></details><details><summary><span class ='class'>class get_doc:</span></summary><details><summary><span class ='def'>def __init__(self,filepath, objtypes):</span></summary><details><summary><span class='docstring'>docstring</span></summary><div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdocument-level&nbspproperties&nbspand&nbspfile&nbspreader&nbsp/&nbsppreprocessor
+</code></details></details><details><summary><span class ='class'>class get_doc:</span></summary><details><summary><span class ='def'>def __init__(self,filepath, objtypes):</span></summary><details><summary><span class='docstring'>docstring</span></summary><code><div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdocument-level&nbspproperties&nbspand&nbspfile&nbspreader&nbsp/&nbsppreprocessor
 </div>
 <div class ='docstring text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspcompletes&nbspwith&nbspself.objects&nbspcontaining&nbspparsed&nbspdocobjects
 </div>
-</details><details><summary><span class='text'>text</span></summary><div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.objects&nbsp=&nbsp[]
+</code></details><details><summary><span class='text'>text</span></summary><code><div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspself.objects&nbsp=&nbsp[]
 </div>
 <div class ='text text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspindent_level&nbsp=&nbsp0
 </div>
@@ -114,7 +112,7 @@
 </div>
 <div class ='text text'>
 </div>
-</details></details></details><details><summary><span class='def'>def html_head():</span></summary><div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp=&nbsp&nbsp&quot;&lt;!DOCTYPE&nbspdoc_html&gt;&lt;doc_html&nbsplang=&#x27;en&#x27;&gt;&lt;head&gt;&lt;title&gt;Code&nbspOutline&lt;/title&gt;&quot;
+</code></details></details></details><details><summary><span class='def'>def html_head():</span></summary><code><div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp=&nbsp&nbsp&quot;&lt;!DOCTYPE&nbspdoc_html&gt;&lt;doc_html&nbsplang=&#x27;en&#x27;&gt;&lt;head&gt;&lt;title&gt;Code&nbspOutline&lt;/title&gt;&quot;
 </div>
 <div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;&lt;style&gt;&nbsp*&nbsp{font-weight:bold;padding-left:2rem;}&quot;
 </div>
@@ -136,7 +134,7 @@
 </div>
 <div class ='def text'>
 </div>
-</details><details><summary><span class='def'>def doc_body(doc, verbose = False):</span></summary><div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp=&nbsp&quot;&quot;
+</code></details><details><summary><span class='def'>def doc_body(doc, verbose = False):</span></summary><code><div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp=&nbsp&quot;&quot;
 </div>
 <div class ='def text'>&nbsp&nbsp&nbsp&nbspfor&nbspi,obj&nbspin&nbspenumerate(doc.objects):
 </div>
@@ -158,9 +156,13 @@
 </div>
 <div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbspf&quot;&lt;details&gt;&lt;summary&gt;&lt;span&nbspclass=&#x27;{obj.html_class}&#x27;&gt;{obj.firstline}&lt;/span&gt;&lt;/summary&gt;&quot;
 </div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;&lt;code&gt;&quot;
+</div>
 <div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspfor&nbspline&nbspin&nbspobj.lines[1:]:
 </div>
 <div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbspf&quot;&lt;div&nbspclass&nbsp=&#x27;{obj.html_class}&nbsptext&#x27;&gt;{html.escape(line).replace(&#x27;&nbsp&#x27;,&#x27;&amp;nbsp&#x27;)}&lt;/div&gt;\n&quot;
+</div>
+<div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;&lt;/code&gt;&quot;
 </div>
 <div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspdoc_html&nbsp+=&nbsp&quot;&lt;/details&gt;&quot;
 </div>
@@ -174,7 +176,7 @@
 </div>
 <div class ='def text'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 </div>
-</details><details><summary><span class='def'>def main():</span></summary><div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp=&nbsphtml_head()
+</code></details><details><summary><span class='def'>def main():</span></summary><code><div class ='def text'>&nbsp&nbsp&nbsp&nbspdoc_html&nbsp=&nbsphtml_head()
 </div>
 <div class ='def text'>
 </div>
@@ -210,4 +212,4 @@
 </div>
 <div class ='def text'>
 </div>
-</details>
+</code></details>
