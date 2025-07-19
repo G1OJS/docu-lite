@@ -5,6 +5,6 @@
 This is the first upload. Coming soon 
   - use your own css file instead of the auto-generated css
 
-Just 100 lines to make this:
+Just 100 lines to make HTML for this:
 
 ![Capture](https://github.com/user-attachments/assets/bbc3723a-ad19-410e-8e7d-8d09e744b198)
