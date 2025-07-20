@@ -2,9 +2,9 @@
 ### Ultra-light Zero-dependency HTML outline generator for Python.  
 * Browse classes and functions with collapsible docstrings in a tidy, readable format.
 * Specify your own stylesheet(s) or rely on the default (will be generated on run)
-* Integrate into your GitHub Workflow for Up to Date outline in your repo
-
-Ultra-light: Just 100 lines to make HTML like this:
+* Ultra-light: no dependencies, short script
+* [Integrate into your GitHub Workflow](https://github.com/G1OJS/docu-lite/blob/main/adding-to-GitHub-workflow.md) for Up to Date outline in your repo
+* Produces output like this [live file]()
 
 ![Capture](https://github.com/user-attachments/assets/c2eb5243-5666-428a-a1f7-4a09ec127285)
 
