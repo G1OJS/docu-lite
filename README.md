@@ -1,4 +1,4 @@
-# 🧾 docu-lite [![PyPI Downloads](https://static.pepy.tech/badge/docu-lite)](https://pepy.tech/projects/docu-lite) [PyPI](https://pypi.org/project/docu-lite/)
+# 🧾 docu-lite [![PyPI Downloads](https://static.pepy.tech/badge/docu-lite)](https://pepy.tech/projects/docu-lite) 
 ### ⚡ Ultra-light Zero-dependency HTML outline generator for Python.  
 
 
@@ -58,4 +58,4 @@ docu-lite [-i INPUT_PATTERN] [-o OUTPUT_FILE] [-s CSS_FILE] [--documentation]
 - If you specify a CSS file, **docu-lite simply references it** in the output HTML — it doesn't modify or generate it.
 - If the default CSS file is missing, **it will be automatically generated** and used.
 
-
+[PyPI link](https://pypi.org/project/docu-lite/)
