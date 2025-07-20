@@ -7,7 +7,10 @@
 * Specify your own stylesheet(s) or rely on the default (will be generated on run)
 * Ultra-light: no dependencies, short script
 * [Integrate into your GitHub Workflow](https://g1ojs.github.io/docu-lite/add-to-workflow/) for Up to Date outline in your repo
-* Produces output like this [live file](https://g1ojs.github.io/docu-lite/docu-lite-outline.html) [live file - documentation mode](https://g1ojs.github.io/docu-lite/docu-lite-outline_docs.html) and the screenshot below
+* Produces output like this:
+    - [live file](https://g1ojs.github.io/docu-lite/docu-lite-outline.html)
+    - [live file - documentation mode](https://g1ojs.github.io/docu-lite/docu-lite-outline_docs.html)
+    - screenshot below
 
 <html><div style='color:red;'> V1.0.0 coming soon - I just want to create another output view more directly suitable for documentation as well as the detailed view below </div></html>
 
