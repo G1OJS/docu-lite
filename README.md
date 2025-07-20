@@ -1,5 +1,5 @@
 # 🧾 docu-lite
-### Ultra-light Zero-dependency HTML outline generator for Python. 
+### Ultra-light Zero-dependency HTML outline generator for Python.  
 * Browse classes and functions with collapsible docstrings in a tidy, readable format.
 * Specify your own stylesheet(s)
 
