@@ -74,7 +74,8 @@ import argparse
                     if(len(objects) &gt; 0):           
                         objects[-1].content_end = (line_no) # end of previous object
                     objects.append(obj)
-        objects[-1].content_end = len(lines)                # end of last object in document
+        if(len(objects)&gt;1):
+            objects[-1].content_end = len(lines)            # end of last object in document
                
         # tell the object what its indent level is within the document
         indents =[0]
