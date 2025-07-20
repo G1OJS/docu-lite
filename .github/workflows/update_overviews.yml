@@ -19,7 +19,7 @@ jobs:
 
       - name: Install docu-lite
         run: |
-          python -m pip install git+https://github.com/G1OJS/docu-lite.git
+          python -m pip install docu-lite
 
       - name: Run docu-lite
         run: |
