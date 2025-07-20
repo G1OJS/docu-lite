@@ -3,7 +3,7 @@
 * Browse classes and functions with collapsible docstrings in a tidy, readable format.
 * Specify your own stylesheet(s) or rely on the default (will be generated on run)
 * Ultra-light: no dependencies, short script
-* [Integrate into your GitHub Workflow](https://github.com/G1OJS/docu-lite/blob/main/adding-to-GitHub-workflow.md) for Up to Date outline in your repo
+* [Integrate into your GitHub Workflow](https://g1ojs.github.io/docu-lite/add-to-workflow/) for Up to Date outline in your repo
 * Produces output like this [live file](https://g1ojs.github.io/docu-lite/docu-lite-outline.html) and this:
 
 ![Capture](https://github.com/user-attachments/assets/c2eb5243-5666-428a-a1f7-4a09ec127285)
