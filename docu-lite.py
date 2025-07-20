@@ -127,7 +127,7 @@ def main(args):
     """
         Another docstring for testing
     """
-    version_string = "v0.5.0"
+    version_string = "v0.5.1"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
     documentation_mode = args.documentation
