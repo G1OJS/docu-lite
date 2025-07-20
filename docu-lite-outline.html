@@ -1,20 +1,34 @@
 <!DOCTYPE html><html lang='en'>
 <head>
-<title>docu-lite-demo-outline.html</title><link rel='stylesheet' href='./docu-lite-style.css' /><body>
+<title>docu-lite-outline.html</title><link rel='stylesheet' href='./docu-lite-style.css' /><body>
 <span class = 'filename'>docu-lite.py</span><br><details open><summary><span class ='docstring signature'>docstring</span></summary>
 <pre class ='docstring content'>    This is a demo of docu-lite semi-automatic documentation, using this same
     file as the input test case. To try it on your own files,
     change these lines below:
         input_folder = &quot;&quot;
-        input_filenames = [&quot;docu-lite.py&quot;]
         output_name = &quot;docu-lite-demo-outline.html&quot;
-        output_style = &quot;docu-lite-style.css&quot;
+        style_sheet = &quot;docu-lite-style.css&quot;
     Remember that if you use a path containing &quot;\&quot;, you&#x27;ll need to escape them by
     adding another &quot;\&quot; e.g. input_folder = &quot;C:\\users\\me\\mydocs\\test.py&quot;
 </pre>
 </details>
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'>import html
+import glob
+import os
+import argparse
+
+</pre>
+</details>
+<details><summary><span class ='def signature'>def parse_args():</span></summary>
+<pre class ='def content'>    parser = argparse.ArgumentParser(description=&quot;Generate an HTML doc outline from source code.&quot;)
+    parser.add_argument(&quot;-i&quot;, &quot;--input&quot;, nargs=&quot;*&quot;, default=&quot;./*.py&quot;,
+                        help=&quot;Input filenames (default: ./*.py)&quot;)
+    parser.add_argument(&quot;-o&quot;, &quot;--output&quot;, default=&quot;docu-lite-outline.html&quot;,
+                        help=&quot;Output HTML file (default: docu-lite-outline.html)&quot;)
+    parser.add_argument(&quot;-s&quot;, &quot;--style&quot;, default=&quot;docu-lite-style.css&quot;,
+                        help=&quot;Output CSS file (default: docu-lite-style.css)&quot;)
+    return parser.parse_args()
 
 </pre>
 </details>
@@ -75,7 +89,7 @@
 </details>
 </details>
 </details>
-<details><summary><span class ='def signature'>def object_list_to_HTML(lines, doc_objects, verbose = False):</span></summary>
+<details><summary><span class ='def signature'>def object_list_to_HTML(lines, doc_objects):</span></summary>
 <details open><summary><span class ='docstring signature'>docstring</span></summary>
 <pre class ='docstring content'>        converts list of doc_objects into HTML
 </pre>
@@ -83,10 +97,6 @@
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'>    doc_html = &quot;&quot;
     for i,obj in enumerate(doc_objects):
-        if(verbose):
-            print(f&quot;Level {obj.indent_level} object, signature =  {obj.signature}&quot;)
-            for l in obj.lines:
-                print(f&quot;{&#x27;    &#x27; * obj.indent_level} {l.replace(&#x27;\n&#x27;,&#x27;&#x27;)}&quot;)
         nextobj = doc_objects[(i+1) % len(doc_objects)]
         details_open = &#x27; open&#x27; if (obj.object_type == &#x27;docstring&#x27;) else &#x27;&#x27;
         doc_html += f&quot;&lt;details{details_open}&gt;&lt;summary&gt;&lt;span class =&#x27;{obj.object_type} {&#x27;signature&#x27;}&#x27;&gt;{obj.signature}&lt;/span&gt;&lt;/summary&gt;\n&quot;
@@ -102,25 +112,25 @@
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def main():</span></summary>
+<details><summary><span class ='def signature'>def main(input_pattern, style_sheet, output_name):</span></summary>
 <details open><summary><span class ='docstring signature'>docstring</span></summary>
 <pre class ='docstring content'>        Another docstring for testing
 </pre>
 </details>
 <details><summary><span class ='body signature'>body</span></summary>
-<pre class ='body content'>    input_folder = &quot;&quot;
-    input_filenames = [&quot;docu-lite.py&quot;]
-    output_name = &quot;docu-lite-demo-outline.html&quot;
-    output_style = &quot;docu-lite-style.css&quot;
-    
-    output_html =  f&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;{output_name}&lt;/title&gt;&quot;
-    output_html += f&quot;&lt;link rel=&#x27;stylesheet&#x27; href=&#x27;./{output_style}&#x27; /&gt;&quot;
+<pre class ='body content'>    output_html =  f&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;{output_name}&lt;/title&gt;&quot;
+    output_html += f&quot;&lt;link rel=&#x27;stylesheet&#x27; href=&#x27;./{style_sheet}&#x27; /&gt;&quot;
     output_html += &quot;&lt;body&gt;\n&quot;
 
-    for fname in input_filenames:
-        with open(input_folder + fname,&quot;r&quot;) as f:
+    for filepath in glob.glob(input_pattern):
+        filename = os.path.basename(filepath)
+        print(f&quot;Found file: {filename}&quot;)
+        with open(filepath,&quot;r&quot;) as f:
             lines = f.readlines()
-        output_html += f&quot;&lt;span class = &#x27;filename&#x27;&gt;{fname}&lt;/span&gt;&lt;br&gt;&quot;
+        if(len(lines) ==0):
+            print(f&quot;File: {filename} has no content - skipping&quot;)
+            continue
+        output_html += f&quot;&lt;span class = &#x27;filename&#x27;&gt;{filename}&lt;/span&gt;&lt;br&gt;&quot;
         doc_objects = get_doc_objects(lines)
         output_html += object_list_to_HTML(lines, doc_objects)
         
@@ -130,7 +140,8 @@
     print(f&quot;\n\nOutline written to {output_name}.html&quot;)
 
 if __name__ == &quot;__main__&quot;:
-    main()
+    args = parse_args()
+    main(args.input, args.style, args.output)
 
 </pre>
 </details>

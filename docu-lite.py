@@ -3,13 +3,25 @@
     file as the input test case. To try it on your own files,
     change these lines below:
         input_folder = ""
-        input_filenames = ["docu-lite.py"]
         output_name = "docu-lite-demo-outline.html"
-        output_style = "docu-lite-style.css"
+        style_sheet = "docu-lite-style.css"
     Remember that if you use a path containing "\", you'll need to escape them by
     adding another "\" e.g. input_folder = "C:\\users\\me\\mydocs\\test.py"
 """
 import html
+import glob
+import os
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Generate an HTML doc outline from source code.")
+    parser.add_argument("-i", "--input", nargs="*", default="./*.py",
+                        help="Input filenames (default: ./*.py)")
+    parser.add_argument("-o", "--output", default="docu-lite-outline.html",
+                        help="Output HTML file (default: docu-lite-outline.html)")
+    parser.add_argument("-s", "--style", default="docu-lite-style.css",
+                        help="Output CSS file (default: docu-lite-style.css)")
+    return parser.parse_args()
 
 class docobj:
     """ structure to contain information about each object in the document """
@@ -60,16 +72,12 @@ def get_doc_objects(lines, object_signatures = ['class','def','docstring','body'
 
         return objects
 
-def object_list_to_HTML(lines, doc_objects, verbose = False):
+def object_list_to_HTML(lines, doc_objects):
     """
         converts list of doc_objects into HTML
     """
     doc_html = ""
     for i,obj in enumerate(doc_objects):
-        if(verbose):
-            print(f"Level {obj.indent_level} object, signature =  {obj.signature}")
-            for l in obj.lines:
-                print(f"{'    ' * obj.indent_level} {l.replace('\n','')}")
         nextobj = doc_objects[(i+1) % len(doc_objects)]
         details_open = ' open' if (obj.object_type == 'docstring') else ''
         doc_html += f"<details{details_open}><summary><span class ='{obj.object_type} {'signature'}'>{obj.signature}</span></summary>\n"
@@ -82,23 +90,23 @@ def object_list_to_HTML(lines, doc_objects, verbose = False):
                 doc_html += "</details>\n"
     return doc_html
             
-def main():
+def main(input_pattern, style_sheet, output_name):
     """
         Another docstring for testing
     """
-    input_folder = ""
-    input_filenames = ["docu-lite.py"]
-    output_name = "docu-lite-demo-outline.html"
-    output_style = "docu-lite-style.css"
-    
     output_html =  f"<!DOCTYPE html><html lang='en'>\n<head>\n<title>{output_name}</title>"
-    output_html += f"<link rel='stylesheet' href='./{output_style}' />"
+    output_html += f"<link rel='stylesheet' href='./{style_sheet}' />"
     output_html += "<body>\n"
 
-    for fname in input_filenames:
-        with open(input_folder + fname,"r") as f:
+    for filepath in glob.glob(input_pattern):
+        filename = os.path.basename(filepath)
+        print(f"Found file: {filename}")
+        with open(filepath,"r") as f:
             lines = f.readlines()
-        output_html += f"<span class = 'filename'>{fname}</span><br>"
+        if(len(lines) ==0):
+            print(f"File: {filename} has no content - skipping")
+            continue
+        output_html += f"<span class = 'filename'>{filename}</span><br>"
         doc_objects = get_doc_objects(lines)
         output_html += object_list_to_HTML(lines, doc_objects)
         
@@ -108,5 +116,6 @@ def main():
     print(f"\n\nOutline written to {output_name}.html")
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    main(args.input, args.style, args.output)
 
