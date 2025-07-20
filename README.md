@@ -12,8 +12,6 @@
     - [live file - documentation mode](https://g1ojs.github.io/docu-lite/docu-lite-outline_docs.html)
     - screenshot below
 
-<html><div style='color:red;'> V1.0.0 coming soon - I just want to create another output view more directly suitable for documentation as well as the detailed view below </div></html>
-
 ![Capture](https://github.com/user-attachments/assets/c2eb5243-5666-428a-a1f7-4a09ec127285)
 
 ## 🛠 Installation
