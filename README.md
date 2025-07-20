@@ -1,11 +1,8 @@
 # 🧾 docu-lite
 ### Ultra-light Zero-dependency HTML outline generator for Python.  
 * Browse classes and functions with collapsible docstrings in a tidy, readable format.
-* Specify your own stylesheet(s)
-
-Coming soon:
-* Create simultaneous copies of HTML output from one source for different purposes / audiences
-* Integrate into GitHub workflow so the outline is always up to date
+* Specify your own stylesheet(s) or rely on the default (will be generated on run)
+* Integrate into your GitHub Workflow for Up to Date outline in your repo
 
 Ultra-light: Just 100 lines to make HTML like this:
 
@@ -21,12 +18,14 @@ pip install docu-lite
 ## Usage
 Either edit and run docu-lite.py in an IDE, or run from the command line:
 ```
-docu-lite [-i INPUT_PATTERN] [-s CSS_FILE] [-o OUTPUT_FILE] [--include-css]
+docu-lite [-i INPUT_PATTERN] [-o OUTPUT_FILE] [-s CSS_FILE] 
 ```
 Arguments:
 -i specifies the input file pattern, e.g. /folder/folder/*.py
--s specifies the name of the css file (should be in the folder that docu-lite is run from)
 -o specifies the name for the output file e.g. /folder/folder/outline.html
---include-css tells docu-lite to copy the css file contents into the html, 
-  so that the html file is self-contained (portable)
+-s specifies the name of the css file you want to use
+
+*if you specify a css file, all docu-lite does is ensure that the output html references that file instead of the default
+*if the default css file is missing, it will be generated and used
+
 
