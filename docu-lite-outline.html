@@ -27,7 +27,7 @@ import argparse
     parser.add_argument(&quot;-o&quot;, &quot;--output&quot;, default=&quot;docu-lite-outline.html&quot;,
                         help=&quot;Output HTML file (default: docu-lite-outline.html)&quot;)
     parser.add_argument(&quot;-s&quot;, &quot;--style&quot;, default=&quot;docu-lite-style.css&quot;,
-                        help=&quot;Output CSS file (default: docu-lite-style.css)&quot;)
+                        help=&quot;CSS file name (default: docu-lite-style.css)&quot;)
     return parser.parse_args()
 
 </pre>
@@ -74,7 +74,8 @@ import argparse
                     if(len(objects) &gt; 0):           
                         objects[-1].content_end = (line_no) # end of previous object
                     objects.append(obj)
-        objects[-1].content_end = len(lines)                # end of last object in document
+        if(len(objects)&gt;1):
+            objects[-1].content_end = len(lines)            # end of last object in document
                
         # tell the object what its indent level is within the document
         indents =[0]
@@ -112,20 +113,38 @@ import argparse
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def main(input_pattern, style_sheet, output_name):</span></summary>
+<details><summary><span class ='def signature'>def main(args):</span></summary>
 <details open><summary><span class ='docstring signature'>docstring</span></summary>
 <pre class ='docstring content'>        Another docstring for testing
 </pre>
 </details>
 <details><summary><span class ='body signature'>body</span></summary>
-<pre class ='body content'>    version_string = &quot;v0.3.0&quot;
-    soft_string = f&quot;Docu-lite {version_string} by Alan Robinson&quot;
+<pre class ='body content'>    version_string = &quot;v0.4.0&quot;
+    soft_string = f&quot;Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/&quot;
     print(f&quot;{soft_string}\n&quot;)
+    input_pattern = args.input
+    output_name = args.output
+    style_sheet = args.style
     
+    # start the output html
     output_html =  f&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;{output_name}&lt;/title&gt;&quot;
-    output_html += f&quot;&lt;link rel=&#x27;stylesheet&#x27; href=&#x27;./{style_sheet}&#x27; /&gt;&quot;
-    output_html += &quot;&lt;body&gt;\n&quot;
 
+    # look for specified or default css, if not found write a new one and use that
+    DEFAULT_CSS = &quot;* {margin-left:2rem;} \n.filename {font-weight:bold; color:grey; font-size:2rem;}\n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:blue;} \
+        \n.def {color:orange; }\n.docstring {color:darkgreen;}\n\n.content {border-left: 2px solid #ccc; color:black; padding-left: 1em; background: #f9f9f9;}\n.docstring {color:green;}&quot;
+    try:
+        with open(args.style, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+            pass
+    except (FileNotFoundError, OSError):
+        print(f&quot;Couldn&#x27;t open style sheet {args.style}: creating default\n&quot;)
+        style_sheet = &#x27;docu-lite-style.css&#x27;
+        with open(style_sheet, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+            f.write(DEFAULT_CSS)
+    output_html += f&quot;&lt;link rel=&#x27;stylesheet&#x27; href=&#x27;./{style_sheet}&#x27; /&gt;&quot;
+
+    # start html body and process input files
+    output_html += &quot;&lt;body&gt;\n&quot;
+    print(f&quot;Scanning for input files in {input_pattern}&quot;)
     for filepath in glob.glob(input_pattern):
         filename = os.path.basename(filepath)
         print(f&quot;Found file: {filename}&quot;)
@@ -138,21 +157,23 @@ import argparse
         doc_objects = get_doc_objects(lines)
         output_html += object_list_to_HTML(lines, doc_objects)
 
+    # write footer
     output_html += f&quot;\n&lt;br&gt;&lt;br&gt;&lt;span style = &#x27;font-size:0.8em;color:#666;border-top:1px solid #ddd; &quot;
     output_html += f&quot;font-style:italic&#x27;&gt;Made with {soft_string}&lt;/span&gt;&quot;
-        
+
+    # close html body and write the file
     output_html += &quot;&lt;/body&gt;\n&quot;
     with open(output_name, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
         f.write(output_html)
-    print(f&quot;\nOutline written to {output_name}.html&quot;)
+    print(f&quot;\nOutline written to {output_name}.html,&quot;)
+    print(f&quot;linking to style sheet {style_sheet}&quot;)
 
 if __name__ == &quot;__main__&quot;:
     args = parse_args()
-    print(args)
-    main(args.input, args.style, args.output)
+    main(args)
 
 </pre>
 </details>
 </details>
 
-<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v0.3.0 by Alan Robinson</span></body>
+<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v0.4.0 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>

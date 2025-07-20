@@ -20,7 +20,7 @@ def parse_args():
     parser.add_argument("-o", "--output", default="docu-lite-outline.html",
                         help="Output HTML file (default: docu-lite-outline.html)")
     parser.add_argument("-s", "--style", default="docu-lite-style.css",
-                        help="Output CSS file (default: docu-lite-style.css)")
+                        help="CSS file name (default: docu-lite-style.css)")
     return parser.parse_args()
 
 class docobj:
@@ -91,18 +91,36 @@ def object_list_to_HTML(lines, doc_objects):
                 doc_html += "</details>\n"
     return doc_html
             
-def main(input_pattern, style_sheet, output_name):
+def main(args):
     """
         Another docstring for testing
     """
-    version_string = "v0.3.0"
-    soft_string = f"Docu-lite {version_string} by Alan Robinson"
+    version_string = "v0.4.0"
+    soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
+    input_pattern = args.input
+    output_name = args.output
+    style_sheet = args.style
     
+    # start the output html
     output_html =  f"<!DOCTYPE html><html lang='en'>\n<head>\n<title>{output_name}</title>"
-    output_html += f"<link rel='stylesheet' href='./{style_sheet}' />"
-    output_html += "<body>\n"
 
+    # look for specified or default css, if not found write a new one and use that
+    DEFAULT_CSS = "* {margin-left:2rem;} \n.filename {font-weight:bold; color:grey; font-size:2rem;}\n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:blue;} \
+        \n.def {color:orange; }\n.docstring {color:darkgreen;}\n\n.content {border-left: 2px solid #ccc; color:black; padding-left: 1em; background: #f9f9f9;}\n.docstring {color:green;}"
+    try:
+        with open(args.style, "r", encoding="utf-8") as f:
+            pass
+    except (FileNotFoundError, OSError):
+        print(f"Couldn't open style sheet {args.style}: creating default\n")
+        style_sheet = 'docu-lite-style.css'
+        with open(style_sheet, "w", encoding="utf-8") as f:
+            f.write(DEFAULT_CSS)
+    output_html += f"<link rel='stylesheet' href='./{style_sheet}' />"
+
+    # start html body and process input files
+    output_html += "<body>\n"
+    print(f"Scanning for input files in {input_pattern}")
     for filepath in glob.glob(input_pattern):
         filename = os.path.basename(filepath)
         print(f"Found file: {filename}")
@@ -115,16 +133,18 @@ def main(input_pattern, style_sheet, output_name):
         doc_objects = get_doc_objects(lines)
         output_html += object_list_to_HTML(lines, doc_objects)
 
+    # write footer
     output_html += f"\n<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; "
     output_html += f"font-style:italic'>Made with {soft_string}</span>"
-        
+
+    # close html body and write the file
     output_html += "</body>\n"
     with open(output_name, "w", encoding="utf-8") as f:
         f.write(output_html)
-    print(f"\nOutline written to {output_name}.html")
+    print(f"\nOutline written to {output_name}.html,")
+    print(f"linking to style sheet {style_sheet}")
 
 if __name__ == "__main__":
     args = parse_args()
-    print(args)
-    main(args.input, args.style, args.output)
+    main(args)
 
