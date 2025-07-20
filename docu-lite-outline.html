@@ -22,7 +22,7 @@ import argparse
 </details>
 <details><summary><span class ='def signature'>def parse_args():</span></summary>
 <pre class ='def content'>    parser = argparse.ArgumentParser(description=&quot;Generate an HTML doc outline from source code.&quot;)
-    parser.add_argument(&quot;-i&quot;, &quot;--input&quot;, nargs=&quot;*&quot;, default=&quot;./*.py&quot;,
+    parser.add_argument(&quot;-i&quot;, &quot;--input&quot;, default=&quot;./*.py&quot;,
                         help=&quot;Input filenames (default: ./*.py)&quot;)
     parser.add_argument(&quot;-o&quot;, &quot;--output&quot;, default=&quot;docu-lite-outline.html&quot;,
                         help=&quot;Output HTML file (default: docu-lite-outline.html)&quot;)
@@ -148,6 +148,7 @@ import argparse
 
 if __name__ == &quot;__main__&quot;:
     args = parse_args()
+    print(args)
     main(args.input, args.style, args.output)
 
 </pre>

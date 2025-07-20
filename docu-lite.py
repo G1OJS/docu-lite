@@ -15,7 +15,7 @@ import argparse
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Generate an HTML doc outline from source code.")
-    parser.add_argument("-i", "--input", nargs="*", default="./*.py",
+    parser.add_argument("-i", "--input", default="./*.py",
                         help="Input filenames (default: ./*.py)")
     parser.add_argument("-o", "--output", default="docu-lite-outline.html",
                         help="Output HTML file (default: docu-lite-outline.html)")
@@ -61,7 +61,8 @@ def get_doc_objects(lines, object_signatures = ['class','def','docstring','body'
                     if(len(objects) > 0):           
                         objects[-1].content_end = (line_no) # end of previous object
                     objects.append(obj)
-        objects[-1].content_end = len(lines)                # end of last object in document
+        if(len(objects)>1):
+            objects[-1].content_end = len(lines)            # end of last object in document
                
         # tell the object what its indent level is within the document
         indents =[0]
@@ -124,5 +125,6 @@ def main(input_pattern, style_sheet, output_name):
 
 if __name__ == "__main__":
     args = parse_args()
+    print(args)
     main(args.input, args.style, args.output)
 
