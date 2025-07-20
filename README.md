@@ -1,4 +1,4 @@
-# 🧾 docu-lite
+# 🧾 docu-lite [![PyPI Downloads](https://static.pepy.tech/badge/docu-lite)](https://pepy.tech/projects/docu-lite)
 ### Ultra-light Zero-dependency HTML outline generator for Python.  
 * Browse classes and functions with collapsible docstrings in a tidy, readable format.
 * Specify your own stylesheet(s) or rely on the default (will be generated on run)
