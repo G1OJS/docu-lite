@@ -94,6 +94,10 @@ def main(input_pattern, style_sheet, output_name):
     """
         Another docstring for testing
     """
+    version_string = "v0.3.0"
+    soft_string = f"Docu-lite {version_string} by Alan Robinson"
+    print(f"{soft_string}\n")
+    
     output_html =  f"<!DOCTYPE html><html lang='en'>\n<head>\n<title>{output_name}</title>"
     output_html += f"<link rel='stylesheet' href='./{style_sheet}' />"
     output_html += "<body>\n"
@@ -109,11 +113,14 @@ def main(input_pattern, style_sheet, output_name):
         output_html += f"<span class = 'filename'>{filename}</span><br>"
         doc_objects = get_doc_objects(lines)
         output_html += object_list_to_HTML(lines, doc_objects)
+
+    output_html += f"\n<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; "
+    output_html += f"font-style:italic'>Made with {soft_string}</span>"
         
     output_html += "</body>\n"
     with open(output_name, "w", encoding="utf-8") as f:
         f.write(output_html)
-    print(f"\n\nOutline written to {output_name}.html")
+    print(f"\nOutline written to {output_name}.html")
 
 if __name__ == "__main__":
     args = parse_args()

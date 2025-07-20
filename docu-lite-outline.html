@@ -118,7 +118,11 @@ import argparse
 </pre>
 </details>
 <details><summary><span class ='body signature'>body</span></summary>
-<pre class ='body content'>    output_html =  f&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;{output_name}&lt;/title&gt;&quot;
+<pre class ='body content'>    version_string = &quot;v0.3.0&quot;
+    soft_string = f&quot;Docu-lite {version_string} by Alan Robinson&quot;
+    print(f&quot;{soft_string}\n&quot;)
+    
+    output_html =  f&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;{output_name}&lt;/title&gt;&quot;
     output_html += f&quot;&lt;link rel=&#x27;stylesheet&#x27; href=&#x27;./{style_sheet}&#x27; /&gt;&quot;
     output_html += &quot;&lt;body&gt;\n&quot;
 
@@ -133,11 +137,14 @@ import argparse
         output_html += f&quot;&lt;span class = &#x27;filename&#x27;&gt;{filename}&lt;/span&gt;&lt;br&gt;&quot;
         doc_objects = get_doc_objects(lines)
         output_html += object_list_to_HTML(lines, doc_objects)
+
+    output_html += f&quot;\n&lt;br&gt;&lt;br&gt;&lt;span style = &#x27;font-size:0.8em;color:#666;border-top:1px solid #ddd; &quot;
+    output_html += f&quot;font-style:italic&#x27;&gt;Made with {soft_string}&lt;/span&gt;&quot;
         
     output_html += &quot;&lt;/body&gt;\n&quot;
     with open(output_name, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
         f.write(output_html)
-    print(f&quot;\n\nOutline written to {output_name}.html&quot;)
+    print(f&quot;\nOutline written to {output_name}.html&quot;)
 
 if __name__ == &quot;__main__&quot;:
     args = parse_args()
@@ -146,4 +153,5 @@ if __name__ == &quot;__main__&quot;:
 </pre>
 </details>
 </details>
-</body>
+
+<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v0.3.0 by Alan Robinson</span></body>
