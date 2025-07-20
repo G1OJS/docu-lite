@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang='en'>
 <head>
 <title>docu-lite-outline.html</title><link rel='stylesheet' href='./docu-lite-style.css' /><body>
-<span class = 'filename'>docu-lite.py</span><br><details open><summary><span class ='docstring signature'>docstring</span></summary>
+<span class = 'filename'>docu-lite.py</span><br><details><summary><span class ='docstring signature'>docstring</span></summary>
 <pre class ='docstring content'>    This is a demo of docu-lite semi-automatic documentation, using this same
     file as the input test case. To try it on your own files,
     change these lines below:
@@ -28,45 +28,55 @@ import argparse
                         help=&quot;Output HTML file (default: docu-lite-outline.html)&quot;)
     parser.add_argument(&quot;-s&quot;, &quot;--style&quot;, default=&quot;docu-lite-style.css&quot;,
                         help=&quot;CSS file name (default: docu-lite-style.css)&quot;)
+    parser.add_argument(&quot;--documentation&quot;, action=&quot;store_true&quot;,
+                        help=&quot;Produce output tailored to documentation, also appends _docs to .html and .css filenames&quot;)
     return parser.parse_args()
 
 </pre>
 </details>
 <details><summary><span class ='class signature'>class docobj:</span></summary>
+<details><summary><span class ='docstring signature'>docstring</span></summary>
+<pre class ='docstring content'>        structure to contain information about each object in the document
+</pre>
+</details>
+<details><summary><span class ='body signature'>body</span></summary>
+<pre class ='body content'></pre>
+</details>
 <details><summary><span class ='def signature'>def __init__(self, signature):</span></summary>
-<pre class ='def content'>        self.signature = signature.strip()
-        self.object_type = self.signature.split(&quot; &quot;)[0]
-        self.docstring =[]
-        self.content_start = 0
-        self.content_end = 0
-        self.indent_spaces = len(signature) - len(signature.lstrip())
-        self.indent_level = 0
+<pre class ='def content'>        self.signature = signature.strip()                              # first line of the object including the def, class etc
+        self.indent_spaces = len(signature) - len(signature.lstrip())   # number of spaces up to first letter in signature line
+        self.indent_level = 0                                           # indent level of this object
+        self.object_type = self.signature.split(&quot; &quot;)[0]                 # see object_signatures=[] in get_doc_objects for possible values
+        self.content_start = 0                                          # index of line file_lines one after first line of object
+        self.content_end = 0                                            # index of line file_lines containing last line of object
 
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def get_doc_objects(lines, object_signatures = ['class','def','docstring','body']):</span></summary>
-<details open><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='def signature'>def get_doc_objects(file_lines):</span></summary>
+<details><summary><span class ='docstring signature'>docstring</span></summary>
 <pre class ='docstring content'>            document-level properties
             converts document into set of docobj in self.objects
-            &#x27;docstring&#x27;,&#x27;text&#x27; represent the opening and closing docstring quotes 
 </pre>
 </details>
 <details><summary><span class ='body signature'>body</span></summary>
-<pre class ='body content'>        objects = []
+<pre class ='body content'>        object_signatures = [&#x27;class&#x27;,&#x27;def&#x27;,&#x27;docstring&#x27;,&#x27;body&#x27;]
+        objects = []
         indent_level = 0
         indent_spaces = 0
 
         # replace all opening docstring markers with &#x27;docstring&#x27; and closing tags with &#x27;body&#x27;
+        # so &#x27;body&#x27; means otherwise unclassified content following a docstring
+        # and in the example css is given the same style as unclassified content following def and class
         opening_tag = True
-        for line_no, line in enumerate(lines):
+        for line_no, line in enumerate(file_lines):
             if(line.strip() == &#x27;&quot;&quot;&quot;&#x27;):
-                lines[line_no] = line.replace(&#x27;&quot;&quot;&quot;&#x27;,&#x27;docstring&#x27; if opening_tag else &#x27;body&#x27;)
+                file_lines[line_no] = line.replace(&#x27;&quot;&quot;&quot;&#x27;,&#x27;docstring&#x27; if opening_tag else &#x27;body&#x27;)
                 opening_tag = not opening_tag
           
         # find and create document objects and tell them the line numbers
         # that their content starts and ends at
-        for line_no, line in enumerate(lines):
+        for line_no, line in enumerate(file_lines):
             for p in object_signatures:
                 if line.strip().startswith(p):
                     obj = docobj(line)
@@ -75,7 +85,7 @@ import argparse
                         objects[-1].content_end = (line_no) # end of previous object
                     objects.append(obj)
         if(len(objects)&gt;1):
-            objects[-1].content_end = len(lines)            # end of last object in document
+            objects[-1].content_end = len(file_lines)            # end of last object in document
                
         # tell the object what its indent level is within the document
         indents =[0]
@@ -83,15 +93,39 @@ import argparse
             if(obj.indent_spaces &gt; indents[-1]):
                 indents.append(obj.indent_spaces)
             obj.indent_level = indents.index(obj.indent_spaces)
-
         return objects
+
 
 </pre>
 </details>
 </details>
 </details>
-<details><summary><span class ='def signature'>def object_list_to_HTML(lines, doc_objects):</span></summary>
-<details open><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='def signature'>def _signature_html(obj_type, obj_signature, open_details = True):</span></summary>
+<pre class ='def content'>    # write the signature of the object with a summary / details tag
+    htm = &quot;&lt;details&gt;&lt;summary&gt;&quot; if open_details else &quot;&lt;div&gt;&quot;
+    htm += f&quot;&lt;span class =&#x27;{obj_type} {&#x27;signature&#x27;}&#x27;&gt;{obj_signature}&lt;/span&gt;&quot;
+    htm += &quot;&lt;/summary&gt;&quot; if open_details else &quot;&lt;/div&gt;&quot;
+    return htm + &quot;\n&quot;
+
+</pre>
+</details>
+<details><summary><span class ='def signature'>def _content_html(file_lines, object_type, start_no, end_no):</span></summary>
+<pre class ='def content'>    # write &#x27;content&#x27; inside &lt;pre&gt;&lt;/pre&gt;
+    htm = f&quot;&lt;pre class =&#x27;{object_type} content&#x27;&gt;&quot;
+    for line in file_lines[start_no:end_no]:
+        htm += f&quot;{html.escape(line)}&quot;
+    htm += &quot;&lt;/pre&gt;\n&quot;
+    return htm
+
+</pre>
+</details>
+<details><summary><span class ='def signature'>def _close_details(n_times):</span></summary>
+<pre class ='def content'>    return &quot;&lt;/details&gt;\n&quot; * n_times
+
+</pre>
+</details>
+<details><summary><span class ='def signature'>def object_list_to_HTML(file_lines, doc_objects):</span></summary>
+<details><summary><span class ='docstring signature'>docstring</span></summary>
 <pre class ='docstring content'>        converts list of doc_objects into HTML
 </pre>
 </details>
@@ -99,22 +133,36 @@ import argparse
 <pre class ='body content'>    doc_html = &quot;&quot;
     for i,obj in enumerate(doc_objects):
         nextobj = doc_objects[(i+1) % len(doc_objects)]
-        details_open = &#x27; open&#x27; if (obj.object_type == &#x27;docstring&#x27;) else &#x27;&#x27;
-        doc_html += f&quot;&lt;details{details_open}&gt;&lt;summary&gt;&lt;span class =&#x27;{obj.object_type} {&#x27;signature&#x27;}&#x27;&gt;{obj.signature}&lt;/span&gt;&lt;/summary&gt;\n&quot;
+        doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
         if(nextobj.indent_level &lt;= obj.indent_level):
-            doc_html += f&quot;&lt;pre class =&#x27;{obj.object_type} content&#x27;&gt;&quot;
-            for line in lines[obj.content_start:obj.content_end]:
-                doc_html += f&quot;{html.escape(line)}&quot;
-            doc_html += &quot;&lt;/pre&gt;\n&quot;
-            for i in range(obj.indent_level - nextobj.indent_level + 1):
-                doc_html += &quot;&lt;/details&gt;\n&quot;
+            doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
+            doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
+    return doc_html
+
+</pre>
+</details>
+</details>
+<details><summary><span class ='def signature'>def object_list_to_documentation_HTML(file_lines, doc_objects):</span></summary>
+<details><summary><span class ='docstring signature'>docstring</span></summary>
+<pre class ='docstring content'>        converts list of doc_objects into HTML
+</pre>
+</details>
+<details><summary><span class ='body signature'>body</span></summary>
+<pre class ='body content'>    doc_html = &quot;&quot;
+    for i,obj in enumerate(doc_objects):
+        nextobj = doc_objects[(i+1) % len(doc_objects)]
+        if(obj.object_type not in [&#x27;body&#x27;,&#x27;docstring&#x27;]):
+            doc_html += &quot;&lt;hr&gt;&quot;
+            doc_html += _signature_html(obj.object_type, obj.signature.replace(&#x27;def &#x27;,&#x27;&amp;nbsp&amp;nbsp&amp;nbsp&#x27;), open_details = False)
+        if(obj.object_type == &quot;docstring&quot;):
+            doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
     return doc_html
             
 </pre>
 </details>
 </details>
 <details><summary><span class ='def signature'>def main(args):</span></summary>
-<details open><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'>docstring</span></summary>
 <pre class ='docstring content'>        Another docstring for testing
 </pre>
 </details>
@@ -122,24 +170,34 @@ import argparse
 <pre class ='body content'>    version_string = &quot;v0.4.0&quot;
     soft_string = f&quot;Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/&quot;
     print(f&quot;{soft_string}\n&quot;)
+    documentation_mode = args.documentation
     input_pattern = args.input
-    output_name = args.output
-    style_sheet = args.style
+  #  documentation_mode = True
+    output_name = args.output if (not documentation_mode) else args.output.split(&quot;.&quot;)[0]+&quot;_docs.html&quot;
+    style_sheet = args.style if (not documentation_mode) else args.style.split(&quot;.&quot;)[0]+&quot;_docs.css&quot; 
+
     
     # start the output html
     output_html =  f&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;{output_name}&lt;/title&gt;&quot;
 
     # look for specified or default css, if not found write a new one and use that
-    DEFAULT_CSS = &quot;* {margin-left:2rem;} \n.filename {font-weight:bold; color:grey; font-size:2rem;}\n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:blue;} \
-        \n.def {color:orange; }\n.docstring {color:darkgreen;}\n\n.content {border-left: 2px solid #ccc; color:black; padding-left: 1em; background: #f9f9f9;}\n.docstring {color:green;}&quot;
+    DEFAULT_CSS = &quot;* {margin-left:2rem;} \n.filename {font-weight:bold; color:grey; font-size:2rem;} \
+        \n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:blue;} \
+        \n.def {color:orange; }\n.docstring {color:darkgreen;}\n \
+        \n.content {border-left: 2px solid #ccc; color:black; padding-left: 1em; background: #f9f9f9;}\n.docstring {color:green;}&quot;
+
+    DEFAULT_CSS_DOCS = &quot;* {margin-left:2rem; background: #e6f9ff;} \n.filename {font-weight:bold; color:grey; font-size:2rem;} \
+        \n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:black; font-size:1.5rem;} \
+        \n.def {color:black; }\n.docstring {color:darkgreen;}\n \
+        \n.content {color:black; padding-left: 1em; }\n.docstring {color:green;}&quot;
+
     try:
-        with open(args.style, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+        with open(style_sheet, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
             pass
     except (FileNotFoundError, OSError):
-        print(f&quot;Couldn&#x27;t open style sheet {args.style}: creating default\n&quot;)
-        style_sheet = &#x27;docu-lite-style.css&#x27;
+        print(f&quot;Couldn&#x27;t open style sheet {style_sheet}: creating default\n&quot;)
         with open(style_sheet, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
-            f.write(DEFAULT_CSS)
+            f.write(DEFAULT_CSS if not documentation_mode else DEFAULT_CSS_DOCS)
     output_html += f&quot;&lt;link rel=&#x27;stylesheet&#x27; href=&#x27;./{style_sheet}&#x27; /&gt;&quot;
 
     # start html body and process input files
@@ -149,13 +207,16 @@ import argparse
         filename = os.path.basename(filepath)
         print(f&quot;Found file: {filename}&quot;)
         with open(filepath,&quot;r&quot;) as f:
-            lines = f.readlines()
-        if(len(lines) ==0):
+            file_lines = f.readlines()
+        if(len(file_lines) ==0):
             print(f&quot;File: {filename} has no content - skipping&quot;)
             continue
         output_html += f&quot;&lt;span class = &#x27;filename&#x27;&gt;{filename}&lt;/span&gt;&lt;br&gt;&quot;
-        doc_objects = get_doc_objects(lines)
-        output_html += object_list_to_HTML(lines, doc_objects)
+        doc_objects = get_doc_objects(file_lines)
+        if(not documentation_mode):
+            output_html += object_list_to_HTML(file_lines, doc_objects)
+        else:
+            output_html += object_list_to_documentation_HTML(file_lines, doc_objects)
 
     # write footer
     output_html += f&quot;\n&lt;br&gt;&lt;br&gt;&lt;span style = &#x27;font-size:0.8em;color:#666;border-top:1px solid #ddd; &quot;
@@ -165,7 +226,7 @@ import argparse
     output_html += &quot;&lt;/body&gt;\n&quot;
     with open(output_name, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
         f.write(output_html)
-    print(f&quot;\nOutline written to {output_name}.html,&quot;)
+    print(f&quot;\nOutline written to {output_name},&quot;)
     print(f&quot;linking to style sheet {style_sheet}&quot;)
 
 if __name__ == &quot;__main__&quot;:
