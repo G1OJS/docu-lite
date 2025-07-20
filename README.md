@@ -21,11 +21,15 @@ Either edit and run docu-lite.py in an IDE, or run from the command line:
 docu-lite [-i INPUT_PATTERN] [-o OUTPUT_FILE] [-s CSS_FILE] 
 ```
 Arguments:
+
 -i specifies the input file pattern, e.g. /folder/folder/*.py
+
 -o specifies the name for the output file e.g. /folder/folder/outline.html
+
 -s specifies the name of the css file you want to use
 
 *if you specify a css file, all docu-lite does is ensure that the output html references that file instead of the default
+
 *if the default css file is missing, it will be generated and used
 
 
