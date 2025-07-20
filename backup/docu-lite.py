@@ -8,74 +8,90 @@
         output_style = "docu-lite-style.css"
     Remember that if you use a path containing "\", you'll need to escape them by
     adding another "\" e.g. input_folder = "C:\\users\\me\\mydocs\\test.py"
+
+    This is the initial version with everything contained in one file.
+
+    Future versions may grow to a library-based project with different HTML generators etc
+
 """
 import html
 
 class docobj:
-    """ structure to contain information about each object in the document """
+    """ Bottom level document object containing only text and text-related properties """
+    """ Note that this version does not process single line docstrings """
+    """ Nor does it handle two
+        line docstrings like this one """
     def __init__(self, signature):
         self.signature = signature.strip()
-        self.object_type = self.signature.split(" ")[0]
+        self.html_class = self.signature.split(" ")[0]
         self.docstring =[]
-        self.content_start = 0
-        self.content_end = 0
+        self.lines = []
         self.indent_spaces = len(signature) - len(signature.lstrip())
         self.indent_level = 0
 
-def get_doc_objects(lines, object_signatures = ['class','def','docstring','body']):
+class get_doc_objects:
+    def __init__(self, filepath, object_types = ['class','def','docstring','body']):
         """
-            document-level properties
+            document-level properties and file reader / preprocessor
             converts document into set of docobj in self.objects
             'docstring','text' represent the opening and closing docstring quotes 
         """
-        objects = []
+        self.objects = []
         indent_level = 0
         indent_spaces = 0
+        # get input file into lines
+        with open(filepath,"r") as f:
+            lines = f.readlines()
 
-        # replace all opening docstring markers with 'docstring' and closing tags with 'body'
+        # process docstrings to a common format:
+        #   ignore """text""" and """text\ntext""", otherwise:
+        #    - replace all opening docstring markers with 'docstring'
+        #    - replace all closing docstring makers with 'body'
         opening_tag = True
-        for line_no, line in enumerate(lines):
+        for idx, line in enumerate(lines):
             if(line.strip() == '"""'):
-                lines[line_no] = line.replace('"""','docstring' if opening_tag else 'body')
+                rep = 'docstring' if opening_tag else 'body'
                 opening_tag = not opening_tag
-          
-        # find and create document objects and tell them the line numbers
-        # that their content starts and ends at
+                lines[idx] = line.replace('"""',rep)
+
+        # find document objects and remember the line number they start at
+        line_index = []
         for line_no, line in enumerate(lines):
-            for p in object_signatures:
+            for p in object_types:
                 if line.strip().startswith(p):
-                    obj = docobj(line)
-                    obj.content_start = line_no + 1         # start of this object
-                    if(len(objects) > 0):           
-                        objects[-1].content_end = (line_no) # end of previous object
-                    objects.append(obj)
-        objects[-1].content_end = len(lines)                # end of last object in document
-               
+                    self.objects.append(docobj(line))
+                    line_index.append(line_no)
+
+        # fill the object.lines[] with the text within the object
+        for obj_ind, obj_start_line_no in enumerate(line_index):
+            obj = self.objects[obj_ind]
+            last_line = line_index[obj_ind+1] if obj_ind < len(self.objects)-1 else len(lines)
+            for obj_line_ind in range(obj_start_line_no, last_line):
+                obj.lines.append(f"{lines[obj_line_ind]}")
+
         # tell the object what its indent level is within the document
         indents =[0]
-        for obj in objects:
+        for obj in self.objects:
             if(obj.indent_spaces > indents[-1]):
                 indents.append(obj.indent_spaces)
             obj.indent_level = indents.index(obj.indent_spaces)
 
-        return objects
 
-def object_list_to_HTML(lines, doc_objects, verbose = False):
+def object_list_to_HTML(doc, verbose = False):
     """
         converts list of doc_objects into HTML
     """
     doc_html = ""
-    for i,obj in enumerate(doc_objects):
+    for i,obj in enumerate(doc.objects):
         if(verbose):
             print(f"Level {obj.indent_level} object, signature =  {obj.signature}")
             for l in obj.lines:
                 print(f"{'    ' * obj.indent_level} {l.replace('\n','')}")
-        nextobj = doc_objects[(i+1) % len(doc_objects)]
-        details_open = ' open' if (obj.object_type == 'docstring') else ''
-        doc_html += f"<details{details_open}><summary><span class ='{obj.object_type} {'signature'}'>{obj.signature}</span></summary>\n"
+        nextobj = doc.objects[(i+1) % len(doc.objects)]
+        doc_html += f"<details><summary><span class ='{obj.html_class} {'signature'}'>{obj.signature}</span></summary>\n"
         if(nextobj.indent_level <= obj.indent_level):
-            doc_html += f"<pre class ='{obj.object_type} content'>"
-            for line in lines[obj.content_start:obj.content_end]:
+            doc_html += f"<pre class ='{obj.html_class}'>"
+            for line in obj.lines[1:]:
                 doc_html += f"{html.escape(line)}"
             doc_html += "</pre>\n"
             for i in range(obj.indent_level - nextobj.indent_level + 1):
@@ -96,15 +112,15 @@ def main():
     output_html += "<body>\n"
 
     for fname in input_filenames:
-        with open(input_folder + fname,"r") as f:
-            lines = f.readlines()
         output_html += f"<span class = 'filename'>{fname}</span><br>"
-        doc_objects = get_doc_objects(lines)
-        output_html += object_list_to_HTML(lines, doc_objects)
-        
+        doc_objects = get_doc_objects(input_folder + fname)
+        output_html += object_list_to_HTML(doc_objects)
+
     output_html += "</body>\n"
+ 
     with open(output_name, "w", encoding="utf-8") as f:
         f.write(output_html)
+
     print(f"\n\nOutline written to {output_name}.html")
 
 if __name__ == "__main__":

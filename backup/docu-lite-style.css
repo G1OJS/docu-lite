@@ -1,0 +1,15 @@
+* {margin-left:2rem;}
+pre {  padding-left: 1em; background: #f9f9f9; color: #444; }
+
+.docstring {color:green;}
+.body {border-left: 2px solid #ccc; }
+
+.filename {font-weight:bold; color:grey;}
+
+.signature {font-weight:bold; margin-left:2rem;}
+.signature.class {color:blue;}
+.signature.def {color:orange; }
+.signature.docstring {color:darkgreen; }
+.signature.body {font-weight:normal; border:none;}
+
+
