@@ -26,7 +26,8 @@ Then, on the side bar:
 Finally, on the bottom of the page
 ![perms](https://github.com/user-attachments/assets/67e10ad9-1f45-41de-82af-ed6d7ab3f279)
 
-
+### That's it
+Once that's done, you should have an html file appear where you specified, which you can then edit to create a new user guide or have GitHub pages automatically serve to the web.
 
 
 
