@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Adding docu-lite to your GitHub workflow"
+permalink: /add-to-workflow/
+---
+
 # Adding docu-lite to your GitHub workflow
 I have just been through this process on this repository, so that I get the same user experience as anyone using docu-lite.
 
