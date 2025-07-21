@@ -7,13 +7,26 @@ import html
 import glob
 import os
 import configparser
+import argparse
 
-def get_config(path="docu-lite.ini"):
+def get_config():
     DEFAULT_INI = """[input] \npattern = ./*.py\n\n[output]\nhtml = docu-lite-outline.html\ncss = docu-lite-style.css\ndocumentation_mode = off"""
+    DEFAULT_INI_FILE = "docu-lite.ini"
+
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--config", default = DEFAULT_INI_FILE)
+    args, _ = parser.parse_known_args()
+    path = args.config
+    print(path)
     if not os.path.exists(path):
-        print(f"Creating default config file: {path}")
-        with open(path, "w") as f:
-            f.write(DEFAULT_INI)
+        if path != DEFAULT_INI_FILE:
+            print(f"Config file not found: {path}. Is there a typo?")
+            sys.exit(1)
+        else:
+            print(f"No config file found — creating default '{path}'")
+            with open(path, "w") as f:
+                f.write(DEFAULT_INI)
+
     config = configparser.ConfigParser()
     config.read(path)
     return config
