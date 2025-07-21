@@ -19,12 +19,12 @@ def get_config():
     config_filepath = args.config
 
     if not os.path.exists(config_filepath):
-        if path != DEFAULT_INI_FILE:
+        if config_filepath != DEFAULT_INI_FILE:
             print(f"Config file not found: {config_filepath}. Is there a typo?")
             sys.exit(1)
         else:
             print(f"No config file found — creating default '{config_filepath}'")
-            with open(path, "w") as f:
+            with open(config_filepath, "w") as f:
                 f.write(DEFAULT_INI)
 
     print(f"Reading options from {config_filepath}")
@@ -47,7 +47,7 @@ def get_config_vars():
     ignore_docstrings_with = get_config_option(config, "options", "ignore_docstrings_with", "")
     
     print(f"Running with options: \n \n[input]\npattern = {input_pattern}\n[output]\nhtml = {output_name}\n"
-          +"css = {style_sheet}\ndocumentation_mode = {documentation_mode}\nignore_docstrings_with = {ignore_docstrings_with}\n")
+          +f"css = {style_sheet}\ndocumentation_mode = {documentation_mode}\nignore_docstrings_with = {ignore_docstrings_with}\n")
     return input_pattern, output_name, style_sheet, documentation_mode, ignore_docstrings_with
 
 def ensure_css_exists(style_sheet, documentation_mode):
@@ -221,6 +221,7 @@ def main():
     # start html body and loop through input files
     output_html += "<body>\n"
     print(f"Scanning for input files in {input_pattern}")
+    n_files_processed = 0
     for filepath in glob.glob(input_pattern):
         filename = os.path.basename(filepath)
         print(f"Found file: {filename}")
@@ -237,10 +238,14 @@ def main():
             output_html += object_list_to_HTML(file_lines, doc_objects)
         else:
             output_html += object_list_to_documentation_HTML(file_lines, doc_objects)
+        n_files_processed +=1
 
     # write footer
     output_html += f"\n<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; "
     output_html += f"font-style:italic'>Made with {soft_string}</span>"
+
+    if (n_files_processed == 0):
+        print(f"\nWarning: didn't process any files from {input_pattern}, please check the input path")
 
     # close html body and write the file
     output_html += "</body>\n"

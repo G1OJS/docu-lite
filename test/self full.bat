@@ -1,0 +1,2 @@
+python ../doculite.py
+pause
