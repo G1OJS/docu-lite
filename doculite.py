@@ -1,5 +1,5 @@
 """
-    This is a demo of docu-lite semi-automatic documentation, using this same
+    This is a demo of docu-lite semi-automatic documentation, using this same 
     file as the input test case. To try it on your own files,
     change the appropriate settings in docu-lite.ini
 """
