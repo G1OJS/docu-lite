@@ -7,12 +7,8 @@
 * 📘 Specify your own stylesheet(s) or rely on the default (will be generated on run)
 * ⚖️ Ultra-light: no dependencies, short script
 * ⚙️[Integrate into your GitHub Workflow](https://g1ojs.github.io/docu-lite/add-to-workflow/) for Up to Date outline in your repo
-* 👀 Produces output like this:
-    - [live file](https://g1ojs.github.io/docu-lite/docu-lite-outline.html)
-    - [live file - documentation mode](https://g1ojs.github.io/docu-lite/docu-lite-outline_docs.html)
-    - screenshot below
-
-![Capture](https://github.com/user-attachments/assets/c2eb5243-5666-428a-a1f7-4a09ec127285)
+* 👀 [Example live output:](https://g1ojs.github.io/docu-lite/docu-lite-outline.html)
+* 👀 [Example live output (documentation mode):](https://g1ojs.github.io/docu-lite/docu-lite-outline_docs.html)
 
 ## 🛠 Installation
 
