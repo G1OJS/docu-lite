@@ -23,7 +23,7 @@ jobs:
 
       - name: Run docu-lite
         run: |
-          python -m docu-lite -i *.py -o docu-lite-outline.html
+          python -m docu-lite
 
       - name: Commit docu-lite-outline.html if changed
         run: |
