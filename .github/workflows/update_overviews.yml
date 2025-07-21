@@ -27,9 +27,7 @@ jobs:
           python -m pip install docu-lite 
 
       - name: Run docu-lite
-        run: |
-          python -m docu-lite
-          python -m docu-lite --config docu-lite-docmode.ini
+      - name: Run docu-lite --config docu-lite-docmode.ini
 
 #      - name: Commit docu-lite outputs if changed
 #        run: |
