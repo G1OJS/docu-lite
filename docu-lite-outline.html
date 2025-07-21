@@ -22,12 +22,12 @@ import argparse
     config_filepath = args.config
 
     if not os.path.exists(config_filepath):
-        if path != DEFAULT_INI_FILE:
+        if config_filepath != DEFAULT_INI_FILE:
             print(f&quot;Config file not found: {config_filepath}. Is there a typo?&quot;)
             sys.exit(1)
         else:
             print(f&quot;No config file found — creating default &#x27;{config_filepath}&#x27;&quot;)
-            with open(path, &quot;w&quot;) as f:
+            with open(config_filepath, &quot;w&quot;) as f:
                 f.write(DEFAULT_INI)
 
     print(f&quot;Reading options from {config_filepath}&quot;)
@@ -54,7 +54,7 @@ import argparse
     ignore_docstrings_with = get_config_option(config, &quot;options&quot;, &quot;ignore_docstrings_with&quot;, &quot;&quot;)
     
     print(f&quot;Running with options: \n \n[input]\npattern = {input_pattern}\n[output]\nhtml = {output_name}\n&quot;
-          +&quot;css = {style_sheet}\ndocumentation_mode = {documentation_mode}\nignore_docstrings_with = {ignore_docstrings_with}\n&quot;)
+          +f&quot;css = {style_sheet}\ndocumentation_mode = {documentation_mode}\nignore_docstrings_with = {ignore_docstrings_with}\n&quot;)
     return input_pattern, output_name, style_sheet, documentation_mode, ignore_docstrings_with
 
 </pre>
@@ -266,6 +266,7 @@ import argparse
     # start html body and loop through input files
     output_html += &quot;&lt;body&gt;\n&quot;
     print(f&quot;Scanning for input files in {input_pattern}&quot;)
+    n_files_processed = 0
     for filepath in glob.glob(input_pattern):
         filename = os.path.basename(filepath)
         print(f&quot;Found file: {filename}&quot;)
@@ -282,10 +283,14 @@ import argparse
             output_html += object_list_to_HTML(file_lines, doc_objects)
         else:
             output_html += object_list_to_documentation_HTML(file_lines, doc_objects)
+        n_files_processed +=1
 
     # write footer
     output_html += f&quot;\n&lt;br&gt;&lt;br&gt;&lt;span style = &#x27;font-size:0.8em;color:#666;border-top:1px solid #ddd; &quot;
     output_html += f&quot;font-style:italic&#x27;&gt;Made with {soft_string}&lt;/span&gt;&quot;
+
+    if (n_files_processed == 0):
+        print(f&quot;\nWarning: didn&#x27;t process any files from {input_pattern}, please check the input path&quot;)
 
     # close html body and write the file
     output_html += &quot;&lt;/body&gt;\n&quot;
