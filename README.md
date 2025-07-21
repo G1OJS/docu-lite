@@ -1,4 +1,4 @@
-# 🧾 docu-lite [![PyPI Downloads](https://static.pepy.tech/badge/docu-lite)](https://pepy.tech/projects/docu-lite) 
+# 🧾 docu-lite [![PyPI Downloads](https://static.pepy.tech/badge/docu-lite)](https://pepy.tech/projects/docu-lite)
 
 ### ⚡ Ultra-light Zero-dependency HTML outline generator for Python.   
 
