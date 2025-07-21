@@ -7,20 +7,34 @@
     change the appropriate settings in docu-lite.ini
 </pre>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbspget_config():</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbspget_config_option(config, section, option, default):</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbspget_config_vars():</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbspensure_css_exists(style_sheet, documentation_mode):</span></div>
+<pre class ='docstring content'>     
+    look for specified or default css, if not found write a new one and use that
+</pre>
 <hr><div><span class ='class signature'>class docobj:</span></div>
 <pre class ='docstring content'>     
-        structure to contain information about each object in the document
+    structure to contain information about each object in the document
 </pre>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbsp__init__(self, signature):</span></div>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbspget_doc_objects(file_lines):</span></div>
 <pre class ='docstring content'>         
-            document-level properties
-            converts document into set of docobj in self.objects
+        converts document into list of objects
+</pre>
+<pre class ='docstring content'>         
+        replace all opening docstring markers with &#x27;docstring&#x27; and closing tags with &#x27;body&#x27;
+        so &#x27;body&#x27; means otherwise unclassified content following a docstring
+        and in the example css is given the same style as unclassified content following def and class
 </pre>
 <hr><div><span class ='docstring_tag_is_opener signature'>docstring_tag_is_opener = False</span></div>
 <hr><div><span class ='docstring_tag_is_opener signature'>docstring_tag_is_opener = not docstring_tag_is_opener</span></div>
 <hr><div><span class ='docstring_tag_is_opener signature'>docstring_tag_is_opener = False</span></div>
 <hr><div><span class ='docstring_tag_is_opener signature'>docstring_tag_is_opener = False</span></div>
+<pre class ='docstring content'>         
+        find and create document objects and tell them the line numbers
+        that their content starts and ends at
+</pre>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbsp_ignore_docstrings_with(doc_objects, file_lines, pattern):</span></div>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbsp_signature_html(obj_type, obj_signature, open_details = True):</span></div>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbsp_content_html(file_lines, object_type, start_no, end_no):</span></div>
@@ -34,8 +48,5 @@
         converts list of doc_objects into HTML
 </pre>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbspmain():</span></div>
-<pre class ='docstring content'>     
-        Another docstring for testing
-</pre>
 
 <br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v0.8.0 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
