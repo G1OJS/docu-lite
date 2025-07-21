@@ -4,7 +4,12 @@ on:
   push:
     paths-ignore:
       - 'docu-lite*'
-
+on:
+  push:
+    paths:
+      - '!docu-lite*.*'
+      - '*.py'
+      
 jobs:
   outline:
     runs-on: ubuntu-latest
