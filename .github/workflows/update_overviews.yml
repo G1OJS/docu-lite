@@ -1,9 +1,7 @@
 name: Generate docu-lite outline
 
 on:
-  push:
-    paths:
-      - '*.py'    # limit triggers to Python updates (avoid endless loops with other workflows)
+   workflow_dispatch:
       
 jobs:
   outline:
