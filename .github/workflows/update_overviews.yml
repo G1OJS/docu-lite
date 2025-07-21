@@ -3,8 +3,7 @@ name: Generate docu-lite outline
 on:
   push:
     paths:
-      - '!docu-lite*.*'
-      - '*.py'
+      - '*.py'    # limit triggers to Python updates (avoid endless loops with other workflows)
       
 jobs:
   outline:
@@ -30,10 +29,12 @@ jobs:
           python -m docu-lite
           python -m docu-lite --config docu-lite-docmode.ini
 
-      - name: Commit docu-lite-outline.html if changed
+      - name: Commit docu-lite outputs if changed
         run: |
           git config user.name "github-actions[bot]"
+          # this is the default GitHub email
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docu-lite-outline.html docu-lite-style.css docu-lite.ini
+          # .ini file is also an output if auto-generated
+          git add docu-lite*
           git diff --cached --quiet || git commit -m "Update outline files"
           git push
