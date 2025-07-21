@@ -30,7 +30,7 @@ import argparse
             print(f&quot;Config file not found: {path}. Is there a typo?&quot;)
             sys.exit(1)
         else:
-            print(f&quot;No config file found â€” creating default &#x27;{path}&#x27;&quot;)
+            print(f&quot;No config file found — creating default &#x27;{path}&#x27;&quot;)
             with open(path, &quot;w&quot;) as f:
                 f.write(DEFAULT_INI)
 
