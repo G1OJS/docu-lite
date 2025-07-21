@@ -9,7 +9,7 @@
 - 🎈   No dependencies, short script
 - ⚙️   [Integrate into your GitHub Workflow](https://g1ojs.github.io/docu-lite/add-to-workflow/) to have automatically up-to-date outline(s) in your repo
 - 👀   [Example live output:](https://g1ojs.github.io/docu-lite/docu-lite-outline.html)
-- 👀   [Example live output (documentation mode):](https://g1ojs.github.io/docu-lite/docu-lite-outline_docs.html)
+- 👀   [Example live output (documentation mode):](https://g1ojs.github.io/docu-lite/docu-lite-outline-docmode.html)
   
 
 ## 🛠 Installation
