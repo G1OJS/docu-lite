@@ -24,6 +24,7 @@ jobs:
       - name: Run docu-lite
         run: |
           python -m docu-lite
+          python -m docu-lite --config docu-lite-docmode.ini
 
       - name: Commit docu-lite-outline.html if changed
         run: |
