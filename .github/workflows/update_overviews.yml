@@ -7,8 +7,8 @@ on:
 on:
   push:
     paths:
-      - '!docu-lite*.*'
-      - '*.py'
+      - '!docu-lite*'
+      - '*py'
       
 jobs:
   outline:
