@@ -26,7 +26,6 @@ Either edit and run docu-lite.py in an IDE, or run from the command line:
 ```
 docu-lite
 ```
-### ⚙️ docu-lite.ini
 A config file 'docu-lite.ini' will be created in the current directory:
 ```
 [input]
@@ -37,11 +36,11 @@ html = docu-lite-outline.html
 css = docu-lite-style.css
 documentation_mode = off
 ```
-Edit this file to control how docu-lite runs:
- - Input pattern specifies where to look for input
- - html specifies the name of the output html file
- - css specifies the name of the input style sheet, which will be referenced from the output html file
- - documentation_mode produces a less detailed output styled for use as or editing into documentation. This mode uses a **completely separate stylesheet**, which can be tailored independently.  
+⚙️ Edit the config file to control how docu-lite runs:
+ - Input **pattern** specifies where to look for input
+ - **html** specifies the name of the output html file
+ - **css** specifies the name of the input style sheet, which will be referenced from the output html file
+ - **documentation_mode** produces a less detailed output styled for use as or editing into documentation. This mode uses a **completely separate stylesheet**, which can be tailored independently.  
 
 📝 If the specified css file is not found, docu-lite will generate one and reference it in the html
 
