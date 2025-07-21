@@ -1,6 +1,7 @@
 name: Generate docu-lite outline
 
-on: [push]
+on:
+  push:
     paths-ignore:
       - 'docu-lite*'
 
