@@ -10,7 +10,7 @@ import configparser
 import argparse
 
 def get_config():
-    DEFAULT_INI = """[input] \npattern = ./*.py\n\n[output]\nhtml = docu-lite-outline.html\ncss = docu-lite-style.css\ndocumentation_mode = off"""
+    DEFAULT_INI = "[input] \npattern = ./*.py\n\n[output]\nhtml = docu-lite-outline.html\ncss = docu-lite-style.css\n\n[options]\ndocumentation_mode = off\nignore_docstrings_with = "
     DEFAULT_INI_FILE = "docu-lite.ini"
 
     parser = argparse.ArgumentParser(add_help=False)
@@ -57,12 +57,24 @@ def get_doc_objects(file_lines):
         # replace all opening docstring markers with 'docstring' and closing tags with 'body'
         # so 'body' means otherwise unclassified content following a docstring
         # and in the example css is given the same style as unclassified content following def and class
-        opening_tag = True
+        docstring_tag_is_opener = False
         for line_no, line in enumerate(file_lines):
-            if(line.strip() == '"""'):
-                file_lines[line_no] = line.replace('"""','docstring' if opening_tag else 'body')
-                opening_tag = not opening_tag
-          
+
+            if(line.strip().startswith('"""')):         # 3quotes starting a line or alone
+                docstring_tag_is_opener = not docstring_tag_is_opener
+                if(line.strip().replace('"""','',1).endswith('"""')):       # 3quotes ending a line that starts with 3quotes
+                    docstring_tag_is_opener = False
+            elif(line.strip().endswith('"""')):         # 3quotes ending a line that doesn't start with 3quotes
+                docstring_tag_is_opener = False
+
+            if('"""' in line):                          # 3quotes anywhere in line
+                if docstring_tag_is_opener:
+                    file_lines[line_no] = line.replace('"""','docstring ',1)
+                else:
+                    file_lines[line_no] = line.replace('"""',' body ',1)
+        
+
+            
         # find and create document objects and tell them the line numbers
         # that their content starts and ends at
         for line_no, line in enumerate(file_lines):
@@ -75,7 +87,7 @@ def get_doc_objects(file_lines):
                     objects.append(obj)
         if(len(objects)>1):
             objects[-1].content_end = len(file_lines)            # end of last object in document
-               
+
         # tell the object what its indent level is within the document
         indents =[0]
         for obj in objects:
@@ -83,6 +95,17 @@ def get_doc_objects(file_lines):
                 indents.append(obj.indent_spaces)
             obj.indent_level = indents.index(obj.indent_spaces)
         return objects
+
+
+def _ignore_docstrings_with(doc_objects, file_lines, pattern):
+    for obj in doc_objects:
+        if (not obj.object_type == 'docstring'):
+            continue
+        text = file_lines[obj.content_start: obj.content_end]
+        text = ''.join(text)
+        if (pattern in text):
+            obj.object_type = 'ignore'
+    return doc_objects
 
 
 def _signature_html(obj_type, obj_signature, open_details = True):
@@ -95,6 +118,8 @@ def _signature_html(obj_type, obj_signature, open_details = True):
 def _content_html(file_lines, object_type, start_no, end_no):
     # write 'content' inside <pre></pre>
     htm = f"<pre class ='{object_type} content'>"
+    if(object_type == 'docstring'):
+        htm += file_lines[start_no-1].replace('docstring','',1)  # 3quotes followed immediately by text
     for line in file_lines[start_no:end_no]:
         htm += f"{html.escape(line)}"
     htm += "</pre>\n"
@@ -110,6 +135,8 @@ def object_list_to_HTML(file_lines, doc_objects):
     doc_html = ""
     for i,obj in enumerate(doc_objects):
         nextobj = doc_objects[(i+1) % len(doc_objects)]
+        if(obj.object_type == 'ignore'):
+            continue
         
         doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
         if(nextobj.indent_level <= obj.indent_level):
@@ -125,11 +152,8 @@ def object_list_to_documentation_HTML(file_lines, doc_objects):
     doc_html = ""
     for i,obj in enumerate(doc_objects):
         nextobj = doc_objects[(i+1) % len(doc_objects)]
-
-   #     doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
-   #     if(nextobj.indent_level <= obj.indent_level):
-   #         doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
-   #         doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)        
+        if(obj.object_type == 'ignore'):
+            continue    
         
         if(obj.object_type not in ['body','docstring']):
             doc_html += "<hr>"
@@ -137,22 +161,21 @@ def object_list_to_documentation_HTML(file_lines, doc_objects):
         if(obj.object_type == "docstring"):
             doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
 
-
-            
     return doc_html
             
 def main():
     """
         Another docstring for testing
     """
-    version_string = "v0.7.4"
+    version_string = "v0.8.0"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
     config = get_config()
     input_pattern = config.get("input", "pattern")
     output_name = config.get("output", "html")
     style_sheet = config.get("output", "css")
-    documentation_mode = config.get("output", "documentation_mode")
+    documentation_mode = config.get("options", "documentation_mode")
+    ignore_docstrings_with = config.get("options", "ignore_docstrings_with")
 
     print(f"Running with \n \n[input]\npattern = {input_pattern}\n[output]\nhtml = {output_name}\ncss = {style_sheet}\ndocumentation_mode = {documentation_mode}\n")
     
@@ -190,8 +213,13 @@ def main():
         if(len(file_lines) ==0):
             print(f"File: {filename} has no content - skipping")
             continue
-        output_html += f"<span class = 'filename'>{filename}</span><br>"
+
         doc_objects = get_doc_objects(file_lines)
+        if(ignore_docstrings_with != ''):
+            print(f"Ignoring docstrings containing {ignore_docstrings_with}")
+            doc_objects =  _ignore_docstrings_with(doc_objects, file_lines, ignore_docstrings_with)
+
+        output_html += f"<span class = 'filename'>{filename}</span><br>"
         if(documentation_mode == "off"):
             output_html += object_list_to_HTML(file_lines, doc_objects)
         else:
