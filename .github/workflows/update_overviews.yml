@@ -5,7 +5,7 @@ on:
     paths:
       - '**.py'
       
-   workflow_dispatch:
+  workflow_dispatch:
       
 jobs:
   outline:
@@ -28,8 +28,11 @@ jobs:
 
       - name: Run docu-lite
         run: |
-          python -m docu-lite
-          python -m docu-lite --config docu-lite-docmode.ini
+          docu-lite
+
+      - name: Run docu-lite in docmode
+        run: |
+          docu-lite --config docu-lite-docmode.ini
 
 #      - name: Commit docu-lite outputs if changed
 #        run: |
