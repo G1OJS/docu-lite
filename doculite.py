@@ -145,7 +145,7 @@ def main():
     """
         Another docstring for testing
     """
-    version_string = "v0.7.3"
+    version_string = "v0.7.4"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
     config = get_config()
