@@ -1,6 +1,6 @@
 [project]
 name = "docu-lite"
-version = "0.7.0"
+version = "0.7.3"
 license = "MIT"
 
 authors = [
@@ -38,9 +38,11 @@ keywords = [
 Homepage = "https://github.com/G1OJS/docu-lite"
 Issues = "https://github.com/G1OJS/docu-lite/issues"
 
+[project.scripts]
+docu-lite = "doculite:main"
+
 [tool.setuptools]
 license-files = ["LICENSE"]
 
-[tool.setuptools.packages.find]
-include = ["docu_lite"]
+
 
