@@ -1,6 +1,10 @@
 name: Generate docu-lite outline
 
 on:
+  push:
+    paths:
+      - '**.py'
+      
    workflow_dispatch:
       
 jobs:
