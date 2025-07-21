@@ -2,13 +2,9 @@ name: Generate docu-lite outline
 
 on:
   push:
-    paths-ignore:
-      - 'docu-lite*'
-on:
-  push:
     paths:
-      - '!docu-lite*'
-      - '*py'
+      - '!docu-lite*.*'
+      - '*.py'
       
 jobs:
   outline:
