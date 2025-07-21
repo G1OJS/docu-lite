@@ -24,38 +24,25 @@ pip install docu-lite
 ## 💡 Usage
 Either edit and run docu-lite.py in an IDE, or run from the command line:
 ```
-docu-lite [-i INPUT_PATTERN] [-o OUTPUT_FILE] [-s CSS_FILE] [--documentation]
+docu-lite
 ```
-### ⚙️ Arguments
+### ⚙️ docu-lite.ini
+A config file 'docu-lite.ini' will be created in the current directory:
+```
+[input]
+pattern = ./*.py
 
-- `-i`  
-  **Input file pattern**, e.g.:  
-  ```
-  -i /folder/folder/*.py
-  ```
+[output]
+html = docu-lite-outline.html
+css = docu-lite-style.css
+documentation_mode = off
+```
+Edit this file to control how docu-lite runs:
+ - Input pattern specifies where to look for input
+ - html specifies the name of the output html file
+ - css specifies the name of the input style sheet, which will be referenced from the output html file
+ - documentation_mode produces a less detailed output styled for use as or editing into documentation. This mode uses a **completely separate stylesheet**, which can be tailored independently.  
 
-- `-o`  
-  **Output file name**, e.g.:  
-  ```
-  -o /folder/folder/outline.html
-  ```
-
-- `-s`  
-  **CSS file to use**, e.g.:  
-  ```
-  -s /path/to/custom.css
-  ```
-
-- `--documentation`  
-  Produces a less detailed output styled for use as or editing into documentation.  
-  This mode uses a **completely separate stylesheet**, which can be tailored independently.  
-  You can run `docu-lite` twice (with and without this flag) to generate two different outputs for different purposes.
-
----
-
-### 📝 Notes
-
-- If you specify a CSS file, **docu-lite simply references it** in the output HTML — it doesn't modify or generate it.
-- If the default CSS file is missing, **it will be automatically generated** and used.
+📝 If the specified css file is not found, docu-lite will generate one and reference it in the html
 
 [PyPI link](https://pypi.org/project/docu-lite/)
