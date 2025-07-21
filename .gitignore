@@ -4,6 +4,9 @@
 dist/
 build/
 
+# pages
+pages/
+
 # Python
 __pycache__/
 *.pyc
