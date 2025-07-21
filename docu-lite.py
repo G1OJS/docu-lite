@@ -17,7 +17,7 @@ def get_config():
     parser.add_argument("--config", default = DEFAULT_INI_FILE)
     args, _ = parser.parse_known_args()
     path = args.config
-    print(path)
+
     if not os.path.exists(path):
         if path != DEFAULT_INI_FILE:
             print(f"Config file not found: {path}. Is there a typo?")
@@ -27,6 +27,7 @@ def get_config():
             with open(path, "w") as f:
                 f.write(DEFAULT_INI)
 
+    print(f"Using config {path}")
     config = configparser.ConfigParser()
     config.read(path)
     return config
@@ -144,7 +145,7 @@ def main():
     """
         Another docstring for testing
     """
-    version_string = "v0.6.0"
+    version_string = "v0.6.1"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
     config = get_config()
@@ -152,6 +153,8 @@ def main():
     output_name = config.get("output", "html")
     style_sheet = config.get("output", "css")
     documentation_mode = config.get("output", "documentation_mode")
+
+    print(f"Running with \n \n[input]\npattern = {input_pattern}\n[output]\nhtml = {output_name}\ncss = {style_sheet}\ndocumentation_mode = {documentation_mode}\n")
     
     # start the output html
     output_html =  f"<!DOCTYPE html><html lang='en'>\n<head>\n<title>{output_name}</title>"
