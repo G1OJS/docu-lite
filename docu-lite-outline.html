@@ -16,21 +16,19 @@
 <pre class ='body content'>import html
 import glob
 import os
-import argparse
+import configparser
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def parse_args():</span></summary>
-<pre class ='def content'>    parser = argparse.ArgumentParser(description=&quot;Generate an HTML doc outline from source code.&quot;)
-    parser.add_argument(&quot;-i&quot;, &quot;--input&quot;, default=&quot;./*.py&quot;,
-                        help=&quot;Input filenames (default: ./*.py)&quot;)
-    parser.add_argument(&quot;-o&quot;, &quot;--output&quot;, default=&quot;docu-lite-outline.html&quot;,
-                        help=&quot;Output HTML file (default: docu-lite-outline.html)&quot;)
-    parser.add_argument(&quot;-s&quot;, &quot;--style&quot;, default=&quot;docu-lite-style.css&quot;,
-                        help=&quot;CSS file name (default: docu-lite-style.css)&quot;)
-    parser.add_argument(&quot;--documentation&quot;, action=&quot;store_true&quot;,
-                        help=&quot;Produce output tailored to documentation, also appends _docs to .html and .css filenames&quot;)
-    return parser.parse_args()
+<details><summary><span class ='def signature'>def get_config(path="docu-lite.ini"):</span></summary>
+<pre class ='def content'>    DEFAULT_INI = &quot;&quot;&quot;[input] \npattern = ./*.py\n\n[output]\nhtml = docu-lite-outline.html\ncss = docu-lite-style.css\ndocumentation_mode = false&quot;&quot;&quot;
+    if not os.path.exists(path):
+        print(f&quot;Creating default config file: {path}&quot;)
+        with open(path, &quot;w&quot;) as f:
+            f.write(DEFAULT_INI)
+    config = configparser.ConfigParser()
+    config.read(path)
+    return config
 
 </pre>
 </details>
@@ -133,10 +131,12 @@ import argparse
 <pre class ='body content'>    doc_html = &quot;&quot;
     for i,obj in enumerate(doc_objects):
         nextobj = doc_objects[(i+1) % len(doc_objects)]
+        
         doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
         if(nextobj.indent_level &lt;= obj.indent_level):
             doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
             doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
+            
     return doc_html
 
 </pre>
@@ -151,31 +151,40 @@ import argparse
 <pre class ='body content'>    doc_html = &quot;&quot;
     for i,obj in enumerate(doc_objects):
         nextobj = doc_objects[(i+1) % len(doc_objects)]
+
+   #     doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
+   #     if(nextobj.indent_level &lt;= obj.indent_level):
+   #         doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
+   #         doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)        
+        
         if(obj.object_type not in [&#x27;body&#x27;,&#x27;docstring&#x27;]):
             doc_html += &quot;&lt;hr&gt;&quot;
             doc_html += _signature_html(obj.object_type, obj.signature.replace(&#x27;def &#x27;,&#x27;&amp;nbsp&amp;nbsp&amp;nbsp&#x27;), open_details = False)
         if(obj.object_type == &quot;docstring&quot;):
             doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
+
+
+            
     return doc_html
             
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def main(args):</span></summary>
+<details><summary><span class ='def signature'>def main():</span></summary>
 <details><summary><span class ='docstring signature'>docstring</span></summary>
 <pre class ='docstring content'>        Another docstring for testing
 </pre>
 </details>
 <details><summary><span class ='body signature'>body</span></summary>
-<pre class ='body content'>    version_string = &quot;v0.5.1&quot;
+<pre class ='body content'>    version_string = &quot;v0.6.0&quot;
     soft_string = f&quot;Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/&quot;
     print(f&quot;{soft_string}\n&quot;)
-    documentation_mode = args.documentation
-    input_pattern = args.input
-  #  documentation_mode = True
-    output_name = args.output if (not documentation_mode) else args.output.split(&quot;.&quot;)[0]+&quot;_docs.html&quot;
-    style_sheet = args.style if (not documentation_mode) else args.style.split(&quot;.&quot;)[0]+&quot;_docs.css&quot; 
+    config = get_config()
+    input_pattern = config.get(&quot;input&quot;, &quot;pattern&quot;)
+    output_name = config.get(&quot;output&quot;, &quot;html&quot;)
+    style_sheet = config.get(&quot;output&quot;, &quot;css&quot;)
 
+    documentation_mode = False
     
     # start the output html
     output_html =  f&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;{output_name}&lt;/title&gt;&quot;
@@ -230,11 +239,10 @@ import argparse
     print(f&quot;linking to style sheet {style_sheet}&quot;)
 
 if __name__ == &quot;__main__&quot;:
-    args = parse_args()
-    main(args)
+    main()
 
 </pre>
 </details>
 </details>
 
-<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v0.5.1 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
+<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v0.6.0 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>

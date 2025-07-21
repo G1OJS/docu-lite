@@ -1,29 +1,22 @@
 """
     This is a demo of docu-lite semi-automatic documentation, using this same
     file as the input test case. To try it on your own files,
-    change these lines below:
-        input_folder = ""
-        output_name = "docu-lite-demo-outline.html"
-        style_sheet = "docu-lite-style.css"
-    Remember that if you use a path containing "\", you'll need to escape them by
-    adding another "\" e.g. input_folder = "C:\\users\\me\\mydocs\\test.py"
+    change the appropriate settings in docu-lite.ini
 """
 import html
 import glob
 import os
-import argparse
+import configparser
 
-def parse_args():
-    parser = argparse.ArgumentParser(description="Generate an HTML doc outline from source code.")
-    parser.add_argument("-i", "--input", default="./*.py",
-                        help="Input filenames (default: ./*.py)")
-    parser.add_argument("-o", "--output", default="docu-lite-outline.html",
-                        help="Output HTML file (default: docu-lite-outline.html)")
-    parser.add_argument("-s", "--style", default="docu-lite-style.css",
-                        help="CSS file name (default: docu-lite-style.css)")
-    parser.add_argument("--documentation", action="store_true",
-                        help="Produce output tailored to documentation, also appends _docs to .html and .css filenames")
-    return parser.parse_args()
+def get_config(path="docu-lite.ini"):
+    DEFAULT_INI = """[input] \npattern = ./*.py\n\n[output]\nhtml = docu-lite-outline.html\ncss = docu-lite-style.css\ndocumentation_mode = off"""
+    if not os.path.exists(path):
+        print(f"Creating default config file: {path}")
+        with open(path, "w") as f:
+            f.write(DEFAULT_INI)
+    config = configparser.ConfigParser()
+    config.read(path)
+    return config
 
 class docobj:
     """
@@ -103,10 +96,12 @@ def object_list_to_HTML(file_lines, doc_objects):
     doc_html = ""
     for i,obj in enumerate(doc_objects):
         nextobj = doc_objects[(i+1) % len(doc_objects)]
+        
         doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
         if(nextobj.indent_level <= obj.indent_level):
             doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
             doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
+            
     return doc_html
 
 def object_list_to_documentation_HTML(file_lines, doc_objects):
@@ -116,26 +111,34 @@ def object_list_to_documentation_HTML(file_lines, doc_objects):
     doc_html = ""
     for i,obj in enumerate(doc_objects):
         nextobj = doc_objects[(i+1) % len(doc_objects)]
+
+   #     doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
+   #     if(nextobj.indent_level <= obj.indent_level):
+   #         doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
+   #         doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)        
+        
         if(obj.object_type not in ['body','docstring']):
             doc_html += "<hr>"
             doc_html += _signature_html(obj.object_type, obj.signature.replace('def ','&nbsp&nbsp&nbsp'), open_details = False)
         if(obj.object_type == "docstring"):
             doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
+
+
+            
     return doc_html
             
-def main(args):
+def main():
     """
         Another docstring for testing
     """
-    version_string = "v0.5.1"
+    version_string = "v0.6.0"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
-    documentation_mode = args.documentation
-    input_pattern = args.input
-  #  documentation_mode = True
-    output_name = args.output if (not documentation_mode) else args.output.split(".")[0]+"_docs.html"
-    style_sheet = args.style if (not documentation_mode) else args.style.split(".")[0]+"_docs.css" 
-
+    config = get_config()
+    input_pattern = config.get("input", "pattern")
+    output_name = config.get("output", "html")
+    style_sheet = config.get("output", "css")
+    documentation_mode = config.get("output", "documentation_mode")
     
     # start the output html
     output_html =  f"<!DOCTYPE html><html lang='en'>\n<head>\n<title>{output_name}</title>"
@@ -157,7 +160,7 @@ def main(args):
     except (FileNotFoundError, OSError):
         print(f"Couldn't open style sheet {style_sheet}: creating default\n")
         with open(style_sheet, "w", encoding="utf-8") as f:
-            f.write(DEFAULT_CSS if not documentation_mode else DEFAULT_CSS_DOCS)
+            f.write(DEFAULT_CSS if (documentation_mode=="off") else DEFAULT_CSS_DOCS)
     output_html += f"<link rel='stylesheet' href='./{style_sheet}' />"
 
     # start html body and process input files
@@ -173,7 +176,7 @@ def main(args):
             continue
         output_html += f"<span class = 'filename'>{filename}</span><br>"
         doc_objects = get_doc_objects(file_lines)
-        if(not documentation_mode):
+        if(documentation_mode == "off"):
             output_html += object_list_to_HTML(file_lines, doc_objects)
         else:
             output_html += object_list_to_documentation_HTML(file_lines, doc_objects)
@@ -190,6 +193,5 @@ def main(args):
     print(f"linking to style sheet {style_sheet}")
 
 if __name__ == "__main__":
-    args = parse_args()
-    main(args)
+    main()
 
