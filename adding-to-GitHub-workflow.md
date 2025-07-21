@@ -5,8 +5,6 @@ permalink: /add-to-workflow/
 ---
 
 # Adding docu-lite to your GitHub workflow
-I have just been through this process on this repository, so that I get the same user experience as anyone using docu-lite.
-
 Here's how to ensure that you create an up to date outline on every commit. 
 
 ### Create a file called something like this (the name doesn't matter, but the file location does):
@@ -15,11 +13,17 @@ Here's how to ensure that you create an up to date outline on every commit.
 ```
    Here's mine: [update_overviews.yml](https://github.com/G1OJS/docu-lite/blob/main/.github/workflows/update_overviews.yml)
 
-   Make sure that you edit the line
+   Make sure that you edit the lines
 ```
-python -m docu-lite -i *.py -o docu-lite-outline.html
+      - name: Run docu-lite
+        run: |
+          docu-lite
+
+      - name: Run docu-lite in docmode
+        run: |
+          docu-lite --config docu-lite-docmode.ini
 ```
-   so that docu-lite looks in the right place for the files you want an outline of, and puts the results where you want them to be (which needs to have docu-lite-style.css in the same folder unless you're using the -include_css option)
+   so that docu-lite points to your .ini file(s), and edit the ini files as described in usage section of the README.
 
 ### Ensure that you have read/write permissions set for your actions
 Go to the repository settings:
