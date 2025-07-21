@@ -16,25 +16,67 @@ def get_config():
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--config", default = DEFAULT_INI_FILE)
     args, _ = parser.parse_known_args()
-    path = args.config
+    config_filepath = args.config
 
-    if not os.path.exists(path):
+    if not os.path.exists(config_filepath):
         if path != DEFAULT_INI_FILE:
-            print(f"Config file not found: {path}. Is there a typo?")
+            print(f"Config file not found: {config_filepath}. Is there a typo?")
             sys.exit(1)
         else:
-            print(f"No config file found — creating default '{path}'")
+            print(f"No config file found — creating default '{config_filepath}'")
             with open(path, "w") as f:
                 f.write(DEFAULT_INI)
 
-    print(f"Using config {path}")
+    print(f"Reading options from {config_filepath}")
     config = configparser.ConfigParser()
-    config.read(path)
+    config.read(config_filepath)
     return config
+
+def get_config_option(config, section, option, default):
+    if (config.has_option(section, option)):
+        return config.get(section, option)
+    else:
+        return default
+
+def get_config_vars():
+    config = get_config()
+    input_pattern = get_config_option(config, "input", "pattern", "./*.py")
+    output_name = get_config_option(config, "output", "html", "docu-lite.html")
+    style_sheet = get_config_option(config, "output", "css", "docu-lite.css")
+    documentation_mode = get_config_option(config, "options", "documentation_mode", "off")        
+    ignore_docstrings_with = get_config_option(config, "options", "ignore_docstrings_with", "")
+    
+    print(f"Running with options: \n \n[input]\npattern = {input_pattern}\n[output]\nhtml = {output_name}\n"
+          +"css = {style_sheet}\ndocumentation_mode = {documentation_mode}\nignore_docstrings_with = {ignore_docstrings_with}\n")
+    return input_pattern, output_name, style_sheet, documentation_mode, ignore_docstrings_with
+
+def ensure_css_exists(style_sheet, documentation_mode):
+    """
+    look for specified or default css, if not found write a new one and use that
+    """
+    
+    DEFAULT_CSS = "* {margin-left:2rem;} \n.filename {font-weight:bold; color:grey; font-size:2rem;} \
+        \n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:blue;} \
+        \n.def {color:orange; }\n.docstring {color:darkgreen;}\n \
+        \n.content {border-left: 2px solid #ccc; color:black; padding-left: 1em; background: #f9f9f9;}\n.docstring {color:green;}"
+
+    DEFAULT_CSS_DOCS = "* {margin-left:2rem; background: #e6f9ff;} \n.filename {font-weight:bold; color:grey; font-size:2rem;} \
+        \n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:black; font-size:1.5rem;} \
+        \n.def {color:black; }\n.docstring {color:darkgreen;}\n \
+        \n.content {color:black; padding-left: 1em; }\n.docstring {color:green;}"
+
+    try:
+        with open(style_sheet, "r", encoding="utf-8") as f:
+            pass
+    except (FileNotFoundError, OSError):
+        print(f"Couldn't open style sheet {style_sheet}: creating default\n")
+        with open(style_sheet, "w", encoding="utf-8") as f:
+            f.write(DEFAULT_CSS if (documentation_mode=="off") else DEFAULT_CSS_DOCS)
+
 
 class docobj:
     """
-        structure to contain information about each object in the document
+    structure to contain information about each object in the document
     """
     def __init__(self, signature):
         self.signature = signature.strip()                              # first line of the object including the def, class etc
@@ -46,17 +88,18 @@ class docobj:
 
 def get_doc_objects(file_lines):
         """
-            document-level properties
-            converts document into set of docobj in self.objects
+        converts document into list of objects
         """
         object_signatures = ['class','def','docstring','body']
         objects = []
         indent_level = 0
         indent_spaces = 0
 
-        # replace all opening docstring markers with 'docstring' and closing tags with 'body'
-        # so 'body' means otherwise unclassified content following a docstring
-        # and in the example css is given the same style as unclassified content following def and class
+        """
+        replace all opening docstring markers with 'docstring' and closing tags with 'body'
+        so 'body' means otherwise unclassified content following a docstring
+        and in the example css is given the same style as unclassified content following def and class
+        """
         docstring_tag_is_opener = False
         for line_no, line in enumerate(file_lines):
 
@@ -72,11 +115,11 @@ def get_doc_objects(file_lines):
                     file_lines[line_no] = line.replace('"""','docstring ',1)
                 else:
                     file_lines[line_no] = line.replace('"""',' body ',1)
-        
-
             
-        # find and create document objects and tell them the line numbers
-        # that their content starts and ends at
+        """
+        find and create document objects and tell them the line numbers
+        that their content starts and ends at
+        """
         for line_no, line in enumerate(file_lines):
             for p in object_signatures:
                 if line.strip().startswith(p):
@@ -106,7 +149,6 @@ def _ignore_docstrings_with(doc_objects, file_lines, pattern):
         if (pattern in text):
             obj.object_type = 'ignore'
     return doc_objects
-
 
 def _signature_html(obj_type, obj_signature, open_details = True):
     # write the signature of the object with a summary / details tag
@@ -164,45 +206,19 @@ def object_list_to_documentation_HTML(file_lines, doc_objects):
     return doc_html
             
 def main():
-    """
-        Another docstring for testing
-    """
-    version_string = "v0.8.0"
+    version_string = "v1.0.0"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
-    config = get_config()
-    input_pattern = config.get("input", "pattern")
-    output_name = config.get("output", "html")
-    style_sheet = config.get("output", "css")
-    documentation_mode = config.get("options", "documentation_mode")
-    ignore_docstrings_with = config.get("options", "ignore_docstrings_with")
 
-    print(f"Running with \n \n[input]\npattern = {input_pattern}\n[output]\nhtml = {output_name}\ncss = {style_sheet}\ndocumentation_mode = {documentation_mode}\n")
-    
+    # get input params
+    input_pattern, output_name, style_sheet, documentation_mode, ignore_docstrings_with = get_config_vars()
+
     # start the output html
+    ensure_css_exists(style_sheet,documentation_mode)
     output_html =  f"<!DOCTYPE html><html lang='en'>\n<head>\n<title>{output_name}</title>"
-
-    # look for specified or default css, if not found write a new one and use that
-    DEFAULT_CSS = "* {margin-left:2rem;} \n.filename {font-weight:bold; color:grey; font-size:2rem;} \
-        \n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:blue;} \
-        \n.def {color:orange; }\n.docstring {color:darkgreen;}\n \
-        \n.content {border-left: 2px solid #ccc; color:black; padding-left: 1em; background: #f9f9f9;}\n.docstring {color:green;}"
-
-    DEFAULT_CSS_DOCS = "* {margin-left:2rem; background: #e6f9ff;} \n.filename {font-weight:bold; color:grey; font-size:2rem;} \
-        \n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:black; font-size:1.5rem;} \
-        \n.def {color:black; }\n.docstring {color:darkgreen;}\n \
-        \n.content {color:black; padding-left: 1em; }\n.docstring {color:green;}"
-
-    try:
-        with open(style_sheet, "r", encoding="utf-8") as f:
-            pass
-    except (FileNotFoundError, OSError):
-        print(f"Couldn't open style sheet {style_sheet}: creating default\n")
-        with open(style_sheet, "w", encoding="utf-8") as f:
-            f.write(DEFAULT_CSS if (documentation_mode=="off") else DEFAULT_CSS_DOCS)
     output_html += f"<link rel='stylesheet' href='./{style_sheet}' />"
 
-    # start html body and process input files
+    # start html body and loop through input files
     output_html += "<body>\n"
     print(f"Scanning for input files in {input_pattern}")
     for filepath in glob.glob(input_pattern):
@@ -213,12 +229,9 @@ def main():
         if(len(file_lines) ==0):
             print(f"File: {filename} has no content - skipping")
             continue
-
         doc_objects = get_doc_objects(file_lines)
         if(ignore_docstrings_with != ''):
-            print(f"Ignoring docstrings containing {ignore_docstrings_with}")
             doc_objects =  _ignore_docstrings_with(doc_objects, file_lines, ignore_docstrings_with)
-
         output_html += f"<span class = 'filename'>{filename}</span><br>"
         if(documentation_mode == "off"):
             output_html += object_list_to_HTML(file_lines, doc_objects)
@@ -233,8 +246,7 @@ def main():
     output_html += "</body>\n"
     with open(output_name, "w", encoding="utf-8") as f:
         f.write(output_html)
-    print(f"\nOutline written to {output_name},")
-    print(f"linking to style sheet {style_sheet}")
+    print(f"\nOutline written to {output_name}, linked to style sheet {style_sheet}")
 
 if __name__ == "__main__":
     main()
