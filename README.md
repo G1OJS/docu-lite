@@ -24,17 +24,8 @@ pip install docu-lite
 ## 💡 Usage
 Either edit and run docu-lite.py in an IDE, or run from the command line:
 ```
-docu-lite
-```
-A config file 'docu-lite.ini' will be created in the current directory:
-```
-[input]
-pattern = ./*.py
-
-[output]
-html = docu-lite-outline.html
-css = docu-lite-style.css
-documentation_mode = off
+docu-lite                         # uses or creates docu-lite.ini
+docu-lite --config alt.ini        # uses alt.ini, errors if missing
 ```
 ⚙️ Edit the config file to control how docu-lite runs:
  - Input **pattern** specifies where to look for input
