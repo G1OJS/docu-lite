@@ -104,25 +104,18 @@ def get_doc_objects(file_lines):
         for line_no, line in enumerate(file_lines):
             if(not '"""' in line):
                 continue
-            #print(f"in docstring: {in_docstring}")
-            #print(f"raw line: {line}")
-            ls = line.strip()
-            if(ls.startswith('"""') and not in_docstring):         
-                file_lines[line_no] = line.replace('"""','docstring ',1)
-                in_docstring = True
-                #print(f"mid line1: {file_lines[line_no]}")
-                if(file_lines[line_no].rstrip().endswith('"""')):
-                    #print(f"mid line2: {file_lines[line_no]}")
-                    file_lines[line_no] = file_lines[line_no].replace('"""','body ',1)
-                    in_docstring = False
-            elif(ls.startswith('"""') and in_docstring):
-                file_lines[line_no] = line.replace('"""','body ',1)
-                in_docstring = False
+            print(f"in docstring: {in_docstring}")
+            print(f"raw line: {line}")
+            if(line.strip().startswith('"""')):
+                replacement_tag = 'docstring ' if not in_docstring else 'body '
+                file_lines[line_no] = line.replace('"""',replacement_tag,1)
+                in_docstring = not in_docstring
             if(file_lines[line_no].rstrip().endswith('"""')):
-                #print(f"extra closer: {file_lines[line_no]}")
-                file_lines[line_no] = file_lines[line_no].replace('"""','body ',1)
+                print(f"extra closer: {file_lines[line_no]}")
+                file_lines[line_no] = file_lines[line_no].replace('"""','body ',1) # 'body' should ideally be on next line alone
                 in_docstring = False           
-            #print(f"new line: {file_lines[line_no]}\n")
+            print(f"new line: {file_lines[line_no]}\n")
+            
         """
         find and create document objects and tell them the line numbers
         that their content starts and ends at
@@ -136,7 +129,7 @@ def get_doc_objects(file_lines):
                         objects[-1].content_end = line_no -1 # end of previous object
                     objects.append(obj)
         if(len(objects)>1):
-            objects[-1].content_end = len(file_lines)            # end of last object in document
+            objects[-1].content_end = len(file_lines) - 1         # end of last object in document
 
         # tell the object what its indent level is within the document
         indents =[0]
@@ -144,6 +137,14 @@ def get_doc_objects(file_lines):
             if(obj.indent_spaces > indents[-1]):
                 indents.append(obj.indent_spaces)
             obj.indent_level = indents.index(obj.indent_spaces)
+        
+        # 'move' any docstring content in the signature into the content,
+        # and remove the 'docstring ' tag
+        for obj in objects:
+            if(obj.object_type == 'docstring'):
+                obj.content_start -= 1
+                obj.signature = obj.signature.split(" ")[0]
+                file_lines[obj.content_start] = file_lines[obj.content_start].replace('docstring ','',1)
         return objects
 
 
@@ -164,10 +165,10 @@ def _signature_html(obj_type, obj_signature, open_details = True):
     htm += "</summary>" if open_details else "</div>"
     return htm + "\n"
 
-def _content_html(file_lines, object_type, start_no, end_no):
+def _content_html(object_type, content_lines):
     # write 'content' inside <pre></pre>
     htm = f"<pre class ='{object_type} content'>"
-    for line in file_lines[start_no : end_no + 1]:
+    for line in content_lines:
         htm += f"{html.escape(line)}"
     htm += "</pre>\n"
     return htm
@@ -175,7 +176,7 @@ def _content_html(file_lines, object_type, start_no, end_no):
 def _close_details(n_times):
     return "</details>\n" * n_times
 
-def object_list_to_HTML(file_lines, doc_objects):
+def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
     """
         converts list of doc_objects into HTML
     """
@@ -184,29 +185,16 @@ def object_list_to_HTML(file_lines, doc_objects):
         nextobj = doc_objects[(i+1) % len(doc_objects)]
         if(obj.object_type == 'ignore'):
             continue
-        
-        doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
-        doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
-        doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
-            
-    return doc_html
-
-def object_list_to_documentation_HTML(file_lines, doc_objects):
-    """
-        converts list of doc_objects into HTML
-    """
-    doc_html = ""
-    for i,obj in enumerate(doc_objects):
-        nextobj = doc_objects[(i+1) % len(doc_objects)]
-        if(obj.object_type == 'ignore'):
-            continue    
-        
-        if(obj.object_type not in ['body','docstring']):
-            doc_html += "<hr>"
-            doc_html += _signature_html(obj.object_type, obj.signature.replace('def ','&nbsp&nbsp&nbsp'), open_details = False)
-        if(obj.object_type == "docstring"):
-            doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
-
+        if(documentation_mode == 'on'):
+            if(obj.object_type not in ['body','docstring']):
+                doc_html += "<hr>"
+                doc_html += _signature_html(obj.object_type, obj.signature.replace('def ','&nbsp&nbsp&nbsp'), open_details = False)
+            if(obj.object_type == "docstring"):
+                doc_html += _content_html(obj.object_type, file_lines[obj.content_start : obj.content_end + 1])
+        else:
+            doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
+            doc_html += _content_html(obj.object_type, file_lines[obj.content_start : obj.content_end + 1])
+            doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
     return doc_html
             
 def main():
@@ -238,10 +226,7 @@ def main():
         if(ignore_docstrings_with != ''):
             doc_objects =  _ignore_docstrings_with(doc_objects, file_lines, ignore_docstrings_with)
         output_html += f"<span class = 'filename'>{filename}</span><br>"
-        if(documentation_mode == "off"):
-            output_html += object_list_to_HTML(file_lines, doc_objects)
-        else:
-            output_html += object_list_to_documentation_HTML(file_lines, doc_objects)
+        output_html += object_list_to_HTML(file_lines, doc_objects, documentation_mode)
         n_files_processed +=1
 
     # write footer
