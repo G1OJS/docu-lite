@@ -140,9 +140,10 @@ def get_doc_objects(file_lines):
         
         # 'move' any docstring content in the signature into the content,
         # and remove the 'docstring ' tag
+        # NEEDS another look - do this with deep copy move so it will be clearer
         for obj in objects:
             if(obj.object_type == 'docstring'):
-                obj.content_start -= 1
+                obj.content_start -= 1 
                 obj.signature = obj.signature.split(" ")[0]
                 file_lines[obj.content_start] = file_lines[obj.content_start].replace('docstring ','',1)
         return objects
@@ -155,6 +156,7 @@ def _ignore_docstrings_with(doc_objects, file_lines, pattern):
         text = file_lines[obj.content_start: obj.content_end + 1]
         text = ''.join(text)
         if (pattern in text):
+            print(f"  ..ignoring docstring at lines {obj.content_start} to {obj.content_end}")
             obj.object_type = 'ignore'
     return doc_objects
 
@@ -198,7 +200,7 @@ def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
     return doc_html
             
 def main():
-    version_string = "v0.9.0"
+    version_string = "v1.0.0"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
 
