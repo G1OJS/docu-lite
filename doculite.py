@@ -126,7 +126,7 @@ def get_doc_objects(file_lines):
                     obj = docobj(line)
                     obj.content_start = line_no + 1         # start of this object
                     if(len(objects) > 0):           
-                        objects[-1].content_end = (line_no) # end of previous object
+                        objects[-1].content_end = line_no -1 # end of previous object
                     objects.append(obj)
         if(len(objects)>1):
             objects[-1].content_end = len(file_lines)            # end of last object in document
@@ -144,7 +144,7 @@ def _ignore_docstrings_with(doc_objects, file_lines, pattern):
     for obj in doc_objects:
         if (not obj.object_type == 'docstring'):
             continue
-        text = file_lines[obj.content_start: obj.content_end]
+        text = file_lines[obj.content_start: obj.content_end + 1]
         text = ''.join(text)
         if (pattern in text):
             obj.object_type = 'ignore'
@@ -160,9 +160,7 @@ def _signature_html(obj_type, obj_signature, open_details = True):
 def _content_html(file_lines, object_type, start_no, end_no):
     # write 'content' inside <pre></pre>
     htm = f"<pre class ='{object_type} content'>"
-    if(object_type == 'docstring'):
-        htm += file_lines[start_no-1].replace('docstring','',1)  # 3quotes followed immediately by text
-    for line in file_lines[start_no:end_no]:
+    for line in file_lines[start_no : end_no + 1]:
         htm += f"{html.escape(line)}"
     htm += "</pre>\n"
     return htm
