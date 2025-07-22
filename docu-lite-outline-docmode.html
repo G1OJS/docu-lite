@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang='en'>
+<head>
+<title>docu-lite-outline-docmode.html</title><link rel='stylesheet' href='./docu-lite-docmode.css' /><body>
+<span class = 'filename'>doculite.py</span><br><pre class ='docstring content'>
+    This is a demo of docu-lite semi-automatic documentation, using this same 
+    file as the input test case. To try it on your own files,
+    change the appropriate settings in docu-lite.ini
+</pre>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbspget_config():</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbspget_config_option(config, section, option, default):</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbspget_config_vars():</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbspensure_css_exists(style_sheet, documentation_mode):</span></div>
+<pre class ='docstring content'>    
+    look for specified or default css, if not found write a new one and use that
+</pre>
+<hr><div><span class ='class signature'>class docobj:</span></div>
+<pre class ='docstring content'>    
+    structure to contain information about each object in the document
+</pre>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbsp__init__(self, signature):</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbspget_doc_objects(file_lines):</span></div>
+<pre class ='docstring content'>        
+        converts document into list of objects
+</pre>
+<pre class ='docstring content'>        
+        replace all opening docstring markers with &#x27;docstring&#x27; and closing tags with &#x27;body&#x27;
+        so &#x27;body&#x27; means otherwise unclassified content following a docstring
+        and in the example css is given the same style as unclassified content following def and class
+</pre>
+<pre class ='docstring content'>        
+        find and create document objects and tell them the line numbers
+        that their content starts and ends at
+</pre>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbsp_ignore_docstrings_with(doc_objects, file_lines, pattern):</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbsp_signature_html(obj_type, obj_signature, open_details = True):</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbsp_content_html(object_type, content_lines):</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbsp_close_details(n_times):</span></div>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbspobject_list_to_HTML(file_lines, doc_objects, documentation_mode):</span></div>
+<pre class ='docstring content'>    
+        converts list of doc_objects into HTML
+</pre>
+<hr><div><span class ='def signature'>&nbsp&nbsp&nbspmain():</span></div>
+
+<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v1.0.0 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
