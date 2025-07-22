@@ -2,6 +2,12 @@
 <head>
 <title>docu-lite-outline.html</title><link rel='stylesheet' href='./docu-lite-style.css' /><body>
 <span class = 'filename'>doculite.py</span><br><details><summary><span class ='docstring signature'>docstring</span></summary>
+<pre class ='docstring content'>
+    This is a demo of docu-lite semi-automatic documentation, using this same 
+    file as the input test case. To try it on your own files,
+    change the appropriate settings in docu-lite.ini
+</pre>
+</details>
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'>import html
 import glob
@@ -10,7 +16,6 @@ import configparser
 import argparse
 
 </pre>
-</details>
 </details>
 <details><summary><span class ='def signature'>def get_config():</span></summary>
 <pre class ='def content'>    DEFAULT_INI = &quot;[input] \npattern = ./*.py\n\n[output]\nhtml = docu-lite-outline.html\ncss = docu-lite-style.css\n\n[options]\ndocumentation_mode = off\nignore_docstrings_with = &quot;
@@ -60,7 +65,12 @@ import argparse
 </pre>
 </details>
 <details><summary><span class ='def signature'>def ensure_css_exists(style_sheet, documentation_mode):</span></summary>
+<pre class ='def content'></pre>
 <details><summary><span class ='docstring signature'>docstring</span></summary>
+<pre class ='docstring content'>    
+    look for specified or default css, if not found write a new one and use that
+</pre>
+</details>
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'>    
     DEFAULT_CSS = &quot;* {margin-left:2rem;} \n.filename {font-weight:bold; color:grey; font-size:2rem;} \
@@ -85,13 +95,15 @@ import argparse
 </pre>
 </details>
 </details>
-</details>
-</details>
 <details><summary><span class ='class signature'>class docobj:</span></summary>
+<pre class ='class content'></pre>
 <details><summary><span class ='docstring signature'>docstring</span></summary>
+<pre class ='docstring content'>    
+    structure to contain information about each object in the document
+</pre>
+</details>
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'></pre>
-</details>
 </details>
 <details><summary><span class ='def signature'>def __init__(self, signature):</span></summary>
 <pre class ='def content'>        self.signature = signature.strip()                              # first line of the object including the def, class etc
@@ -104,9 +116,13 @@ import argparse
 </pre>
 </details>
 </details>
-</details>
 <details><summary><span class ='def signature'>def get_doc_objects(file_lines):</span></summary>
+<pre class ='def content'></pre>
 <details><summary><span class ='docstring signature'>docstring</span></summary>
+<pre class ='docstring content'>        
+        converts document into list of objects
+</pre>
+</details>
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'>        object_signatures = [&#x27;class&#x27;,&#x27;def&#x27;,&#x27;docstring&#x27;,&#x27;body&#x27;]
         objects = []
@@ -115,29 +131,38 @@ import argparse
 
 </pre>
 </details>
-</details>
 <details><summary><span class ='docstring signature'>docstring</span></summary>
+<pre class ='docstring content'>        
+        replace all opening docstring markers with &#x27;docstring&#x27; and closing tags with &#x27;body&#x27;
+        so &#x27;body&#x27; means otherwise unclassified content following a docstring
+        and in the example css is given the same style as unclassified content following def and class
+</pre>
+</details>
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'>        in_docstring = False
         for line_no, line in enumerate(file_lines):
-            if(not &#x27; body &#x27; in line):
+            if(not &#x27;&quot;&quot;&quot;&#x27; in line):
                 continue
             #print(f&quot;in docstring: {in_docstring}&quot;)
             #print(f&quot;raw line: {line}&quot;)
-            if(line.strip().startswith(&#x27; body &#x27;)):
+            if(line.strip().startswith(&#x27;&quot;&quot;&quot;&#x27;)):
                 replacement_tag = &#x27;docstring &#x27; if not in_docstring else &#x27;body &#x27;
-                file_lines[line_no] = line.replace(&#x27; body &#x27;,replacement_tag,1)
+                file_lines[line_no] = line.replace(&#x27;&quot;&quot;&quot;&#x27;,replacement_tag,1)
                 in_docstring = not in_docstring
-            if(file_lines[line_no].rstrip().endswith(&#x27; body &#x27;)):
+            if(file_lines[line_no].rstrip().endswith(&#x27;&quot;&quot;&quot;&#x27;)):
                 #print(f&quot;extra closer: {file_lines[line_no]}&quot;)
-                file_lines[line_no] = file_lines[line_no].replace(&#x27; body &#x27;,&#x27;body &#x27;,1) # &#x27;body&#x27; should ideally be on next line alone
+                file_lines[line_no] = file_lines[line_no].replace(&#x27;&quot;&quot;&quot;&#x27;,&#x27;body &#x27;,1) # &#x27;body&#x27; should ideally be on next line alone
                 in_docstring = False           
             #print(f&quot;new line: {file_lines[line_no]}\n&quot;)
             
 </pre>
 </details>
-</details>
 <details><summary><span class ='docstring signature'>docstring</span></summary>
+<pre class ='docstring content'>        
+        find and create document objects and tell them the line numbers
+        that their content starts and ends at
+</pre>
+</details>
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'>        for line_no, line in enumerate(file_lines):
             for p in object_signatures:
@@ -159,18 +184,16 @@ import argparse
         
         # &#x27;move&#x27; any docstring content in the signature into the content,
         # and remove the &#x27;docstring &#x27; tag
+        # NEEDS another look - do this with deep copy move so it will be clearer
         for obj in objects:
             if(obj.object_type == &#x27;docstring&#x27;):
-                obj.content_start -= 1
+                obj.content_start -= 1 
                 obj.signature = obj.signature.split(&quot; &quot;)[0]
                 file_lines[obj.content_start] = file_lines[obj.content_start].replace(&#x27;docstring &#x27;,&#x27;&#x27;,1)
         return objects
 
 
 </pre>
-</details>
-</details>
-</details>
 </details>
 </details>
 </details>
@@ -181,6 +204,7 @@ import argparse
         text = file_lines[obj.content_start: obj.content_end + 1]
         text = &#x27;&#x27;.join(text)
         if (pattern in text):
+            print(f&quot;  ..ignoring docstring at lines {obj.content_start} to {obj.content_end}&quot;)
             obj.object_type = &#x27;ignore&#x27;
     return doc_objects
 
@@ -211,7 +235,12 @@ import argparse
 </pre>
 </details>
 <details><summary><span class ='def signature'>def object_list_to_HTML(file_lines, doc_objects, documentation_mode):</span></summary>
+<pre class ='def content'></pre>
 <details><summary><span class ='docstring signature'>docstring</span></summary>
+<pre class ='docstring content'>    
+        converts list of doc_objects into HTML
+</pre>
+</details>
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'>    doc_html = &quot;&quot;
     for i,obj in enumerate(doc_objects):
@@ -233,10 +262,8 @@ import argparse
 </pre>
 </details>
 </details>
-</details>
-</details>
 <details><summary><span class ='def signature'>def main():</span></summary>
-<pre class ='def content'>    version_string = &quot;v0.9.0&quot;
+<pre class ='def content'>    version_string = &quot;v1.0.0&quot;
     soft_string = f&quot;Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/&quot;
     print(f&quot;{soft_string}\n&quot;)
 
@@ -286,4 +313,4 @@ if __name__ == &quot;__main__&quot;:
 </pre>
 </details>
 
-<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v0.8.0 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
+<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v0.9.0 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
