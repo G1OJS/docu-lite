@@ -100,22 +100,29 @@ def get_doc_objects(file_lines):
         so 'body' means otherwise unclassified content following a docstring
         and in the example css is given the same style as unclassified content following def and class
         """
-        docstring_tag_is_opener = False
+        in_docstring = False
         for line_no, line in enumerate(file_lines):
-
-            if(line.strip().startswith('"""')):         # 3quotes starting a line or alone
-                docstring_tag_is_opener = not docstring_tag_is_opener
-                if(line.strip().replace('"""','',1).endswith('"""')):       # 3quotes ending a line that starts with 3quotes
-                    docstring_tag_is_opener = False
-            elif(line.strip().endswith('"""')):         # 3quotes ending a line that doesn't start with 3quotes
-                docstring_tag_is_opener = False
-
-            if('"""' in line):                          # 3quotes anywhere in line
-                if docstring_tag_is_opener:
-                    file_lines[line_no] = line.replace('"""','docstring ',1)
-                else:
-                    file_lines[line_no] = line.replace('"""',' body ',1)
-            
+            if(not '"""' in line):
+                continue
+            #print(f"in docstring: {in_docstring}")
+            #print(f"raw line: {line}")
+            ls = line.strip()
+            if(ls.startswith('"""') and not in_docstring):         
+                file_lines[line_no] = line.replace('"""','docstring ',1)
+                in_docstring = True
+                #print(f"mid line1: {file_lines[line_no]}")
+                if(file_lines[line_no].rstrip().endswith('"""')):
+                    #print(f"mid line2: {file_lines[line_no]}")
+                    file_lines[line_no] = file_lines[line_no].replace('"""','body ',1)
+                    in_docstring = False
+            elif(ls.startswith('"""') and in_docstring):
+                file_lines[line_no] = line.replace('"""','body ',1)
+                in_docstring = False
+            if(file_lines[line_no].rstrip().endswith('"""')):
+                #print(f"extra closer: {file_lines[line_no]}")
+                file_lines[line_no] = file_lines[line_no].replace('"""','body ',1)
+                in_docstring = False           
+            #print(f"new line: {file_lines[line_no]}\n")
         """
         find and create document objects and tell them the line numbers
         that their content starts and ends at
