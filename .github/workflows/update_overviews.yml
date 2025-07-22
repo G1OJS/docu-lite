@@ -40,6 +40,6 @@ jobs:
           # this is the default GitHub email
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # .ini file is also an output if auto-generated
-          git add docu-lite*
+          git add -f docu-lite*
           git diff --cached --quiet || git commit -m "Update outline files"
-          git push -f
+          git push
