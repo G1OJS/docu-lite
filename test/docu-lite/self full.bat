@@ -1,2 +1,2 @@
-python ../doculite.py
+python ../../doculite.py
 pause

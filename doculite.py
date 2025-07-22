@@ -104,17 +104,17 @@ def get_doc_objects(file_lines):
         for line_no, line in enumerate(file_lines):
             if(not '"""' in line):
                 continue
-            print(f"in docstring: {in_docstring}")
-            print(f"raw line: {line}")
+            #print(f"in docstring: {in_docstring}")
+            #print(f"raw line: {line}")
             if(line.strip().startswith('"""')):
                 replacement_tag = 'docstring ' if not in_docstring else 'body '
                 file_lines[line_no] = line.replace('"""',replacement_tag,1)
                 in_docstring = not in_docstring
             if(file_lines[line_no].rstrip().endswith('"""')):
-                print(f"extra closer: {file_lines[line_no]}")
+                #print(f"extra closer: {file_lines[line_no]}")
                 file_lines[line_no] = file_lines[line_no].replace('"""','body ',1) # 'body' should ideally be on next line alone
                 in_docstring = False           
-            print(f"new line: {file_lines[line_no]}\n")
+            #print(f"new line: {file_lines[line_no]}\n")
             
         """
         find and create document objects and tell them the line numbers
