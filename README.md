@@ -37,7 +37,7 @@ Docu-lite will create a docu-lite.ini file if one doesn't exist.
 
 📝 If the specified css file is not found, docu-lite will generate one and reference it in the html
 
-## :⚠️ Known Issues
+## ⚠️ Known Issues
  - Doesn't cleanly handle all variations of docstring layout. In particular, the single line docstring causes the body below the docstring to appear below it.
 
 [PyPI link](https://pypi.org/project/docu-lite/)
