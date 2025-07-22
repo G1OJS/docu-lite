@@ -28,11 +28,11 @@ jobs:
 
       - name: Run docu-lite
         run: |
-          docu-lite
+          python -m docu-lite
 
       - name: Run docu-lite in docmode
         run: |
-          docu-lite --config docu-lite-docmode.ini
+          python -m docu-lite --config docu-lite-docmode.ini
 
       - name: Commit docu-lite outputs if changed
         run: |
