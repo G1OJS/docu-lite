@@ -118,26 +118,30 @@ import argparse
 </details>
 <details><summary><span class ='docstring signature'>docstring</span></summary>
 <details><summary><span class ='body signature'>body</span></summary>
-<pre class ='body content'></pre>
-</details>
-</details>
-<details><summary><span class ='docstring_tag_is_opener signature'>docstring_tag_is_opener = False</span></summary>
-<details><summary><span class ='docstring_tag_is_opener signature'>docstring_tag_is_opener = not docstring_tag_is_opener</span></summary>
-<details><summary><span class ='docstring_tag_is_opener signature'>docstring_tag_is_opener = False</span></summary>
-<pre class ='docstring_tag_is_opener content'>            elif(line.strip().endswith(&#x27; body &#x27;)):         # 3quotes ending a line that doesn&#x27;t start with 3quotes
+<pre class ='body content'>        in_docstring = False
+        for line_no, line in enumerate(file_lines):
+            if(not &#x27; body &#x27; in line):
+                continue
+            #print(f&quot;in docstring: {in_docstring}&quot;)
+            #print(f&quot;raw line: {line}&quot;)
+            ls = line.strip()
+            if(ls.startswith(&#x27; body &#x27;) and not in_docstring):         
+                file_lines[line_no] = line.replace(&#x27; body &#x27;,&#x27;docstring &#x27;,1)
+                in_docstring = True
+                #print(f&quot;mid line1: {file_lines[line_no]}&quot;)
+                if(file_lines[line_no].rstrip().endswith(&#x27; body &#x27;)):
+                    #print(f&quot;mid line2: {file_lines[line_no]}&quot;)
+                    file_lines[line_no] = file_lines[line_no].replace(&#x27; body &#x27;,&#x27;body &#x27;,1)
+                    in_docstring = False
+            elif(ls.startswith(&#x27; body &#x27;) and in_docstring):
+                file_lines[line_no] = line.replace(&#x27; body &#x27;,&#x27;body &#x27;,1)
+                in_docstring = False
+            if(file_lines[line_no].rstrip().endswith(&#x27; body &#x27;)):
+                #print(f&quot;extra closer: {file_lines[line_no]}&quot;)
+                file_lines[line_no] = file_lines[line_no].replace(&#x27; body &#x27;,&#x27;body &#x27;,1)
+                in_docstring = False           
+            #print(f&quot;new line: {file_lines[line_no]}\n&quot;)
 </pre>
-</details>
-</details>
-<details><summary><span class ='docstring_tag_is_opener signature'>docstring_tag_is_opener = False</span></summary>
-<pre class ='docstring_tag_is_opener content'>
-            if(&#x27; body &#x27; in line):                          # 3quotes anywhere in line
-                if docstring_tag_is_opener:
-                    file_lines[line_no] = line.replace(&#x27; body &#x27;,&#x27;docstring &#x27;,1)
-                else:
-                    file_lines[line_no] = line.replace(&#x27; body &#x27;,&#x27; body &#x27;,1)
-            
-</pre>
-</details>
 </details>
 </details>
 <details><summary><span class ='docstring signature'>docstring</span></summary>
