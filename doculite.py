@@ -198,7 +198,7 @@ def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
     return doc_html
             
 def main():
-    version_string = "v1.0.0"
+    version_string = "v0.9.0"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
 
