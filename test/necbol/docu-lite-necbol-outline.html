@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang='en'>
 <head>
 <title>docu-lite-necbol-outline.html</title><link rel='stylesheet' href='./docu-lite-style.css' /><body>
-<span class = 'filename'>components.py</span><br><details><summary><span class ='docstring signature'>docstring</span></summary>
+<span class = 'filename'>components.py</span><br><details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>
 This file is part of the &quot;NECBOL Plain Language Python NEC Runner&quot;
 Copyright (c) 2025 Alan Robinson G1OJS
@@ -27,7 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>
 import numpy as np
 import math
@@ -39,31 +39,29 @@ from necbol.modeller import GeometryObject,units
 
 </pre>
 </details>
-<details><summary><span class ='class signature'>class components:</span></summary>
+<details><summary><span class ='class signature'> class components:</span></summary>
 <pre class ='class content'></pre>
-<details><summary><span class ='def signature'>def __init__(self, starting_tag_nr = 0):</span></summary>
+<details><summary><span class ='def signature'>🧾 def __init__(self, starting_tag_nr = 0):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
-<pre class ='docstring content'>        
-        Sets object_counter to starting_tag_nr (tags number identifies an object)
+<details><summary><span class ='docstring signature'> docstring</span></summary>
+<pre class ='docstring content'>        Sets object_counter to starting_tag_nr (tags number identifies an object)
         and loads the units module class units()
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        self.object_counter = starting_tag_nr
         self.units = units()
 
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def new_geometry_object(self):</span></summary>
+<details><summary><span class ='def signature'>🧾 def new_geometry_object(self):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
-<pre class ='docstring content'>        
-        increment the object counter and return a GeometryObject with the counter&#x27;s new value
+<details><summary><span class ='docstring signature'> docstring</span></summary>
+<pre class ='docstring content'>        increment the object counter and return a GeometryObject with the counter&#x27;s new value
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        self.object_counter += 1
         iTag = self.object_counter
         return iTag, GeometryObject([])
@@ -71,14 +69,13 @@ from necbol.modeller import GeometryObject,units
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def copy_of(self, existing_obj):</span></summary>
+<details><summary><span class ='def signature'>🧾 def copy_of(self, existing_obj):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
-<pre class ='docstring content'>        
-        Returns a clone of existing_obj with a new iTag
+<details><summary><span class ='docstring signature'> docstring</span></summary>
+<pre class ='docstring content'>        Returns a clone of existing_obj with a new iTag
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        iTag, obj = self.new_geometry_object()
         for w in existing_obj.wires:
             obj.add_wire(iTag, w[&#x27;nS&#x27;], *w[&#x27;a&#x27;], *w[&#x27;b&#x27;], w[&#x27;wr&#x27;])
@@ -87,9 +84,9 @@ from necbol.modeller import GeometryObject,units
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def wire_Z(self, **dimensions):</span></summary>
+<details><summary><span class ='def signature'>🧾 def wire_Z(self, **dimensions):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
         Create a straight wire aligned along the Z-axis, centered at the origin.
 
@@ -103,7 +100,7 @@ from necbol.modeller import GeometryObject,units
             obj (GeometryObject): The constructed geometry object with the defined wire.
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        iTag, obj = self.new_geometry_object()
         dimensions_m = self.units.from_suffixed_dimensions(dimensions)
         half_length_m = dimensions_m.get(&#x27;length_m&#x27;)/2
@@ -114,9 +111,9 @@ from necbol.modeller import GeometryObject,units
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def rect_loop_XZ(self, **dimensions):</span></summary>
+<details><summary><span class ='def signature'>🧾 def rect_loop_XZ(self, **dimensions):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
         Create a rectangular wire loop in the XZ plane, centered at the origin, with the specified wire diameter.
         The &#x27;side&#x27; wires extend from Z=-length/2 to Z=+length/2 at X = +/- width/2.
@@ -130,7 +127,7 @@ from necbol.modeller import GeometryObject,units
             obj (GeometryObject): The constructed geometry object with the defined wires.
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        iTag, obj = self.new_geometry_object()
         dimensions_m = self.units.from_suffixed_dimensions(dimensions)
         half_length_m = dimensions_m.get(&#x27;length_m&#x27;)/2
@@ -145,9 +142,9 @@ from necbol.modeller import GeometryObject,units
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def connector(self, from_object, from_wire_index, from_alpha_wire, to_object, to_wire_index, to_alpha_wire,  wire_diameter_mm = 1.0):</span></summary>
+<details><summary><span class ='def signature'>🧾 def connector(self, from_object, from_wire_index, from_alpha_wire, to_object, to_wire_index, to_alpha_wire,  wire_diameter_mm = 1.0):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
         Create a single wire from a specified point on the from_object to a specified point on the to_object.
         The point on an object is specified as {ftom|to}_wire_index AND {ftom|to}_alpha_wire, which specify respectively:
@@ -160,7 +157,7 @@ from necbol.modeller import GeometryObject,units
             obj (GeometryObject): The constructed geometry object with the defined wire.
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        iTag, obj = self.new_geometry_object()
         from_point = obj.point_on_object(from_object, from_wire_index, from_alpha_wire)
         to_point = obj.point_on_object(to_object, to_wire_index, to_alpha_wire)
@@ -170,9 +167,9 @@ from necbol.modeller import GeometryObject,units
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def helix(self,  wires_per_turn, sense, **dimensions):</span></summary>
+<details><summary><span class ='def signature'>🧾 def helix(self,  wires_per_turn, sense, **dimensions):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
         Create a single helix with axis = Z axis
         Arguments_
@@ -188,7 +185,7 @@ from necbol.modeller import GeometryObject,units
             obj (GeometryObject): The constructed geometry object representing the helix.
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        iTag, obj = self.new_geometry_object()
         dimensions_m = self.units.from_suffixed_dimensions(dimensions)
         radius_m = dimensions_m.get(&#x27;diameter_m&#x27;)/2
@@ -218,9 +215,9 @@ from necbol.modeller import GeometryObject,units
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def flexi_helix(self, sense, wires_per_turn, n_cos,r_cos_params,p_cos_params, **dimensions):</span></summary>
+<details><summary><span class ='def signature'>🧾 def flexi_helix(self, sense, wires_per_turn, n_cos,r_cos_params,p_cos_params, **dimensions):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
         Create a helix along the Z axis where radius and pitch vary as scaled sums of cosines:
 
@@ -246,11 +243,11 @@ from necbol.modeller import GeometryObject,units
             GeometryObject: The constructed helix geometry object.
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>
 </pre>
 </details>
-<details><summary><span class ='def signature'>def cosine_series(s, terms):</span></summary>
+<details><summary><span class ='def signature'> def cosine_series(s, terms):</span></summary>
 <pre class ='def content'>            return sum(A * math.cos(i * math.pi * s + P) for i, (A, P) in enumerate(terms))
 
         # === Parameter unpacking and setup ===
@@ -301,9 +298,9 @@ from necbol.modeller import GeometryObject,units
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def circular_arc(self, n_wires, arc_phi_deg, **dimensions):</span></summary>
+<details><summary><span class ='def signature'>🧾 def circular_arc(self, n_wires, arc_phi_deg, **dimensions):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
         Create a single circular arc in the XY plane centred on the origin
         Arguments:
@@ -317,7 +314,7 @@ from necbol.modeller import GeometryObject,units
             obj (GeometryObject): The constructed geometry object representing the helix.
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        iTag, obj = self.new_geometry_object()
         dimensions_m = self.units.from_suffixed_dimensions(dimensions)
         radius_m = dimensions_m.get(&#x27;diameter_m&#x27;)/2
@@ -339,13 +336,13 @@ from necbol.modeller import GeometryObject,units
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def thin_sheet(self, model, sigma, epsillon_r, force_odd = True,</span></summary>
+<details><summary><span class ='def signature'>🧾 def thin_sheet(self, model, sigma, epsillon_r, force_odd = True,</span></summary>
 <pre class ='def content'>                   close_start = True, close_end = True,
                    close_bottom = True, close_top = True,
                    enforce_exact_pitch = True,
                    **dimensions):
 </pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
         Creates a grid of wires interconnected at segment level to economically model a flat sheet
         which is normal to the x axis and extends from z=-height/2 to z= height/2, and y = -length/2 to length/2
@@ -372,7 +369,7 @@ from necbol.modeller import GeometryObject,units
         Dimensions are length_, height_, thickness_, grid_pitch_
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        
         print(&quot;NOTE: The thin_sheet model has been tested functionally but not validated quantitavely&quot;)
         iTag, obj = self.new_geometry_object()
@@ -434,7 +431,7 @@ from necbol.modeller import GeometryObject,units
 </details>
 </details>
 </details>
-<span class = 'filename'>gui.py</span><br><details><summary><span class ='docstring signature'>docstring</span></summary>
+<span class = 'filename'>gui.py</span><br><details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>
 This file is part of the &quot;NECBOL Plain Language Python NEC Runner&quot;
 Copyright (c) 2025 Alan Robinson G1OJS
@@ -460,11 +457,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>
 </pre>
 </details>
-<details><summary><span class ='def signature'>def show_wires(wires, ex_tag, title, color='blue'):</span></summary>
+<details><summary><span class ='def signature'> def show_wires(wires, ex_tag, title, color='blue'):</span></summary>
 <pre class ='def content'>    import matplotlib.pyplot as plt
     from mpl_toolkits.mplot3d import Axes3D
 
@@ -500,7 +497,7 @@ SOFTWARE.
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def show_wires_from_file(file_path, ex_tag, color='blue', title = "3D Viewer"):</span></summary>
+<details><summary><span class ='def signature'> def show_wires_from_file(file_path, ex_tag, color='blue', title = "3D Viewer"):</span></summary>
 <pre class ='def content'>    wires = []
     with open(file_path, &#x27;r&#x27;) as f:
         for line in f:
@@ -517,7 +514,7 @@ SOFTWARE.
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def plot_gain(pattern_data, elevation_deg, component, polar=True):</span></summary>
+<details><summary><span class ='def signature'> def plot_gain(pattern_data, elevation_deg, component, polar=True):</span></summary>
 <pre class ='def content'>    import matplotlib.pyplot as plt
     import numpy as np
         
@@ -560,7 +557,7 @@ SOFTWARE.
 
 </pre>
 </details>
-<span class = 'filename'>modeller.py</span><br><details><summary><span class ='docstring signature'>docstring</span></summary>
+<span class = 'filename'>modeller.py</span><br><details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>
 This file is part of the &quot;NECBOL Plain Language Python NEC Runner&quot;
 Copyright (c) 2025 Alan Robinson G1OJS
@@ -586,7 +583,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>
 import numpy as np
 import math
@@ -600,25 +597,25 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='class signature'>class GeometryObject:</span></summary>
+<details><summary><span class ='class signature'> class GeometryObject:</span></summary>
 <pre class ='class content'></pre>
-<details><summary><span class ='def signature'>def __init__(self, wires):</span></summary>
+<details><summary><span class ='def signature'> def __init__(self, wires):</span></summary>
 <pre class ='def content'>        self.wires = wires  # list of wire dicts with iTag, nS, x1, y1, ...
         self.units = units()
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def add_wire(self, iTag, nS, x1, y1, z1, x2, y2, z2, wr):</span></summary>
+<details><summary><span class ='def signature'> def add_wire(self, iTag, nS, x1, y1, z1, x2, y2, z2, wr):</span></summary>
 <pre class ='def content'>        self.wires.append({&quot;iTag&quot;:iTag, &quot;nS&quot;:nS, &quot;a&quot;:(x1, y1, z1), &quot;b&quot;:(x2, y2, z2), &quot;wr&quot;:wr})
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def get_wires(self):</span></summary>
+<details><summary><span class ='def signature'> def get_wires(self):</span></summary>
 <pre class ='def content'>        return self.wires
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def translate(self, **params):</span></summary>
+<details><summary><span class ='def signature'> def translate(self, **params):</span></summary>
 <pre class ='def content'>        params_m = self.units.from_suffixed_dimensions(params)
         for w in self.wires:
             w[&#x27;a&#x27;] = tuple(map(float,np.array(w[&#x27;a&#x27;]) + np.array([params_m.get(&#x27;dx_m&#x27;), params_m.get(&#x27;dy_m&#x27;), params_m.get(&#x27;dz_m&#x27;)])))
@@ -626,19 +623,19 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def rotate_ZtoY(self):</span></summary>
+<details><summary><span class ='def signature'> def rotate_ZtoY(self):</span></summary>
 <pre class ='def content'>        R = np.array([[1, 0, 0],[0,  0, 1],[0,  -1, 0]])
         return self.rotate(R)
     
 </pre>
 </details>
-<details><summary><span class ='def signature'>def rotate_ZtoX(self):</span></summary>
+<details><summary><span class ='def signature'> def rotate_ZtoX(self):</span></summary>
 <pre class ='def content'>        R = np.array([[0, 0, 1],[0,  1, 0],[-1,  0, 0]])
         return self.rotate(R)
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def rotate_around_Z(self, angle_deg):</span></summary>
+<details><summary><span class ='def signature'> def rotate_around_Z(self, angle_deg):</span></summary>
 <pre class ='def content'>        ca, sa = self.cos_sin(angle_deg)
         R = np.array([[ca, -sa, 0],
                       [sa, ca, 0],
@@ -647,7 +644,7 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def rotate_around_X(self, angle_deg):</span></summary>
+<details><summary><span class ='def signature'> def rotate_around_X(self, angle_deg):</span></summary>
 <pre class ='def content'>        ca, sa = self.cos_sin(angle_deg)
         R = np.array([[1, 0, 0],
                       [0, ca, -sa],
@@ -656,7 +653,7 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def rotate_around_Y(self, angle_deg):</span></summary>
+<details><summary><span class ='def signature'> def rotate_around_Y(self, angle_deg):</span></summary>
 <pre class ='def content'>        ca, sa = self.cos_sin(angle_deg)
         R = np.array([[ca, 0, sa],
                       [0, 1, 0],
@@ -665,7 +662,7 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def cos_sin(self,angle_deg):</span></summary>
+<details><summary><span class ='def signature'> def cos_sin(self,angle_deg):</span></summary>
 <pre class ='def content'>        angle_rad = math.pi*angle_deg/180
         ca = math.cos(angle_rad)
         sa = math.sin(angle_rad)
@@ -673,7 +670,7 @@ import os
     
 </pre>
 </details>
-<details><summary><span class ='def signature'>def rotate(self, R):</span></summary>
+<details><summary><span class ='def signature'> def rotate(self, R):</span></summary>
 <pre class ='def content'>        for w in self.wires:
             a = np.array(w[&#x27;a&#x27;])
             b = np.array(w[&#x27;b&#x27;])
@@ -682,7 +679,7 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def connect_ends(self, other, tol=1e-3, verbose = False):</span></summary>
+<details><summary><span class ='def signature'> def connect_ends(self, other, tol=1e-3, verbose = False):</span></summary>
 <pre class ='def content'>        wires_to_add=[]
         for ws in self.wires:
             if(verbose):
@@ -711,7 +708,7 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def point_should_connect_to_wire(self,P, wire, tol=1e-3):</span></summary>
+<details><summary><span class ='def signature'> def point_should_connect_to_wire(self,P, wire, tol=1e-3):</span></summary>
 <pre class ='def content'>        P = np.array(P, dtype=float)
         A = np.array(wire[&#x27;a&#x27;], dtype=float)
         B = np.array(wire[&#x27;b&#x27;], dtype=float)
@@ -753,7 +750,7 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def point_on_object(self,geom_object, wire_index, alpha_wire):</span></summary>
+<details><summary><span class ='def signature'> def point_on_object(self,geom_object, wire_index, alpha_wire):</span></summary>
 <pre class ='def content'>        if(wire_index&gt; len(geom_object.wires)):
             wire_index = len(geom_object.wires)
             alpha_wire = 1.0
@@ -770,7 +767,7 @@ import os
 </pre>
 </details>
 </details>
-<details><summary><span class ='class signature'>class units:</span></summary>
+<details><summary><span class ='class signature'> class units:</span></summary>
 <pre class ='class content'>    
     _UNIT_FACTORS = {
         &quot;m&quot;: 1.0,
@@ -781,24 +778,23 @@ import os
     }
 
 </pre>
-<details><summary><span class ='def signature'>def __init__(self, default_unit: str = "m"):</span></summary>
+<details><summary><span class ='def signature'> def __init__(self, default_unit: str = "m"):</span></summary>
 <pre class ='def content'>        if default_unit not in self._UNIT_FACTORS:
             raise ValueError(f&quot;Unsupported unit: {default_unit}&quot;)
         self.default_unit = default_unit
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def from_suffixed_dimensions(self, params: dict, whitelist=[]) -> dict:</span></summary>
+<details><summary><span class ='def signature'>🧾 def from_suffixed_dimensions(self, params: dict, whitelist=[]) -> dict:</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
-<pre class ='docstring content'>        
-        Converts suffixed values like &#x27;d_mm&#x27; to meters.
+<details><summary><span class ='docstring signature'> docstring</span></summary>
+<pre class ='docstring content'>        Converts suffixed values like &#x27;d_mm&#x27; to meters.
 
         Output keys have &#x27;_m&#x27; suffix unless they already end with &#x27;_m&#x27;,
         in which case they are passed through unchanged (assumed meters).
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        
         out = {}
         names_seen = []
@@ -843,9 +839,9 @@ import os
 </details>
 </details>
 </details>
-<details><summary><span class ='class signature'>class NECModel:</span></summary>
+<details><summary><span class ='class signature'> class NECModel:</span></summary>
 <pre class ='class content'></pre>
-<details><summary><span class ='def signature'>def __init__(self, working_dir, nec_exe_path, model_name = "Unnamed_Antennna", verbose=False):</span></summary>
+<details><summary><span class ='def signature'> def __init__(self, working_dir, nec_exe_path, model_name = "Unnamed_Antennna", verbose=False):</span></summary>
 <pre class ='def content'>        self.verbose = verbose
         self.working_dir = working_dir
         self.nec_exe = nec_exe_path
@@ -870,7 +866,7 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def set_name(self, name):</span></summary>
+<details><summary><span class ='def signature'> def set_name(self, name):</span></summary>
 <pre class ='def content'>        self.model_name = name
         self.nec_in = self.working_dir + &quot;\\&quot; + self.model_name +  &quot;.nec&quot;
         self.nec_out = self.working_dir + &quot;\\&quot; + self.model_name +  &quot;.out&quot;
@@ -878,7 +874,7 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def write_runner_files(self):</span></summary>
+<details><summary><span class ='def signature'> def write_runner_files(self):</span></summary>
 <pre class ='def content'>        for filepath, content in [
             (self.nec_bat, f&quot;{self.nec_exe} &lt; {self.files_txt} \n&quot;),
             (self.files_txt, f&quot;{self.nec_in}\n{self.nec_out}\n&quot;)
@@ -895,24 +891,24 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def set_wire_conductivity(self, sigma):</span></summary>
+<details><summary><span class ='def signature'> def set_wire_conductivity(self, sigma):</span></summary>
 <pre class ='def content'>        self.LD_WIRECOND = f&quot;LD 5 0 0 0 {sigma:.6f} \n&quot;
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def set_frequency(self, MHz):</span></summary>
+<details><summary><span class ='def signature'> def set_frequency(self, MHz):</span></summary>
 <pre class ='def content'>        self.FR_CARD = f&quot;FR 0 1 0 0 {MHz:.3f} 0\n&quot;
         lambda_m = 300/MHz
         self.segLength_m = lambda_m / self.nSegs_per_wavelength
         
 </pre>
 </details>
-<details><summary><span class ='def signature'>def set_gain_point(self, azimuth, elevation):</span></summary>
+<details><summary><span class ='def signature'> def set_gain_point(self, azimuth, elevation):</span></summary>
 <pre class ='def content'>        self.RP_CARD = f&quot;RP 0 1 1 1000 {90-elevation:.2f} {azimuth:.2f} 0 0\n&quot;
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def set_gain_az_arc(self, azimuth_start, azimuth_stop, nPoints, elevation):</span></summary>
+<details><summary><span class ='def signature'> def set_gain_az_arc(self, azimuth_start, azimuth_stop, nPoints, elevation):</span></summary>
 <pre class ='def content'>        if(nPoints&lt;2):
             nPoints=2
         dAz = (azimuth_stop - azimuth_start) / (nPoints-1)
@@ -920,9 +916,9 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def set_ground(self, eps_r, sigma, **params):</span></summary>
+<details><summary><span class ='def signature'>🧾 def set_ground(self, eps_r, sigma, **params):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
             Sets the ground relative permitivity and conductivity. Currently limited to simple choices.
             If eps_r = 1, nec is told to use no ground (free space model), and you may omit the origin height parameter
@@ -935,7 +931,7 @@ import os
                 origin_height_{units_string} (float): Height of antenna reference point X,Y,Z = (0,0,0)
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        if eps_r == 1.0:
             self.GE_CARD = &quot;GE 0\n&quot;
             self.GN_CARD = &quot;&quot;
@@ -949,7 +945,7 @@ import os
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def start_geometry(self, comments="No comments specified"):</span></summary>
+<details><summary><span class ='def signature'> def start_geometry(self, comments="No comments specified"):</span></summary>
 <pre class ='def content'>        # effectively *resets* the model, except that all of the parameters
         # set by set_ functions are still incorporated when the file is written
         self.comments = comments
@@ -960,15 +956,15 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def place_series_RLC_load(self, geomObj, R_ohms, L_uH, C_pf, load_alpha_object=-1, load_wire_index=-1, load_alpha_wire=-1):</span></summary>
+<details><summary><span class ='def signature'>🧾 def place_series_RLC_load(self, geomObj, R_ohms, L_uH, C_pf, load_alpha_object=-1, load_wire_index=-1, load_alpha_wire=-1):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
             inserts a single segment containing a series RLC load into an existing geometry object
             see _place_feed_or_load for how to specify the position of the segment within the object
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        self.LOADS.append(f&quot;LD 0 {self.LOAD_iTag} 0 0 {R_ohms} {L_uH * 1e-6} {C_pf * 1e-12}\n&quot;)
         self._place_feed_or_load(geomObj, self.LOAD_iTag, load_alpha_object, load_wire_index, load_alpha_wire)
         self.LOAD_iTag +=1
@@ -976,15 +972,15 @@ import os
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def place_parallel_RLC_load(self, geomObj, R_ohms, L_uH, C_pf, load_alpha_object=-1, load_wire_index=-1, load_alpha_wire=-1):</span></summary>
+<details><summary><span class ='def signature'>🧾 def place_parallel_RLC_load(self, geomObj, R_ohms, L_uH, C_pf, load_alpha_object=-1, load_wire_index=-1, load_alpha_wire=-1):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
             inserts a single segment containing a parakllel RLC load into an existing geometry object
             see _place_feed_or_load for how to specify the position of the segment within the object
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        self.LOADS.append(f&quot;LD 1 {self.LOAD_iTag} 0 0 {R_ohms} {L_uH * 1e-6} {C_pf * 1e-12}\n&quot;)
         self._place_feed_or_load(geomObj, self.LOAD_iTag, load_alpha_object, load_wire_index, load_alpha_wire)
         self.LOAD_iTag +=1
@@ -992,23 +988,23 @@ import os
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def place_feed(self,  geomObj, feed_alpha_object=-1, feed_wire_index=-1, feed_alpha_wire=-1):</span></summary>
+<details><summary><span class ='def signature'>🧾 def place_feed(self,  geomObj, feed_alpha_object=-1, feed_wire_index=-1, feed_alpha_wire=-1):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
             inserts a single segment containing the excitation point into an existing geometry object
             see _place_feed_or_load for how to specify the position of the segment within the object
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        self._place_feed_or_load(geomObj, self.EX_TAG, feed_alpha_object, feed_wire_index, feed_alpha_wire)
 
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def _place_feed_or_load(self, geomObj, item_iTag, item_alpha_object, item_wire_index, item_alpha_wire):</span></summary>
+<details><summary><span class ='def signature'>🧾 def _place_feed_or_load(self, geomObj, item_iTag, item_alpha_object, item_wire_index, item_alpha_wire):</span></summary>
 <pre class ='def content'></pre>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
+<details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>        
             inserts a single segment with a specified iTag into an existing geometry object
             position within the object is specied as
@@ -1022,7 +1018,7 @@ import os
               wire divided by that wire&#x27;s length
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>        wires = geomObj.get_wires()
         if(item_alpha_object &gt;=0):
             item_wire_index = min(len(wires)-1,int(item_alpha_object*len(wires))) # 0 to nWires -1
@@ -1057,7 +1053,7 @@ import os
 </pre>
 </details>
 </details>
-<details><summary><span class ='def signature'>def add(self, geomObj):</span></summary>
+<details><summary><span class ='def signature'> def add(self, geomObj):</span></summary>
 <pre class ='def content'>        for w in geomObj.get_wires():
             A = np.array(w[&quot;a&quot;], dtype=float)
             B = np.array(w[&quot;b&quot;], dtype=float)
@@ -1072,7 +1068,7 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def write_nec(self):</span></summary>
+<details><summary><span class ='def signature'> def write_nec(self):</span></summary>
 <pre class ='def content'>        tail_text = self.GM_CARD
         tail_text += self.GE_CARD
         tail_text += self.GN_CARD
@@ -1089,12 +1085,12 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def run_nec(self):</span></summary>
+<details><summary><span class ='def signature'> def run_nec(self):</span></summary>
 <pre class ='def content'>        subprocess.run([self.nec_bat], creationflags=subprocess.CREATE_NO_WINDOW)
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def gains(self):</span></summary>
+<details><summary><span class ='def signature'> def gains(self):</span></summary>
 <pre class ='def content'>        try:
             with open(self.nec_out) as f:
                 while &quot;RADIATION PATTERNS&quot; not in f.readline():
@@ -1114,22 +1110,22 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def h_gain(self):</span></summary>
+<details><summary><span class ='def signature'> def h_gain(self):</span></summary>
 <pre class ='def content'>        return self.gains()[&#x27;h_gain&#x27;]
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def v_gain(self):</span></summary>
+<details><summary><span class ='def signature'> def v_gain(self):</span></summary>
 <pre class ='def content'>        return self.gains()[&#x27;v_gain&#x27;]
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def tot_gain(self):</span></summary>
+<details><summary><span class ='def signature'> def tot_gain(self):</span></summary>
 <pre class ='def content'>        return self.gains()[&#x27;total&#x27;]
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def vswr(self):</span></summary>
+<details><summary><span class ='def signature'> def vswr(self):</span></summary>
 <pre class ='def content'>        try:
             with open(self.nec_out) as f:
                 while &quot;ANTENNA INPUT PARAMETERS&quot; not in f.readline():
@@ -1150,7 +1146,7 @@ import os
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def read_radiation_pattern(self):</span></summary>
+<details><summary><span class ='def signature'> def read_radiation_pattern(self):</span></summary>
 <pre class ='def content'>        data = []
         in_data = False
         start_lineNo = 1e9
@@ -1200,7 +1196,7 @@ import os
 </pre>
 </details>
 </details>
-<span class = 'filename'>optimisers.py</span><br><details><summary><span class ='docstring signature'>docstring</span></summary>
+<span class = 'filename'>optimisers.py</span><br><details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>
 This file is part of the &quot;NECBOL Plain Language Python NEC Runner&quot;
 Copyright (c) 2025 Alan Robinson G1OJS
@@ -1226,16 +1222,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 </pre>
 </details>
-<details><summary><span class ='body signature'>body</span></summary>
+<details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>
 
 import random, sys
 
 </pre>
 </details>
-<details><summary><span class ='class signature'>class RandomOptimiser:</span></summary>
+<details><summary><span class ='class signature'> class RandomOptimiser:</span></summary>
 <pre class ='class content'></pre>
-<details><summary><span class ='def signature'>def __init__(self, build_fn, param_init, cost_fn,</span></summary>
+<details><summary><span class ='def signature'> def __init__(self, build_fn, param_init, cost_fn,</span></summary>
 <pre class ='def content'>                 bounds={}, delta_init=0.2, stall_limit=50, max_iter=250, min_delta=0.001):
         self.build_fn = build_fn
         self.param_names = list(param_init.keys())
@@ -1249,7 +1245,7 @@ import random, sys
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def format_params(self, params):</span></summary>
+<details><summary><span class ='def signature'> def format_params(self, params):</span></summary>
 <pre class ='def content'>        s=&quot;{&quot;
         for k, v in params.items():
             s = s + f&quot;&#x27;{k}&#x27;: {v:.2f}, &quot;
@@ -1257,13 +1253,13 @@ import random, sys
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def same_line_print(self,text):</span></summary>
+<details><summary><span class ='def signature'> def same_line_print(self,text):</span></summary>
 <pre class ='def content'>        sys.stdout.write(f&quot;\r{text}          &quot;)
         sys.stdout.flush()
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def random_variation(self, x):</span></summary>
+<details><summary><span class ='def signature'> def random_variation(self, x):</span></summary>
 <pre class ='def content'>        x_new = x.copy()
         for name in self.param_names:
             factor = 1 + random.uniform(-self.delta_x, self.delta_x)
@@ -1276,7 +1272,7 @@ import random, sys
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def optimise(self, model,  verbose=False, tty=True):</span></summary>
+<details><summary><span class ='def signature'> def optimise(self, model,  verbose=False, tty=True):</span></summary>
 <pre class ='def content'>        best_params = self.x_baseline.copy()
         best_model = self.build_fn(model, **best_params)
         best_model.write_nec()
@@ -1347,4 +1343,4 @@ import random, sys
 </details>
 </details>
 
-<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v0.9.0 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
+<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v1.0.1 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>

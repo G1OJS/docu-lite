@@ -3,17 +3,14 @@
 <title>docu-lite-necbol-outline-docmode.html</title><link rel='stylesheet' href='./docu-lite-docmode.css' /><body>
 <span class = 'filename'>components.py</span><br><hr><div><span class ='class signature'>class components:</span></div>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbsp__init__(self, starting_tag_nr = 0):</span></div>
-<pre class ='docstring content'>        
-        Sets object_counter to starting_tag_nr (tags number identifies an object)
+<pre class ='docstring content'>        Sets object_counter to starting_tag_nr (tags number identifies an object)
         and loads the units module class units()
 </pre>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbspnew_geometry_object(self):</span></div>
-<pre class ='docstring content'>        
-        increment the object counter and return a GeometryObject with the counter&#x27;s new value
+<pre class ='docstring content'>        increment the object counter and return a GeometryObject with the counter&#x27;s new value
 </pre>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbspcopy_of(self, existing_obj):</span></div>
-<pre class ='docstring content'>        
-        Returns a clone of existing_obj with a new iTag
+<pre class ='docstring content'>        Returns a clone of existing_obj with a new iTag
 </pre>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbspwire_Z(self, **dimensions):</span></div>
 <pre class ='docstring content'>        
@@ -154,8 +151,7 @@
 <hr><div><span class ='class signature'>class units:</span></div>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbsp__init__(self, default_unit: str = "m"):</span></div>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbspfrom_suffixed_dimensions(self, params: dict, whitelist=[]) -> dict:</span></div>
-<pre class ='docstring content'>        
-        Converts suffixed values like &#x27;d_mm&#x27; to meters.
+<pre class ='docstring content'>        Converts suffixed values like &#x27;d_mm&#x27; to meters.
 
         Output keys have &#x27;_m&#x27; suffix unless they already end with &#x27;_m&#x27;,
         in which case they are passed through unchanged (assumed meters).
@@ -225,4 +221,4 @@
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbsprandom_variation(self, x):</span></div>
 <hr><div><span class ='def signature'>&nbsp&nbsp&nbspoptimise(self, model,  verbose=False, tty=True):</span></div>
 
-<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v0.9.0 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
+<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v1.0.1 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
