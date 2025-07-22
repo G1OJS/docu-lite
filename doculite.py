@@ -181,9 +181,8 @@ def object_list_to_HTML(file_lines, doc_objects):
             continue
         
         doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
-        if(nextobj.indent_level <= obj.indent_level):
-            doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
-            doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
+        doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
+        doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
             
     return doc_html
 
