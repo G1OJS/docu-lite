@@ -122,25 +122,18 @@ import argparse
         for line_no, line in enumerate(file_lines):
             if(not &#x27; body &#x27; in line):
                 continue
-            #print(f&quot;in docstring: {in_docstring}&quot;)
-            #print(f&quot;raw line: {line}&quot;)
-            ls = line.strip()
-            if(ls.startswith(&#x27; body &#x27;) and not in_docstring):         
-                file_lines[line_no] = line.replace(&#x27; body &#x27;,&#x27;docstring &#x27;,1)
-                in_docstring = True
-                #print(f&quot;mid line1: {file_lines[line_no]}&quot;)
-                if(file_lines[line_no].rstrip().endswith(&#x27; body &#x27;)):
-                    #print(f&quot;mid line2: {file_lines[line_no]}&quot;)
-                    file_lines[line_no] = file_lines[line_no].replace(&#x27; body &#x27;,&#x27;body &#x27;,1)
-                    in_docstring = False
-            elif(ls.startswith(&#x27; body &#x27;) and in_docstring):
-                file_lines[line_no] = line.replace(&#x27; body &#x27;,&#x27;body &#x27;,1)
-                in_docstring = False
+            print(f&quot;in docstring: {in_docstring}&quot;)
+            print(f&quot;raw line: {line}&quot;)
+            if(line.strip().startswith(&#x27; body &#x27;)):
+                replacement_tag = &#x27;docstring &#x27; if not in_docstring else &#x27;body &#x27;
+                file_lines[line_no] = line.replace(&#x27; body &#x27;,replacement_tag,1)
+                in_docstring = not in_docstring
             if(file_lines[line_no].rstrip().endswith(&#x27; body &#x27;)):
-                #print(f&quot;extra closer: {file_lines[line_no]}&quot;)
-                file_lines[line_no] = file_lines[line_no].replace(&#x27; body &#x27;,&#x27;body &#x27;,1)
+                print(f&quot;extra closer: {file_lines[line_no]}&quot;)
+                file_lines[line_no] = file_lines[line_no].replace(&#x27; body &#x27;,&#x27;body &#x27;,1) # &#x27;body&#x27; should ideally be on next line alone
                 in_docstring = False           
-            #print(f&quot;new line: {file_lines[line_no]}\n&quot;)
+            print(f&quot;new line: {file_lines[line_no]}\n&quot;)
+            
 </pre>
 </details>
 </details>
@@ -155,7 +148,7 @@ import argparse
                         objects[-1].content_end = line_no -1 # end of previous object
                     objects.append(obj)
         if(len(objects)&gt;1):
-            objects[-1].content_end = len(file_lines)            # end of last object in document
+            objects[-1].content_end = len(file_lines) - 1         # end of last object in document
 
         # tell the object what its indent level is within the document
         indents =[0]
@@ -163,6 +156,14 @@ import argparse
             if(obj.indent_spaces &gt; indents[-1]):
                 indents.append(obj.indent_spaces)
             obj.indent_level = indents.index(obj.indent_spaces)
+        
+        # &#x27;move&#x27; any docstring content in the signature into the content,
+        # and remove the &#x27;docstring &#x27; tag
+        for obj in objects:
+            if(obj.object_type == &#x27;docstring&#x27;):
+                obj.content_start -= 1
+                obj.signature = obj.signature.split(&quot; &quot;)[0]
+                file_lines[obj.content_start] = file_lines[obj.content_start].replace(&#x27;docstring &#x27;,&#x27;&#x27;,1)
         return objects
 
 
@@ -194,10 +195,10 @@ import argparse
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def _content_html(file_lines, object_type, start_no, end_no):</span></summary>
+<details><summary><span class ='def signature'>def _content_html(object_type, content_lines):</span></summary>
 <pre class ='def content'>    # write &#x27;content&#x27; inside &lt;pre&gt;&lt;/pre&gt;
     htm = f&quot;&lt;pre class =&#x27;{object_type} content&#x27;&gt;&quot;
-    for line in file_lines[start_no : end_no + 1]:
+    for line in content_lines:
         htm += f&quot;{html.escape(line)}&quot;
     htm += &quot;&lt;/pre&gt;\n&quot;
     return htm
@@ -209,7 +210,7 @@ import argparse
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>def object_list_to_HTML(file_lines, doc_objects):</span></summary>
+<details><summary><span class ='def signature'>def object_list_to_HTML(file_lines, doc_objects, documentation_mode):</span></summary>
 <details><summary><span class ='docstring signature'>docstring</span></summary>
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'>    doc_html = &quot;&quot;
@@ -217,33 +218,16 @@ import argparse
         nextobj = doc_objects[(i+1) % len(doc_objects)]
         if(obj.object_type == &#x27;ignore&#x27;):
             continue
-        
-        doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
-        doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
-        doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
-            
-    return doc_html
-
-</pre>
-</details>
-</details>
-</details>
-</details>
-<details><summary><span class ='def signature'>def object_list_to_documentation_HTML(file_lines, doc_objects):</span></summary>
-<details><summary><span class ='docstring signature'>docstring</span></summary>
-<details><summary><span class ='body signature'>body</span></summary>
-<pre class ='body content'>    doc_html = &quot;&quot;
-    for i,obj in enumerate(doc_objects):
-        nextobj = doc_objects[(i+1) % len(doc_objects)]
-        if(obj.object_type == &#x27;ignore&#x27;):
-            continue    
-        
-        if(obj.object_type not in [&#x27;body&#x27;,&#x27;docstring&#x27;]):
-            doc_html += &quot;&lt;hr&gt;&quot;
-            doc_html += _signature_html(obj.object_type, obj.signature.replace(&#x27;def &#x27;,&#x27;&amp;nbsp&amp;nbsp&amp;nbsp&#x27;), open_details = False)
-        if(obj.object_type == &quot;docstring&quot;):
-            doc_html += _content_html(file_lines, obj.object_type, obj.content_start, obj.content_end)
-
+        if(documentation_mode == &#x27;on&#x27;):
+            if(obj.object_type not in [&#x27;body&#x27;,&#x27;docstring&#x27;]):
+                doc_html += &quot;&lt;hr&gt;&quot;
+                doc_html += _signature_html(obj.object_type, obj.signature.replace(&#x27;def &#x27;,&#x27;&amp;nbsp&amp;nbsp&amp;nbsp&#x27;), open_details = False)
+            if(obj.object_type == &quot;docstring&quot;):
+                doc_html += _content_html(obj.object_type, file_lines[obj.content_start : obj.content_end + 1])
+        else:
+            doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
+            doc_html += _content_html(obj.object_type, file_lines[obj.content_start : obj.content_end + 1])
+            doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
     return doc_html
             
 </pre>
@@ -280,10 +264,7 @@ import argparse
         if(ignore_docstrings_with != &#x27;&#x27;):
             doc_objects =  _ignore_docstrings_with(doc_objects, file_lines, ignore_docstrings_with)
         output_html += f&quot;&lt;span class = &#x27;filename&#x27;&gt;{filename}&lt;/span&gt;&lt;br&gt;&quot;
-        if(documentation_mode == &quot;off&quot;):
-            output_html += object_list_to_HTML(file_lines, doc_objects)
-        else:
-            output_html += object_list_to_documentation_HTML(file_lines, doc_objects)
+        output_html += object_list_to_HTML(file_lines, doc_objects, documentation_mode)
         n_files_processed +=1
 
     # write footer
