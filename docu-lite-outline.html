@@ -112,6 +112,8 @@ import argparse
         self.object_type = self.signature.split(&quot; &quot;)[0]                 # see object_signatures=[] in get_doc_objects for possible values
         self.content_start = 0                                          # index of line file_lines one after first line of object
         self.content_end = 0                                            # index of line file_lines containing last line of object
+        self.nextobj_index = 0
+        self.icon = &#x27;&#x27;
 
 </pre>
 </details>
@@ -190,6 +192,17 @@ import argparse
                 obj.content_start -= 1 
                 obj.signature = obj.signature.split(&quot; &quot;)[0]
                 file_lines[obj.content_start] = file_lines[obj.content_start].replace(&#x27;docstring &#x27;,&#x27;&#x27;,1)
+
+        # tell each object the line number of the next object
+        for i, obj in enumerate(objects[:-1]):
+            obj.nextobj_index = i + 1
+
+        # add &#x27;notes&#x27; icon to objects where next child is a docstring
+        for i, obj in enumerate(objects[:-1]):
+            nextobj = objects[obj.nextobj_index]
+            if (nextobj.object_type == &#x27;docstring&#x27; and nextobj.indent_level &gt; obj.indent_level):
+                obj.icon = &#x27;🧾&#x27; 
+
         return objects
 
 
@@ -244,7 +257,6 @@ import argparse
 <details><summary><span class ='body signature'>body</span></summary>
 <pre class ='body content'>    doc_html = &quot;&quot;
     for i,obj in enumerate(doc_objects):
-        nextobj = doc_objects[(i+1) % len(doc_objects)]
         if(obj.object_type == &#x27;ignore&#x27;):
             continue
         if(documentation_mode == &#x27;on&#x27;):
@@ -254,8 +266,9 @@ import argparse
             if(obj.object_type == &quot;docstring&quot;):
                 doc_html += _content_html(obj.object_type, file_lines[obj.content_start : obj.content_end + 1])
         else:
-            doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
+            doc_html += _signature_html(obj.object_type, obj.icon + &#x27; &#x27; + obj.signature, open_details = True)
             doc_html += _content_html(obj.object_type, file_lines[obj.content_start : obj.content_end + 1])
+            nextobj = doc_objects[obj.nextobj_index]
             doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
     return doc_html
             
@@ -263,7 +276,7 @@ import argparse
 </details>
 </details>
 <details><summary><span class ='def signature'>def main():</span></summary>
-<pre class ='def content'>    version_string = &quot;v1.0.0&quot;
+<pre class ='def content'>    version_string = &quot;v1.1.0&quot;
     soft_string = f&quot;Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/&quot;
     print(f&quot;{soft_string}\n&quot;)
 
