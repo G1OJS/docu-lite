@@ -3,9 +3,10 @@
 *.egg-info/
 dist/
 build/
+test/
 
-# pages
-pages/
+# auto content
+docu-lite*.html
 
 # Python
 __pycache__/

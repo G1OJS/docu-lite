@@ -85,6 +85,8 @@ class docobj:
         self.object_type = self.signature.split(" ")[0]                 # see object_signatures=[] in get_doc_objects for possible values
         self.content_start = 0                                          # index of line file_lines one after first line of object
         self.content_end = 0                                            # index of line file_lines containing last line of object
+        self.nextobj_index = 0
+        self.icon = ''
 
 def get_doc_objects(file_lines):
         """
@@ -146,6 +148,17 @@ def get_doc_objects(file_lines):
                 obj.content_start -= 1 
                 obj.signature = obj.signature.split(" ")[0]
                 file_lines[obj.content_start] = file_lines[obj.content_start].replace('docstring ','',1)
+
+        # tell each object the line number of the next object
+        for i, obj in enumerate(objects[:-1]):
+            obj.nextobj_index = i + 1
+
+        # add 'notes' icon to objects where next child is a docstring
+        for i, obj in enumerate(objects[:-1]):
+            nextobj = objects[obj.nextobj_index]
+            if (nextobj.object_type == 'docstring' and nextobj.indent_level > obj.indent_level):
+                obj.icon = '🧾' 
+
         return objects
 
 
@@ -184,7 +197,6 @@ def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
     """
     doc_html = ""
     for i,obj in enumerate(doc_objects):
-        nextobj = doc_objects[(i+1) % len(doc_objects)]
         if(obj.object_type == 'ignore'):
             continue
         if(documentation_mode == 'on'):
@@ -194,13 +206,14 @@ def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
             if(obj.object_type == "docstring"):
                 doc_html += _content_html(obj.object_type, file_lines[obj.content_start : obj.content_end + 1])
         else:
-            doc_html += _signature_html(obj.object_type, obj.signature, open_details = True)
+            doc_html += _signature_html(obj.object_type, obj.icon + ' ' + obj.signature, open_details = True)
             doc_html += _content_html(obj.object_type, file_lines[obj.content_start : obj.content_end + 1])
+            nextobj = doc_objects[obj.nextobj_index]
             doc_html += _close_details(obj.indent_level - nextobj.indent_level + 1)
     return doc_html
             
 def main():
-    version_string = "v1.0.0"
+    version_string = "v1.1.0"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
 
