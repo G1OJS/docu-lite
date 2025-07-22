@@ -1,2 +1,2 @@
-python ../doculite.py --config ./docu-lite-necbol.ini
+python ../../doculite.py --config ./docu-lite-necbol.ini
 pause
