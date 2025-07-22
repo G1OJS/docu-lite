@@ -4,8 +4,8 @@
 dist/
 build/
 
-# pages
-pages/
+# auto content
+docu-lite*.html
 
 # Python
 __pycache__/
