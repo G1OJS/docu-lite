@@ -42,4 +42,4 @@ jobs:
           # .ini file is also an output if auto-generated
           git add docu-lite*
           git diff --cached --quiet || git commit -m "Update outline files"
-          git push
+          git push -f
