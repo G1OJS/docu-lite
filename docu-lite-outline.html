@@ -256,17 +256,20 @@ import argparse
 </details>
 <details><summary><span class ='body signature'> body</span></summary>
 <pre class ='body content'>    doc_html = &quot;&quot;
+    associate_docstring = False
     for i,obj in enumerate(doc_objects):
         if(obj.object_type == &#x27;ignore&#x27;):
             continue
-        if(documentation_mode == &#x27;on&#x27;):
+        if(documentation_mode == &#x27;on&#x27;):    
             if(len(obj.signature.split(&quot; &quot;))&gt;1): # ignore names starting with _ in doc mode
                if(obj.signature.split(&quot; &quot;)[1].startswith(&quot;_&quot;)):
                   continue
             if(obj.object_type not in [&#x27;body&#x27;,&#x27;docstring&#x27;]):
                 doc_html += &quot;&lt;hr&gt;&quot;
                 doc_html += _signature_html(obj.object_type, obj.signature.replace(&#x27;def &#x27;,&#x27;&amp;nbsp&amp;nbsp&amp;nbsp&#x27;), open_details = False)
-            if(obj.object_type == &quot;docstring&quot;):
+                associate_docstring = True
+            if(obj.object_type == &quot;docstring&quot; and associate_docstring):
+                associate_docstring = False # this is a workaround (pending using true object tree) to prevent multiple &amp; sometimes non-local docstrings appearing
                 doc_html += _content_html(obj.object_type, file_lines[obj.content_start : obj.content_end + 1])
         else:
             doc_html += _signature_html(obj.object_type, obj.icon + &#x27; &#x27; + obj.signature, open_details = True)
@@ -279,7 +282,7 @@ import argparse
 </details>
 </details>
 <details><summary><span class ='def signature'> def main():</span></summary>
-<pre class ='def content'>    version_string = &quot;v1.2.1&quot;
+<pre class ='def content'>    version_string = &quot;v1.2.2&quot;
     soft_string = f&quot;Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/&quot;
     print(f&quot;{soft_string}\n&quot;)
 
