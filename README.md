@@ -39,5 +39,6 @@ Docu-lite will create a docu-lite.ini file if one doesn't exist.
 
 ## ⚠️ Known Issues
  - Doesn't cleanly handle all variations of docstring layout. In particular, the single line docstring causes the body below the docstring to appear below it.
+ - Doesn't cleanly handle function definitions that span several lines (only first line is shown)
 
 [PyPI link](https://pypi.org/project/docu-lite/)
