@@ -260,6 +260,9 @@ import argparse
         if(obj.object_type == &#x27;ignore&#x27;):
             continue
         if(documentation_mode == &#x27;on&#x27;):
+            if(len(obj.signature.split(&quot; &quot;))&gt;1): # ignore names starting with _ in doc mode
+               if(obj.signature.split(&quot; &quot;)[1].startswith(&quot;_&quot;)):
+                  continue
             if(obj.object_type not in [&#x27;body&#x27;,&#x27;docstring&#x27;]):
                 doc_html += &quot;&lt;hr&gt;&quot;
                 doc_html += _signature_html(obj.object_type, obj.signature.replace(&#x27;def &#x27;,&#x27;&amp;nbsp&amp;nbsp&amp;nbsp&#x27;), open_details = False)
@@ -276,7 +279,7 @@ import argparse
 </details>
 </details>
 <details><summary><span class ='def signature'> def main():</span></summary>
-<pre class ='def content'>    version_string = &quot;v1.2.0&quot;
+<pre class ='def content'>    version_string = &quot;v1.2.1&quot;
     soft_string = f&quot;Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/&quot;
     print(f&quot;{soft_string}\n&quot;)
 
@@ -326,4 +329,4 @@ if __name__ == &quot;__main__&quot;:
 </pre>
 </details>
 
-<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v1.2.0 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
+<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite v1.2.1 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
