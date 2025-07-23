@@ -196,17 +196,20 @@ def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
         converts list of doc_objects into HTML
     """
     doc_html = ""
+    associate_docstring = False
     for i,obj in enumerate(doc_objects):
         if(obj.object_type == 'ignore'):
             continue
-        if(documentation_mode == 'on'):
+        if(documentation_mode == 'on'):    
             if(len(obj.signature.split(" "))>1): # ignore names starting with _ in doc mode
                if(obj.signature.split(" ")[1].startswith("_")):
                   continue
             if(obj.object_type not in ['body','docstring']):
                 doc_html += "<hr>"
                 doc_html += _signature_html(obj.object_type, obj.signature.replace('def ','&nbsp&nbsp&nbsp'), open_details = False)
-            if(obj.object_type == "docstring"):
+                associate_docstring = True
+            if(obj.object_type == "docstring" and associate_docstring):
+                associate_docstring = False # this is a workaround (pending using true object tree) to prevent multiple & sometimes non-local docstrings appearing
                 doc_html += _content_html(obj.object_type, file_lines[obj.content_start : obj.content_end + 1])
         else:
             doc_html += _signature_html(obj.object_type, obj.icon + ' ' + obj.signature, open_details = True)
@@ -216,7 +219,7 @@ def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
     return doc_html
             
 def main():
-    version_string = "v1.2.1"
+    version_string = "v1.2.2"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
 
