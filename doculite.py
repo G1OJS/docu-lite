@@ -200,6 +200,9 @@ def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
         if(obj.object_type == 'ignore'):
             continue
         if(documentation_mode == 'on'):
+            if(len(obj.signature.split(" "))>1): # ignore names starting with _ in doc mode
+               if(obj.signature.split(" ")[1].startswith("_")):
+                  continue
             if(obj.object_type not in ['body','docstring']):
                 doc_html += "<hr>"
                 doc_html += _signature_html(obj.object_type, obj.signature.replace('def ','&nbsp&nbsp&nbsp'), open_details = False)
@@ -213,7 +216,7 @@ def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
     return doc_html
             
 def main():
-    version_string = "v1.2.0"
+    version_string = "v1.2.1"
     soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
 
