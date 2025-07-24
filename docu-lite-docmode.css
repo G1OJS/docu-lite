@@ -5,5 +5,5 @@
 .def {color:black; }
 .docstring {color:darkgreen;}
          
-.content {color:black; padding-left: 1em; }
+.content {color:black; padding-left: 1em; margin-top:0px;}
 .docstring {color:green;}

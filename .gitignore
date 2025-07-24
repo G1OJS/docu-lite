@@ -7,6 +7,7 @@ test/
 
 # auto content
 docu-lite*.html
+docu-lite*.css
 
 # Python
 __pycache__/

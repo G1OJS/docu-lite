@@ -8,6 +8,7 @@ import glob
 import os
 import configparser
 import argparse
+import sys
 
 def get_config():
     DEFAULT_INI = "[input] \npattern = ./*.py\n\n[output]\nhtml = docu-lite-outline.html\ncss = docu-lite-style.css\n\n[options]\ndocumentation_mode = off\nignore_docstrings_with = "
@@ -17,6 +18,7 @@ def get_config():
     parser.add_argument("--config", default = DEFAULT_INI_FILE)
     args, _ = parser.parse_known_args()
     config_filepath = args.config
+    print(config_filepath, DEFAULT_INI_FILE, config_filepath != DEFAULT_INI_FILE)
 
     if not os.path.exists(config_filepath):
         if config_filepath != DEFAULT_INI_FILE:
@@ -55,16 +57,16 @@ def ensure_css_exists(style_sheet, documentation_mode):
     look for specified or default css, if not found write a new one and use that
     """
     
-    DEFAULT_CSS = "* {margin-left:2rem;} \n.filename {font-weight:bold; color:grey; font-size:2rem;} \
-        \n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:blue;} \
-        \n.def {color:orange; }\n.docstring {color:darkgreen;}\n \
-        \n.content {border-left: 2px solid #ccc; color:black; padding-left: 1em; background: #f9f9f9;}\n.docstring {color:green;}"
+    DEFAULT_CSS_DOCS = "* {margin-left:2rem; background: rgb(255, 255, 240);  font-family: system-ui, sans-serif; color:rgb(50, 60, 20);}  \
+        \n.filename {font-weight:bold; font-size:2.5rem;}  \
+        \n.signature {font-weight:bold;} \
+        \n.class {color:rgb(50,100,200); font-size:1.5rem;} \
+        \n.def {color:rgb(60, 70, 30); } \
+        \n.content {color:rgb(10,10,10); padding-left: 2rem; margin-top:5px; }  \
+        \n.docstring {color:rgb(0, 100, 0); }"
 
-    DEFAULT_CSS_DOCS = "* {margin-left:2rem; background: #e6f9ff;} \n.filename {font-weight:bold; color:grey; font-size:2rem;} \
-        \n.signature {font-weight:bold; margin-left:2rem;}\n.class {color:black; font-size:1.5rem;} \
-        \n.def {color:black; }\n.docstring {color:darkgreen;}\n \
-        \n.content {color:black; padding-left: 1em; }\n.docstring {color:green;}"
-
+    DEFAULT_CSS = DEFAULT_CSS_DOCS
+    
     try:
         with open(style_sheet, "r", encoding="utf-8") as f:
             pass
@@ -145,7 +147,8 @@ def get_doc_objects(file_lines):
         # NEEDS another look - do this with deep copy move so it will be clearer
         for obj in objects:
             if(obj.object_type == 'docstring'):
-                obj.content_start -= 1 
+                if(len(file_lines[obj.content_start]) >0):  # but don't introduce a blank line to the beginning
+                    obj.content_start -= 1 
                 obj.signature = obj.signature.split(" ")[0]
                 file_lines[obj.content_start] = file_lines[obj.content_start].replace('docstring ','',1)
 
@@ -183,7 +186,10 @@ def _signature_html(obj_type, obj_signature, open_details = True):
 def _content_html(object_type, content_lines):
     # write 'content' inside <pre></pre>
     htm = f"<pre class ='{object_type} content'>"
-    for line in content_lines:
+    for i, line in enumerate(content_lines):
+        if(i==0 and len(line.strip()) ==0):
+            continue
+#        htm += f"{i}:{len(line.strip())}: '{html.escape(line)}'"
         htm += f"{html.escape(line)}"
     htm += "</pre>\n"
     return htm
@@ -204,9 +210,10 @@ def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
             if(len(obj.signature.split(" "))>1): # ignore names starting with _ in doc mode
                if(obj.signature.split(" ")[1].startswith("_")):
                   continue
+            sig_line = obj.signature.replace('def ','&nbsp&nbsp&nbsp').replace('(self)','()').replace('(self, ','(').replace('(self,','(')
             if(obj.object_type not in ['body','docstring']):
                 doc_html += "<hr>"
-                doc_html += _signature_html(obj.object_type, obj.signature.replace('def ','&nbsp&nbsp&nbsp'), open_details = False)
+                doc_html += _signature_html(obj.object_type, sig_line, open_details = False)
                 associate_docstring = True
             if(obj.object_type == "docstring" and associate_docstring):
                 associate_docstring = False # this is a workaround (pending using true object tree) to prevent multiple & sometimes non-local docstrings appearing
@@ -219,8 +226,12 @@ def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
     return doc_html
             
 def main():
-    version_string = "v1.2.2"
-    soft_string = f"Docu-lite {version_string} by Alan Robinson: github.com/G1OJS/docu-lite/"
+    from importlib.metadata import version
+    try:
+        __version__ = version("docu-lite")
+    except:
+        __version__ = ""
+    soft_string = f"Docu-lite {__version__} by Alan Robinson: github.com/G1OJS/docu-lite/"
     print(f"{soft_string}\n")
 
     # get input params
@@ -246,7 +257,7 @@ def main():
         doc_objects = get_doc_objects(file_lines)
         if(ignore_docstrings_with != ''):
             doc_objects =  _ignore_docstrings_with(doc_objects, file_lines, ignore_docstrings_with)
-        output_html += f"<span class = 'filename'>{filename}</span><br>"
+        output_html += f"<br><div class = 'filename'>{filename}</div><br>"
         output_html += object_list_to_HTML(file_lines, doc_objects, documentation_mode)
         n_files_processed +=1
 
