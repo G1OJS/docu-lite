@@ -6,8 +6,8 @@ build/
 test/
 
 # auto content
-docu-lite*.html
-docu-lite*.css
+*.html
+*.css
 
 # Python
 __pycache__/
