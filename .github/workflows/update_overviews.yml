@@ -32,7 +32,7 @@ jobs:
 
       - name: Run docu-lite in docmode
         run: |
-          docu-lite --config docu-lite-docmode.ini
+          docu-lite --config docu-lite-docs.ini
 
       - name: Commit docu-lite outputs if changed
         run: |
