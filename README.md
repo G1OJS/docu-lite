@@ -4,7 +4,7 @@
 
 
 
-- 📖   Browse classes and functions with collapsible docstrings in a tidy, readable format
+- 📖   Browse classes and functions with collapsible docstrings in a tidy, readable format 
 - 📘   Specify your own stylesheet(s) or rely on the default (will be generated on run) 
 - 🎈   No dependencies, short script
 - ⚙️   [Integrate into your GitHub Workflow](https://g1ojs.github.io/docu-lite/add-to-workflow/index.html) to have automatically up-to-date outline(s) in your repo
