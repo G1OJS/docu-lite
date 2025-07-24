@@ -31,10 +31,11 @@ Docu-lite will create a docu-lite.ini file if one doesn't exist.
  - **pattern** specifies where to look for input
  - **html** specifies the name of the output html file
  - **css** specifies the name of the input style sheet, which will be referenced from the output html file
- - **documentation_mode** produces a less detailed output styled for use as or editing into documentation. This mode uses a **completely separate stylesheet**, which can be tailored independently.
+ - **documentation_mode** produces a less detailed output styled for use as or editing into documentation. 
      - ignores code blocks starting with _ (e.g. def _name)
      - hides 'self' in function argument lists
      - provides inner content only for docstrings, not code
+     - style sheet dedicated to this mode can be specified in the ini file
  - **ignore_docstrings_with** can be followed by = word to ignore docstrings containing the word (e.g. License, useful to stop license blocks appearing in the output)  
 
 
