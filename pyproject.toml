@@ -1,6 +1,6 @@
 [project]
 name = "docu-lite"
-version = "1.4.4"
+version = "1.5.0"
 license = "MIT"
 
 authors = [
