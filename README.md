@@ -37,6 +37,7 @@ Docu-lite will create a docu-lite.ini file if one doesn't exist.
  - **pattern** specifies where to look for input
  - **html** specifies the name of the output html file
  - **css** specifies the name of the input style sheet, which will be referenced from the output html file
+ - **text_file** specifies the name of the text results file (text_file =) prevents text file creation
  - **documentation_mode** produces a less detailed output styled for use as or editing into documentation. 
      - ignores code blocks starting with _ (e.g. def _name)
      - hides 'self' in function argument lists
