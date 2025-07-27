@@ -8,9 +8,15 @@
 - 📘   Specify your own stylesheet(s) or rely on the default (will be generated on run) 
 - 🎈   No dependencies, short script
 - ⚙️   [Integrate into your GitHub Workflow](https://g1ojs.github.io/docu-lite/add-to-workflow/index.html) to have automatically up-to-date outline(s) in your repo
+- 🛠️  Includes a text list of classes and functions useful for creating a delta view of API changes (e.g. using GitHub's compare)
 - 👀   [Example live output:](https://g1ojs.github.io/docu-lite/docu-lite-outline.html)
 - 👀   [Example live output (documentation mode):](https://g1ojs.github.io/docu-lite/docu-lite-outline-docmode.html)
   
+## Screenshots
+
+|User-facing  | Browsable outline | Text file (e.g. for API delta) |
+|--------------|-------------------|-------------------------|
+|![docu-lite user](https://github.com/user-attachments/assets/3735ad93-4f1e-4c47-a0c8-67e4e6c1bed8)| ![docu-lite browse](https://github.com/user-attachments/assets/a12df5d7-9c04-4c32-856b-81c6e317de25)|![docu-lite text list](https://github.com/user-attachments/assets/d9f39a76-e724-4dd2-8dca-7aace3a99d13)|
 
 ## 🛠 Installation
 
