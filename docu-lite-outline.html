@@ -18,7 +18,7 @@ import sys
 </pre>
 </details>
 <details><summary><span class ='def signature'> def get_config():</span></summary>
-<pre class ='def content'>    DEFAULT_INI = &quot;[input] \npattern = ./*.py\n\n[output]\nhtml = docu-lite-outline.html\ncss = docu-lite-style.css\n\n[options]\ndocumentation_mode = off\nignore_docstrings_with = &quot;
+<pre class ='def content'>    DEFAULT_INI = &quot;[input] \npattern = ./*.py\n\n[output]\nhtml = docu-lite-outline.html\ncss = docu-lite-style.css\ntext_list = docu-lite-list.txt\n[options]\ndocumentation_mode = off\nignore_docstrings_with = &quot;
     DEFAULT_INI_FILE = &quot;docu-lite.ini&quot;
 
     parser = argparse.ArgumentParser(add_help=False)
@@ -54,18 +54,19 @@ import sys
 <details><summary><span class ='def signature'> def get_config_vars():</span></summary>
 <pre class ='def content'>    config = get_config()
     input_pattern = get_config_option(config, &quot;input&quot;, &quot;pattern&quot;, &quot;./*.py&quot;)
-    output_name = get_config_option(config, &quot;output&quot;, &quot;html&quot;, &quot;docu-lite.html&quot;)
-    style_sheet = get_config_option(config, &quot;output&quot;, &quot;css&quot;, &quot;docu-lite.css&quot;)
+    output_html_file = get_config_option(config, &quot;output&quot;, &quot;html&quot;, &quot;docu-lite.html&quot;)
+    output_text_list_file = get_config_option(config, &quot;output&quot;, &quot;text_list&quot;, &quot;docu-lite-list.txt&quot;)
+    style_sheet_file = get_config_option(config, &quot;output&quot;, &quot;css&quot;, &quot;docu-lite.css&quot;)
     documentation_mode = get_config_option(config, &quot;options&quot;, &quot;documentation_mode&quot;, &quot;off&quot;)        
     ignore_docstrings_with = get_config_option(config, &quot;options&quot;, &quot;ignore_docstrings_with&quot;, &quot;&quot;)
     
-    print(f&quot;Running with options: \n \n[input]\npattern = {input_pattern}\n[output]\nhtml = {output_name}\n&quot;
-          +f&quot;css = {style_sheet}\ndocumentation_mode = {documentation_mode}\nignore_docstrings_with = {ignore_docstrings_with}\n&quot;)
-    return input_pattern, output_name, style_sheet, documentation_mode, ignore_docstrings_with
+    print(f&quot;Running with options: \n \n[input]\npattern = {input_pattern}\n[output]\nhtml = {output_html_file}\ntext_list = {output_text_list_file}&quot;
+          +f&quot;css = {style_sheet_file}\ndocumentation_mode = {documentation_mode}\nignore_docstrings_with = {ignore_docstrings_with}\n&quot;)
+    return input_pattern, output_html_file, output_text_list_file, style_sheet_file, documentation_mode, ignore_docstrings_with 
 
 </pre>
 </details>
-<details><summary><span class ='def signature'>🧾 def ensure_css_exists(style_sheet, documentation_mode):</span></summary>
+<details><summary><span class ='def signature'>🧾 def ensure_css_exists(style_sheet_file, documentation_mode):</span></summary>
 <pre class ='def content'></pre>
 <details><summary><span class ='docstring signature'> docstring</span></summary>
 <pre class ='docstring content'>    look for specified or default css, if not found write a new one and use that
@@ -83,11 +84,11 @@ import sys
     DEFAULT_CSS = DEFAULT_CSS_DOCS
     
     try:
-        with open(style_sheet, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+        with open(style_sheet_file, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
             pass
     except (FileNotFoundError, OSError):
-        print(f&quot;Couldn&#x27;t open style sheet {style_sheet}: creating default\n&quot;)
-        with open(style_sheet, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        print(f&quot;Couldn&#x27;t open style sheet {style_sheet_file}: creating default\n&quot;)
+        with open(style_sheet_file, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
             f.write(DEFAULT_CSS if (documentation_mode==&quot;off&quot;) else DEFAULT_CSS_DOCS)
 
 
@@ -290,17 +291,18 @@ import sys
     print(f&quot;{soft_string}\n&quot;)
 
     # get input params
-    input_pattern, output_name, style_sheet, documentation_mode, ignore_docstrings_with = get_config_vars()
+    input_pattern, output_html_file, output_text_list_file, style_sheet_file, documentation_mode, ignore_docstrings_with = get_config_vars()
 
     # start the output html
-    ensure_css_exists(style_sheet,documentation_mode)
-    output_html =  f&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;{output_name}&lt;/title&gt;&quot;
-    output_html += f&quot;&lt;link rel=&#x27;stylesheet&#x27; href=&#x27;./{style_sheet}&#x27; /&gt;&quot;
+    ensure_css_exists(style_sheet_file,documentation_mode)
+    output_html =  f&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;en&#x27;&gt;\n&lt;head&gt;\n&lt;title&gt;{output_html_file}&lt;/title&gt;&quot;
+    output_html += f&quot;&lt;link rel=&#x27;stylesheet&#x27; href=&#x27;./{style_sheet_file}&#x27; /&gt;&quot;
 
     # start html body and loop through input files
     output_html += &quot;&lt;body&gt;\n&quot;
     print(f&quot;Scanning for input files in {input_pattern}&quot;)
     n_files_processed = 0
+    signatures = []
     for filepath in glob.glob(input_pattern):
         filename = os.path.basename(filepath)
         print(f&quot;Found file: {filename}&quot;)
@@ -316,6 +318,12 @@ import sys
         output_html += object_list_to_HTML(file_lines, doc_objects, documentation_mode)
         n_files_processed +=1
 
+        # gather signatures for alphabetic list
+        for obj in doc_objects:
+            if((obj.signature == &quot;docstring&quot;) or (obj.signature == &quot;body&quot;)):
+                continue
+            signatures.append(obj.signature)
+            
     # write footer
     output_html += f&quot;\n&lt;br&gt;&lt;br&gt;&lt;span style = &#x27;font-size:0.8em;color:#666;border-top:1px solid #ddd; &quot;
     output_html += f&quot;font-style:italic&#x27;&gt;Made with {soft_string}&lt;/span&gt;&quot;
@@ -323,11 +331,20 @@ import sys
     if (n_files_processed == 0):
         print(f&quot;\nWarning: didn&#x27;t process any files from {input_pattern}, please check the input path&quot;)
 
+    # write alphabetic_list
+    if(len(signatures)&gt;1 and output_text_list_file !=&#x27;&#x27;):
+        signatures.sort()
+        with open(output_text_list_file , &quot;w&quot;) as f:
+            for sig in signatures:
+                f.write(f&quot;{sig}\n&quot;)
+        print(f&quot;\nSignatures list written to {output_text_list_file}&quot;)
+
+
     # close html body and write the file
     output_html += &quot;&lt;/body&gt;\n&quot;
-    with open(output_name, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    with open(output_html_file, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
         f.write(output_html)
-    print(f&quot;\nOutline written to {output_name}, linked to style sheet {style_sheet}&quot;)
+    print(f&quot;\nOutline written to {output_html_file}, linked to style sheet {style_sheet_file}&quot;)
 
 if __name__ == &quot;__main__&quot;:
     main()
