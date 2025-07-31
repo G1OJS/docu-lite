@@ -32,7 +32,7 @@ import sys
             print(f&quot;Config file not found: {config_filepath}. Is there a typo?&quot;)
             sys.exit(1)
         else:
-            print(f&quot;No config file found — creating default &#x27;{config_filepath}&#x27;&quot;)
+            print(f&quot;No config file found â€” creating default &#x27;{config_filepath}&#x27;&quot;)
             with open(config_filepath, &quot;w&quot;) as f:
                 f.write(DEFAULT_INI)
 
@@ -198,7 +198,7 @@ import sys
         for i, obj in enumerate(objects[:-1]):
             nextobj = objects[obj.nextobj_index]
             if (nextobj.object_type == &#x27;docstring&#x27; and nextobj.indent_level &gt; obj.indent_level):
-                obj.icon = &#x27;🧾&#x27; 
+                obj.icon = &#x27;ðŸ§¾&#x27; 
 
         return objects
 
@@ -352,4 +352,4 @@ if __name__ == &quot;__main__&quot;:
 </pre>
 </details>
 
-<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite 1.4.0 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>
+<br><br><span style = 'font-size:0.8em;color:#666;border-top:1px solid #ddd; font-style:italic'>Made with Docu-lite 1.5.1 by Alan Robinson: github.com/G1OJS/docu-lite/</span></body>

@@ -1,0 +1,13 @@
+class docobj:
+def __init__(self, signature):
+def _close_details(n_times):
+def _content_html(object_type, content_lines):
+def _ignore_docstrings_with(doc_objects, file_lines, pattern):
+def _signature_html(obj_type, obj_signature, open_details = True):
+def ensure_css_exists(style_sheet_file, documentation_mode):
+def get_config():
+def get_config_option(config, section, option, default):
+def get_config_vars():
+def get_doc_objects(file_lines):
+def main():
+def object_list_to_HTML(file_lines, doc_objects, documentation_mode):
