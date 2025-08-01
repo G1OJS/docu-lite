@@ -1,5 +1,10 @@
 # 🧾 docu-lite [![PyPI Downloads](https://static.pepy.tech/badge/docu-lite)](https://pepy.tech/projects/docu-lite)
 
+### NEWS:
+I'm developing a set of tools based on docu-lite with the idea that they can be run standalone or in combination
+from the command line or by importing to Python modules. Currently I've got the document parser part of docu-lite,
+slightly improved, as a cli/importable module. The tools are available from pip and on GitHub: [docu-lite-kit](https://github.com/G1OJS/docu-lite-kit)
+
 ### ⚡ Ultra-light Zero-dependency HTML outline generator for Python.   
 
 
